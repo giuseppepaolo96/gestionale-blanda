@@ -1,0 +1,90 @@
+version: '3.9'
+
+services:
+  # smtp4dev:
+  #   image: rnwood/smtp4dev:latest
+  #   container_name: smtp4dev
+  #   ports:
+  #     - "3000:80"
+  #     - "2525:25"
+  #   volumes:
+  #     - smtp4dev_data:/app/Data
+  #   environment:
+  #     - ASPNETCORE_URLS=http://+:80
+  #     - ADMIN_PASSWORD=your_admin_password
+  #     - SMTP_SERVER_NAME=gestpallavolo-smtp
+  #     - SMTP_SERVER_PORT=587
+  #     - SMTP_REQUIRE_TLS=true
+  #     - SmtpSettings__SmptSenderName=GestionalePallavolo
+  #     - SmtpSettings__SmtpSenderEmail=a9b857b682-c96f7b+1@inbox.mailtrap.io
+  #     - SmtpSettings__SmtpUsername=7b04c6bad989ad
+  #     - SmtpSettings__SmtpPassword=90653da05b51f1
+  #   restart: unless-stopped
+  #   networks:
+  #     - integrationai_network
+
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb-Match
+    environment:
+      MYSQL_ROOT_PASSWORD: gestionale-password
+      MYSQL_DATABASE: Gestionale-Match
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - integrationai_network
+
+  # minio:
+  #   image: quay.io/minio/minio
+  #   container_name: minio
+  #   command: server /data --console-address ":9001"
+  #   environment:
+  #     - MINIO_ROOT_USER=minioadmin
+  #     - MINIO_ROOT_PASSWORD=minioadmin
+  #   volumes:
+  #     - minio_data:/data
+  #   ports:
+  #     - "9000:9000"  # Esponi la porta 9000 per MinIO
+  #     - "9001:9001"
+  #   networks:
+  #     - integrationai_network
+
+  api:
+    build:
+      context: .
+      dockerfile: src/Api/Dockerfile
+    container_name: api-Match
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mariadb
+#      - smtp4dev
+#     - minio
+    networks:
+      - integrationai_network
+    environment:
+      - ConnectionStrings__MariaDbConnection=Server=mariadb;Port=3306;Database=Gestionale-Match;Uid=root;Pwd=gestionale-password;
+      # - JwtBearerOptions__Authority=http://keycloak:8080/realms/gestionale-pallavolo
+      # - JwtBearerOptions__MetadataAddress=http://keycloak:8080/realms/gestionale-pallavolo/.well-known/openid-configuration
+      # - JwtBearerOptions__RequireHttpsMetadata=false
+      # - JwtBearerOptions__Audience=account
+      # - JwtBearerOptions__TokenValidationParameters__NameClaimType=preferred_username
+      # - JwtBearerOptions__TokenValidationParameters__RoleClaimType=roles
+      # - Minio__Endpoint=http://minio:9000
+      # - Minio__AccessKey=minioadmin
+      # - Minio__SecretKey=minioadmin
+      # - Minio__BucketName=gestionale-pallavolo
+
+volumes:
+  smtp4dev_data:
+    driver: local
+  mariadb_data:
+    driver: local
+  minio_data:
+    driver: local
+
+networks:
+  integrationai_network:
+    driver: bridge
