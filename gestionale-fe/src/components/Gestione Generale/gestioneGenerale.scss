@@ -1,0 +1,48 @@
+.section-container{
+    width: 50%; // Larghezza per ogni div affinché occupi metà della riga
+    max-width: 893px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 5%;
+}
+
+
+.colors-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.color-box {
+    width: 100px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+.gradients-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.gradient-box {
+    width: 200px;
+    height: 50px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+}

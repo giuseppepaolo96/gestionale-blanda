@@ -1,0 +1,87 @@
+.carousel {
+    position: relative;
+    width: 100%; // Larghezza massima dell'area di anteprima
+    height: 100%; // Altezza massima dell'area di anteprima
+    overflow: hidden; // Nascondi le parti delle immagini che escono fuori dal contenitore
+}
+
+.carousel-container {
+    display: flex; // Flex per allineare le immagini
+    transition: transform 0.5s ease; // Transizione fluida quando le immagini cambiano
+}
+
+.carousel.horizontal {
+    width: 100%; /* Imposta una larghezza adeguata */
+    height: auto; /* Altezza automatica per mantenere le proporzioni */
+    display: flex; /* Allinea orizzontalmente le immagini */
+}
+
+.carousel.vertical {
+    width: auto; /* Altezza automatica per mantenere le proporzioni */
+    height: 100%; /* Imposta l'altezza adeguata */
+    display: block; /* Mostra l'immagine in verticale */
+}
+
+.carousel img {
+    width: 100%; // Imposta la larghezza al 100% per occupare tutto lo spazio
+    height: 100%; // Imposta l'altezza al 100% per occupare tutto lo spazio
+    object-fit: cover; // Mantieni le proporzioni delle immagini
+    transition: opacity 0.5s ease; // Aggiungi una transizione dolce
+    max-width: 250px; /* Regola la dimensione in base alle necessità */
+    margin-right: 10px;
+    border-radius: 4px;
+}
+
+
+.carousel-section {
+    display: none; /* Nascondi tutte le sezioni per impostazione predefinita */
+}
+
+.carousel-section.active {
+    display: block; /* Mostra solo la sezione attiva */
+}
+
+
+/* Rimuove qualsiasi margine o padding indesiderato nel carosello */
+.carousel-wrapper {
+    width: 100%; /* Imposta la larghezza massima */
+    height: 100%; /* Imposta l'altezza massima */
+    overflow: hidden; /* Evita le barre laterali o il fuoriuscire dell'immagine */
+    display: flex;
+    justify-content: center; /* Centra il carosello orizzontalmente */
+    align-items: center; /* Centra il carosello verticalmente */
+}
+
+/* Assicurati che l'immagine occupi l'intero spazio disponibile senza deformarsi */
+.carousel-item img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Mantiene le proporzioni dell'immagine senza tagliarla */
+}
+
+/* Personalizza la sezione del carosello per avere uno spazio controllato */
+.carousel {
+    width: 100%; /* Carosello prende tutta la larghezza disponibile */
+    height: 100%; /* Imposta un'altezza per il carosello */
+}
+
+.carousel-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.both-preview {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* Spazio tra i caroselli orizzontali e verticali */
+}
+
+
+
+.p-carousel-content {
+    display: flex;
+    overflow: hidden !important; /* Rimuove la barra di scorrimento */
+    display: flex;
+}
+

@@ -1,0 +1,57 @@
+.navbar-container {
+    background-color: #ffffff; /* Sfondo bianco per la navbar */
+    padding: -1%; /* Spaziatura interna della navbar */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombra leggera */
+    border-bottom: 1px solid #e0e0e0; /* Aggiunge una linea sottile sotto la navbar */
+}
+
+.logo-image-col-nav {
+    height: 27px;
+    margin-left: -2px;
+    margin-top: -1%;
+}
+p-menubar {
+    background-color: #ffffff; /* Colore di sfondo della menubar */
+    border: none; /* Rimuove il bordo */
+    padding: 0; /* Rimuove il padding */
+    box-shadow: none; /* Rimuove qualsiasi ombra aggiuntiva */
+}
+
+.p-menubar .p-menuitem-link {
+    color: #000000	; /* Colore del testo dei menu item */
+    padding: 10px 15px; /* Spaziatura interna dei menu item */
+    display: flex;
+    align-items: center;
+    font-size: 14px; /* Dimensione del testo dei menu item */
+}
+
+.p-menubar .p-menuitem-link:hover {
+    background-color: #f1f1f1; /* Colore di sfondo al passaggio del mouse */
+    color: #000; /* Colore del testo al passaggio del mouse */
+}
+
+.p-menu {
+    background-color: #ffffff; /* Colore di sfondo del menu a discesa */
+    border: 1px solid #e0e0e0; /* Bordo sottile del menu a discesa */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombra leggera per il menu a discesa */
+    border-radius: 4px; /* Angoli arrotondati del menu a discesa */
+    z-index: 1000; /* Assicura che il menu a discesa sia sopra gli altri elementi */
+}
+
+.p-menu .p-menuitem {
+    padding: 0; /* Rimuove il padding predefinito dei menu item */
+}
+
+.p-menu .p-menuitem-link {
+    padding: 10px 15px; /* Spaziatura interna dei menu item del menu a discesa */
+}
+
+.p-menu .p-menuitem-link:hover {
+    background-color: #f1f1f1; /* Colore di sfondo al passaggio del mouse nel menu a discesa */
+    color: #000000; /* Colore del testo al passaggio del mouse */
+}
+
+.p-menu .p-menuitem-text {
+    line-height: 1;
+    color: #000000;
+}

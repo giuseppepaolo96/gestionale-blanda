@@ -1,0 +1,148 @@
+.title {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #333333;
+    font-size: 20px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+  }
+  
+  .title-dash {
+      text-align: center;
+      margin-bottom: 10px;
+      color: #333333;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      font-weight: bold;
+    }
+    
+    .form-row {
+      display: flex;
+      justify-content: space-between;  // Gli elementi si distribuiranno uniformemente
+      align-items: center;             // Gli elementi saranno centrati verticalmente
+      gap: 1rem;                       // Spazio tra gli elementi
+      margin-bottom: 15px;             // Spazio inferiore per separare le righe
+    }
+  
+  
+    .box-dash {
+      width: 181%;
+      max-width: 931px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dash-button {
+      width: 27%;
+      padding: 10px;
+      border: none;
+      background-color: #ffffff;
+      color: black;
+      text-transform: uppercase;
+      font-weight: bold;
+      border-radius: 4px;
+      border: 1px solid black;
+      cursor: pointer;
+  }
+  
+  .dash-button-res {
+    width: 27%;
+    padding: 10px;
+    border: none;
+    background-color: #ffffff;
+    color: black;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: 4px;
+    border: 1px solid black;
+    cursor: pointer;
+    margin-left: 36%;
+  }
+  
+  .orario {
+    width: 30.5%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-left: 15%;
+    color: #333;
+    transition: border-color 0.3s ease;
+  }
+  
+  .title-orario {
+    font-weight: bold;
+    color: #333333;
+    font-size: 15px;
+    font-family: "Inter", sans-serif;
+    margin-top: 5%;
+    margin-bottom: -4%;
+  }
+  
+  .home-score{
+    text-align: center;
+    margin-bottom: 10px;
+    color: #333333;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+  }
+  
+  .set {
+    width: 16.5%;
+    padding: 0.75rem;
+    border: 1px solid #333333;
+    border-radius: 4px;
+    margin-right: 65%;
+    color: #333;
+    transition: border-color 0.3s ease;
+    font-weight: bold;
+  }
+  
+  .team-possession {
+    font-weight: bold; /* Imposta il testo in grassetto */
+    font-size: 1.2em; /* Imposta una dimensione del font maggiore */
+    margin-left: 10px; /* Margine sinistro per distanziare */
+    color: #ffffff; /* Colore personalizzato, puoi cambiarlo */
+  }
+  
+  .timeout-status {
+    font-weight: bold; /* Grassetto per il testo di stato */
+    color: #ff5722; /* Colore per il testo del timeout */
+    margin-left: 10px; /* Margine sinistro */
+  }
+  
+  .timer-text {
+    font-size: 1.1em; /* Dimensione del font per il timer */
+    margin-top: 10px; /* Margine superiore per distanziare dal contenuto sopra */
+    color: #4caf50; /* Colore verde per il timer, personalizzabile */
+  }
+  
+  .team-logo{
+   
+    width: 16.5%;
+    height: 16.5%;
+  }
+  
+  
+  
+  .set-scores-container {
+    display: flex;
+    justify-content: space-between; // Per allineare le squadre ai lati
+  }
+  
+  .team-scores {
+    display: flex;
+    flex-direction: column; // Allinea i punteggi in verticale
+    align-items: center; // Centro i nomi delle squadre e i punteggi
+  }
+  
+  .set-score-punteggio {
+    margin: 5px 0; // Spazio tra i punteggi
+  }
+  

@@ -1,0 +1,192 @@
+.diretta {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: fixed;
+  background-color: #f8f9fa;
+  padding: 20px;
+  border: 2px solid #343a40;
+  border-radius: 8px;
+  max-width: 569px;
+  width: 100%;
+  justify-content: space-between;
+  top: 2px;
+  right: 2px;
+}
+
+  
+  .teams-container {
+    display: flex;
+    flex-direction: column; /* Mantiene i team uno sopra l'altro */
+    margin-right: 10px; /* Ridotto per avvicinare i nomi al logo */
+  }
+  
+  .team {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .team-logo-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .color-strip {
+        width: 10px;
+        height: 62px;
+        margin-right: 10px;
+
+}
+  
+  .home {
+    background-color: #8a2be2;
+  }
+  
+  .away {
+    background-color: #FFD700;
+  }
+  
+  .team-logo {
+    width: 50px;
+    height: auto;
+  }
+  
+  .team-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 63%;
+  }
+  
+  .team-name-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 200px;
+    margin-left: -75%;
+        
+    }
+
+  
+    .team-name-long {
+      font-size: 102%;
+      color: #343a40;
+      margin-left: 126px;
+  }
+
+  .team-name-short {
+    font-size: 90%;
+    color: #343a40;
+    margin-left: 122px;
+}
+ 
+  .set-info {
+    display: flex;
+    flex-direction: row; /* Dispone i set in riga */
+    margin-left: 20px; /* Margine a sinistra per distanziare il punteggio dal nome */
+  }
+  
+  .set-container {
+    display: flex;
+    flex-direction: column; /* Dispone label e punteggio in colonna */
+    align-items: center; /* Allinea label e punteggio al centro */
+    margin-left: 10px; /* Margine tra i set */
+  }
+  
+  .set-label,
+  .set-number {
+    font-size: 73%;
+    color: #343a40;
+    margin: 0;
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-left: 5px;
+  }
+  
+  .set-scores {
+    font-size: 96%;
+    color: black;
+    min-width: 30px;
+    text-align: center;
+  }
+  
+  .divider {
+    width: 100%;
+    height: 2px;
+    background-color: #343a40;
+    margin: 10px 0;
+  }
+  
+  /* Stili per il carosello */
+    .carousel-container-dir {
+      width: 95%;
+      height: 60%;
+      overflow: hidden;
+      position: relative;
+      left: 60px;
+      right: 447px;
+      margin-top: -11%;
+      margin-right: 45%;
+      max-width: 200px;
+      max-height: 200px;
+  }
+
+
+.carousel-scroll-vert {
+  display: flex;
+  animation: verticalScroll 10s linear infinite;  // Scroll continuo
+  white-space: nowrap;  // Mantieni il carosello in una singola riga
+}
+.carousel-item {
+  flex-shrink: 0; /* Evita che gli sponsor si riducano */
+  max-width: 1000px;
+  max-height: 1000px;
+  width: 100%; /* Impostare una larghezza maggiore per ogni immagine */
+  height: 100%; /* Impostare un'altezza maggiore */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 30px; /* Aumentare la distanza tra gli sponsor */
+}
+
+.carousel-item img {
+  max-width: 200%;
+  max-height: 319%;
+  object-fit: contain;
+}    
+@keyframes verticalScroll {
+    0% {
+        transform: translateY(0%);
+    }
+    100% {
+        transform: translateY(-100%);
+    }
+}
+
+
+
+  
+  .logo-container-diretta {
+    position: relative; /* Posizionamento relativo per stare accanto a .diretta */
+    margin-right: auto; /* Sposta il logo a sinistra */
+    left: 0px; /* Aggiusta la distanza per allineare correttamente */
+    z-index: 10;
+    top:1px;
+
+}
+  
+  .header-logo {
+    width: 95%;
+    height: 60%;
+    max-width: 200px;
+    max-height: 200px;
+
+  }
+
+
+.set-icon {
+   /* Spazio tra il punteggio e l'icona */
+    color: #343a40; /* Colore dell'icona, modifica come desideri */
+    font-size: 13px !important;
+}
