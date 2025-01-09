@@ -1,21 +1,40 @@
 ﻿using Api.Features.GetMatchData.Command;
+using Api.Infrastructure.Data;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.Features.GetMatchData.Endpoint
 {
-    public class GetMatchDataEndpoint : EndpointWithoutRequest<List<Entities.MatchData>>
+    public class GetMatchDataRequest
     {
+        public int? MatchNumber { get; set; }
+    }
+
+    public class GetMatchDataEndpoint : Endpoint<GetMatchDataRequest, List<Entities.MatchData>>
+    {
+        private readonly AppDbContext _appDbContext;
+
+        // Iniezione di AppDbContext
+        public GetMatchDataEndpoint(AppDbContext appDbContext)
+        {
+            _appDbContext = appDbContext;
+        }
+
         public override void Configure()
         {
-            Get("/api/match-data");
+            // URL con parametro opzionale
+            Get("/api/match-data/{matchNumber?}");
             AllowAnonymous();
         }
-        public override async Task<List<Entities.MatchData>> ExecuteAsync(CancellationToken ct)
+
+        public override async Task<List<Entities.MatchData>> ExecuteAsync(GetMatchDataRequest request, CancellationToken ct)
         {
-            var result = await new GetMatchDataCommand().ExecuteAsync(ct);
+            // Passa il parametro matchNumber (che potrebbe essere nullo) al comando
+            var command = new GetMatchDataCommand { MatchNumber = request.MatchNumber };
+
+            // Esegui il comando con AppDbContext
+            var result = await new GetMatchDataCommandHandler(_appDbContext).ExecuteAsync(command, ct);
             return result;
         }
     }
-
 }

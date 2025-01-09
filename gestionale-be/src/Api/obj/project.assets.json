@@ -6536,32 +6536,40 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\angel\\.nuget\\packages\\": {}
+    "C:\\Users\\giuse\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\angel\\Desktop\\ProgettoPP\\gestionale-be\\src\\Api\\Api.csproj",
+      "projectUniqueName": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Api.csproj",
       "projectName": "Api",
-      "projectPath": "C:\\Users\\angel\\Desktop\\ProgettoPP\\gestionale-be\\src\\Api\\Api.csproj",
-      "packagesPath": "C:\\Users\\angel\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\angel\\Desktop\\ProgettoPP\\gestionale-be\\src\\Api\\obj\\",
+      "projectPath": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Api.csproj",
+      "packagesPath": "C:\\Users\\giuse\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\angel\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\giuse\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\angel\\Desktop\\ProgettoPP\\gestionale-be\\src\\Shared\\Shared.csproj": {
-              "projectPath": "C:\\Users\\angel\\Desktop\\ProgettoPP\\gestionale-be\\src\\Shared\\Shared.csproj"
+            "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Shared\\Shared.csproj": {
+              "projectPath": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Shared\\Shared.csproj"
             }
           }
         }
@@ -6574,7 +6582,7 @@
       "restoreAuditProperties": {
         "enableAudit": "true",
         "auditLevel": "low",
-        "auditMode": "all"
+        "auditMode": "direct"
       },
       "SdkAnalysisLevel": "9.0.100"
     },
@@ -6650,24 +6658,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[8.0.11, 8.0.11]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Host.win-x64",
-            "version": "[8.0.11, 8.0.11]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[8.0.11, 8.0.11]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Ref",
-            "version": "[8.0.11, 8.0.11]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -6676,7 +6666,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
   },
@@ -6685,7 +6675,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'iTextSharp 5.5.13.4' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0'. This package may not be fully compatible with your project.",
+      "message": "Il pacchetto 'iTextSharp 5.5.13.4' è stato ripristinato mediante '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' e non mediante il framework di destinazione del progetto 'net8.0'. Questo pacchetto potrebbe non essere completamente compatibile con il progetto.",
       "libraryId": "iTextSharp",
       "targetGraphs": [
         "net8.0"

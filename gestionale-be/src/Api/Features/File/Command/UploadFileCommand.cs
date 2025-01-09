@@ -235,36 +235,68 @@ namespace Api.Features.UploadFile.Command
             using var reader = new StreamReader(memoryStream);
             using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture));
 
-            var records = csv.GetRecords<dynamic>();  // Usa dynamic per mappare i dati in base alla struttura
+            var records = csv.GetRecords<dynamic>();
 
             foreach (var record in records)
             {
-                // Gestire la colonna aggiuntiva tra "Data Gara" e "Nr. Gara"
-                var matchDate = DateTime.ParseExact(record.Data_Gara.ToString(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
-
-                var matchData = new MatchData
+                try
                 {
-                    Day = record.Giornata, // Colonna "Giornata"
-                    OutwardReturn = record.A_R,  // Colonna "A/R"
-                    MatchNumber = int.Parse(record.Nr_Gara.ToString()),  // Colonna "Nr.Gara"
-                    MatchDate = matchDate,  // Colonna "Data Gara"
-                    Time = record.Orario.ToString(),  // Colonna "Orario"
-                    Location = record.Localita,  // Colonna "Località"
-                    HomeTeam = new Api.Entities.Team { Name = record.Nome_Squadra_Casa },  // Colonna "Nome Squadra Casa"
-                    AwayTeam = new Api.Entities.Team { Name = record.Nome_Squadra_Fuori },  // Colonna "Nome Squadra Fuori"
-                    FileRecordId = fileRecordId,
-                    DayOfWeek = matchDate.ToString("dddd", new CultureInfo("it-IT")) // Giorno della settimana
-                };
+                    var matchDate = DateTime.ParseExact(record.Data_Gara.ToString(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    var matchData = new MatchData
+                    {
+                        Day = record.Giornata, // Colonna "Giornata"
+                        OutwardReturn = record.A_R,  // Colonna "A/R"
+                        MatchNumber = int.Parse(record.Nr_Gara.ToString()),  // Colonna "Nr.Gara"
+                        MatchDate = matchDate,  // Colonna "Data Gara"
+                        Time = record.Orario.ToString(),  // Colonna "Orario"
+                        Location = record.Localita,  // Colonna "Località"
+                        HomeTeam = new Api.Entities.Team { Name = record.Nome_Squadra_Casa },  // Colonna "Nome Squadra Casa"
+                        AwayTeam = new Api.Entities.Team { Name = record.Nome_Squadra_Fuori },  // Colonna "Nome Squadra Fuori"
+                        FileRecordId = fileRecordId,
+                        DayOfWeek = matchDate.ToString("dddd", new CultureInfo("it-IT")) // Giorno della settimana
+                    };
 
-                // Imposta il flag del sesso in base al nome del file
-                SetGenderFlags(fileName, matchData);
+                    // Imposta il flag del sesso in base al nome del file
+                    SetGenderFlags(fileName, matchData);
 
-                _context.MatchData.Add(matchData);
+                    // Aggiungere o aggiornare i team
+                    var homeTeam = await _context.Teams
+                        .FirstOrDefaultAsync(t => t.Name == matchData.HomeTeam.Name, ct)
+                        ?? _context.ChangeTracker.Entries<Api.Entities.Team>()
+                        .FirstOrDefault(e => e.Entity.Name == matchData.HomeTeam.Name)?.Entity;
+
+                    if (homeTeam == null)
+                    {
+                        homeTeam = new Api.Entities.Team { Name = matchData.HomeTeam.Name };
+                        _context.Teams.Add(homeTeam);
+                    }
+
+                    var awayTeam = await _context.Teams
+                        .FirstOrDefaultAsync(t => t.Name == matchData.AwayTeam.Name, ct)
+                        ?? _context.ChangeTracker.Entries<Api.Entities.Team>()
+                             .FirstOrDefault(e => e.Entity.Name == matchData.AwayTeam.Name)?.Entity;
+
+                    if (awayTeam == null)
+                    {
+                        awayTeam = new Api.Entities.Team { Name = matchData.AwayTeam.Name };
+                        _context.Teams.Add(awayTeam);
+                    }
+
+                    // Associare i team ai match
+                    matchData.HomeTeam = homeTeam;
+                    matchData.AwayTeam = awayTeam;
+
+                    // Aggiungi il matchData al contesto
+                    _context.MatchData.Add(matchData);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Errore nel parsing del record CSV: {ex.Message}");
+                }
             }
 
             await _context.SaveChangesAsync(ct);
         }
-
 
 
 
@@ -319,35 +351,70 @@ namespace Api.Features.UploadFile.Command
         {
             using var package = new ExcelPackage(memoryStream);
             var worksheet = package.Workbook.Worksheets.First();
-            int row = 2;
+            int row = 2; // Supponiamo che l'intestazione sia nella prima riga
 
             while (!string.IsNullOrEmpty(worksheet.Cells[row, 1].Text))
             {
-                var matchDate = DateTime.ParseExact(worksheet.Cells[row, 4].Text, "dd/MM/yyyy", CultureInfo.InvariantCulture); // Assumiamo che la data sia nella 4ª colonna
-                var matchData = new MatchData
+                try
                 {
-                    Day = worksheet.Cells[row, 1].Text,  // Colonna "Giornata"
-                    OutwardReturn = worksheet.Cells[row, 2].Text,  // Colonna "A/R"
-                    MatchNumber = int.Parse(worksheet.Cells[row, 3].Text),  // Colonna "Nr.Gara"
-                    MatchDate = matchDate,  // Colonna "Data Gara"
-                    Time = worksheet.Cells[row, 5].Text,  // Colonna "Orario"
-                    Location = worksheet.Cells[row, 6].Text,  // Colonna "Località"
-                    HomeTeam = new Api.Entities.Team { Name = worksheet.Cells[row, 7].Text },  // Colonna "Nome Squadra Casa"
-                    AwayTeam = new Api.Entities.Team { Name = worksheet.Cells[row, 8].Text },  // Colonna "Nome Squadra Fuori"
-                    Female = worksheet.Cells[row, 9].Text == "F",
-                    Male = worksheet.Cells[row, 9].Text == "M",
-                    FileRecordId = fileRecordId,
-                    DayOfWeek = matchDate.ToString("dddd", new CultureInfo("it-IT")) // Giorno della settimana
-                };
+                    var matchDate = DateTime.ParseExact(worksheet.Cells[row, 4].Text, "dd/MM/yyyy", CultureInfo.InvariantCulture); // Data Gara nella colonna 4
+                    var matchData = new MatchData
+                    {
+                        Day = worksheet.Cells[row, 1].Text.Trim(),  // Colonna "Giornata"
+                        OutwardReturn = worksheet.Cells[row, 2].Text.Trim(),  // Colonna "A/R"
+                        MatchNumber = int.Parse(worksheet.Cells[row, 3].Text.Trim()),  // Colonna "Nr.Gara"
+                        MatchDate = matchDate,  // Colonna "Data Gara"
+                        Time = worksheet.Cells[row, 5].Text.Trim(),  // Colonna "Orario"
+                        Location = worksheet.Cells[row, 6].Text.Trim(),  // Colonna "Località"
+                        HomeTeam = new Api.Entities.Team { Name = worksheet.Cells[row, 7].Text.Trim() },  // Colonna "Nome Squadra Casa"
+                        AwayTeam = new Api.Entities.Team { Name = worksheet.Cells[row, 8].Text.Trim() },  // Colonna "Nome Squadra Fuori"
+                        FileRecordId = fileRecordId,
+                        DayOfWeek = matchDate.ToString("dddd", new CultureInfo("it-IT")) // Giorno della settimana
+                    };
 
-                SetGenderFlags(fileName, matchData);
-                _context.MatchData.Add(matchData);
+                    // Imposta i flag Female e Male in base al nome del file
+                    SetGenderFlags(fileName, matchData);
+
+                    // Aggiungere i team se non esistono
+                    var homeTeam = await _context.Teams
+                        .FirstOrDefaultAsync(t => t.Name == matchData.HomeTeam.Name, ct)
+                        ?? _context.ChangeTracker.Entries<Api.Entities.Team>()
+                        .FirstOrDefault(e => e.Entity.Name == matchData.HomeTeam.Name)?.Entity;
+
+                    if (homeTeam == null)
+                    {
+                        homeTeam = new Api.Entities.Team { Name = matchData.HomeTeam.Name };
+                        _context.Teams.Add(homeTeam);
+                    }
+
+                    var awayTeam = await _context.Teams
+                        .FirstOrDefaultAsync(t => t.Name == matchData.AwayTeam.Name, ct)
+                        ?? _context.ChangeTracker.Entries<Api.Entities.Team>()
+                             .FirstOrDefault(e => e.Entity.Name == matchData.AwayTeam.Name)?.Entity;
+
+                    if (awayTeam == null)
+                    {
+                        awayTeam = new Api.Entities.Team { Name = matchData.AwayTeam.Name };
+                        _context.Teams.Add(awayTeam);
+                    }
+
+                    // Associare i team a MatchData
+                    matchData.HomeTeam = homeTeam;
+                    matchData.AwayTeam = awayTeam;
+
+                    // Aggiungi il dato al contesto
+                    _context.MatchData.Add(matchData);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Errore durante il parsing della riga {row} nel file Excel: {ex.Message}");
+                }
+
                 row++;
             }
 
             await _context.SaveChangesAsync(ct);
         }
-
 
 
         private List<MatchData> ParseMatchDataFromPdf(MemoryStream memoryStream, int fileId)
