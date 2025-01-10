@@ -8,6 +8,7 @@ import './ledwall.scss';
 import axios from 'axios';
 import { LABEL_CONSTANT } from "constants/label_costant";
 import { getMatchData, MatchDataResponse } from 'services/UserService';
+import { useParams } from "react-router-dom";
 
 export interface SponsorResponse {
     name: string;
@@ -27,6 +28,7 @@ interface SetData {
 }
 
 export default function Ledwall() {
+    const { matchId } = useParams();
     const [homeScore, setHomeScore] = useState(0);
     const [awayScore, setAwayScore] = useState(0);
     const [setScores, setSetScores] = useState<number[][]>([[], [], [], [], []]);
@@ -71,8 +73,8 @@ export default function Ledwall() {
             const data = await getMatchData();
             const match = data.find(m => m.id === matchId);
             if (match) {
-                setHomeTeam(match.homeTeam);
-                setAwayTeam(match.awayTeam);
+/*                 setHomeTeam(match.homeTeam);
+                setAwayTeam(match.awayTeam); */
                 setHomeScore(0);
                 setAwayScore(0);
                 setSetScores([[], [], [], [], []]); // Resetta i punteggi dei set

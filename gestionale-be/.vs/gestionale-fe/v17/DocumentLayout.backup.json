@@ -26,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 85,
-          "SelectedChildIndex": 16,
+          "SelectedChildIndex": 15,
           "Children": [
             {
               "$type": "Bookmark",
@@ -81,10 +81,6 @@
               "Name": "ST:141:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
-            },
-            {
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "TableDb.cs",
@@ -118,7 +114,7 @@
               "RelativeDocumentMoniker": "src\\Api\\Features\\GetMatchData\\Command\\GetMatchDataCommand.cs",
               "ToolTip": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\GetMatchData\\Command\\GetMatchDataCommand.cs",
               "RelativeToolTip": "src\\Api\\Features\\GetMatchData\\Command\\GetMatchDataCommand.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADQAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAABsAAAAAAAAAAAAIwDcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-08T18:09:50.877Z",
               "EditorCaption": ""

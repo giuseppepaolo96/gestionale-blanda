@@ -1,5 +1,3 @@
-import { title } from "process";
-
 export const LABEL_CONSTANT = {
     accedi: "Accedi",
     accedi_guest:"Accedi come guest",
@@ -45,7 +43,7 @@ export const LABEL_CONSTANT = {
     numero:"N. GARA:",
     femminile:"FEMMINILE",
     maschile:"MASCHILE",
-    visualizza_diretta:"Visualizza la diretta",
+    visualizza_diretta:"Visualizza la struttura della diretta",
     visualizza_ledwall: "Visualizza il ledwall",
     punteggio_set:"Parziale set",
     timer_set:"Tempo effettivo set",
@@ -58,7 +56,7 @@ export const LABEL_CONSTANT = {
     cartellino_rosso_ospite:"Aggiungi cartellino rosso ospite",
     categoria:"SERIE B2/I",
     vs:"VS",
-    title_generale:"Gestisci generalmente",
+    title_generale:"Gestisci calendario e loghi",
     subtitle_generale:"Da questa sezione potrai gestire la struttura del ledwall,della diretta e delle squadre",
     upload_sponsor:"Carica i tuoi sponsor",
     carica_logo:"Carica i loghi delle squadre",
@@ -66,10 +64,16 @@ export const LABEL_CONSTANT = {
     rimuovi:"Rimuovi selezionati",
     carica_multipli:"Carica tutti i file",
     carica_calendario:"Carica il calendario",
-    subtitle_calendario:"Da questa sezione potrai caricare il calendario della partita",
+    lista_calendario:"Lista dei calendari",
+    subtitle_calendario:"Prima di procedere con il caricamento del caledario è necessario associare le seguenti caratteristiche al file:",
     subtitle_loghi:"Da questa sezione potrai caricare i loghi delle squadre",
+    subtitle_sport:"A quale sport dobbiamo fare riferimento",
     selezione_multipla:"Seleziona tutti",
-    seleziona_squadra:"Scegli la squadra a cui vuoi associare il logo",
+    inserisci_categoria:"Inserisci la categoria a cui fai riferimento",
+    inserisci_girone:"Inserisci il girone a cui fai riferimento",
+    seleziona_sport:"Seleziona lo sport",
+    seleziona_girone:"Seleziona il girone",
+    seleziona_squadra:"Seleziona la squadra",
     primo_set_ledwall:"SET 1°",
     secondo_set_ledwall:"SET 2°",
     terzo_set_ledwall:"SET 3°",
@@ -83,7 +87,12 @@ export const LABEL_CONSTANT = {
     inserisci_colore:"Inserisci colore",
     aggiungi_colore:"Aggiungi colore",
     nessun_gradiente_disponibile:"Nessun gradiente disponibile",
-    inserisci_gradiente:"Inserisci il gradiente"
-
+    inserisci_gradiente:"Inserisci il gradiente",
+    cosa_vuoi_fare:"Quale attività vuoi svolgere?",
+    nessun_dato:"Dati di calendario e squadre non presenti",
+    lista_calendari:"Questa è la lista dei calendari caricati fino ad adesso",
+    dialog_conferma_gestione:"Sei sicuro di voler gestire il punteggio per la gara :",
+    tra:"tra",
+    e:"e",
   }
   

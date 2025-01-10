@@ -1,5 +1,9 @@
-import { axiosInstance } from "utils";
+
 import axios, { AxiosError } from 'axios';
+
+export const axiosInstance = axios.create({
+  baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080', // Default alla porta 8080
+});
 
 export enum FileTypeEnum {
   PDF = 'PDF',
@@ -17,10 +21,10 @@ export interface UploadFileResponse {
   success: boolean; 
 }
 
-export interface TeamResponse {
+export interface Team {
   id: number;
   name: string; // Nome della squadra
-  logo: string; // Logo della squadra in formato base64 o URL
+  logo?: string; // Logo della squadra in formato base64 o URL
 }
 
 export interface SponsorResponse {
@@ -28,12 +32,10 @@ export interface SponsorResponse {
   logoBase64: string | null; // Logo in formato Base64 (o null se non disponibile)
 }
 
-export interface TeamsResponse {
-  name: string; // Nome della squadra
-  logo: string | null; // Logo in formato Base64 (o null se non disponibile)
-}
-
-
+export interface FileResponse {
+  fileName: string;
+  uploadDate: Date; 
+  }
 
 export interface MatchDataResponse {
   id: number;
@@ -44,8 +46,8 @@ export interface MatchDataResponse {
   dayOfWeek : string;
   time: string; // Orario
   location: string; // Località
-  homeTeam: string; // Team di casa
-  awayTeam: string; // Team in trasferta
+  homeTeam: Team; // Team di casa
+  awayTeam: Team; // Team in trasferta
   female?: boolean; // Possibilità di valore null
   male?: boolean; // Possibilità di valore null
 }
@@ -90,9 +92,9 @@ export const uploadFile = async (
 
 
 
-export const getTeamLogos = async (): Promise<TeamResponse[]> => {
+export const getTeamLogos = async (): Promise<Team[]> => {
   try {
-    const response = await axiosInstance.get<TeamResponse[]>('/api/logo');
+    const response = await axiosInstance.get<Team[]>('/api/logo');
     return response.data;
   } catch (error) {
     console.error('Errore durante la richiesta dei loghi delle squadre:', error);
@@ -110,6 +112,7 @@ export const getMatchData = async (): Promise<MatchDataResponse[]> => {
   }
 };
 
+
 export const getSponsors = async (): Promise<SponsorResponse[]> => {
   try {
     // Invio della richiesta GET all'endpoint '/api/sponsor'
@@ -124,9 +127,9 @@ export const getSponsors = async (): Promise<SponsorResponse[]> => {
 };
 
 
-export const getTeams = async (): Promise<TeamsResponse[]> => {
+export const getTeams = async (): Promise<Team[]> => {
   try {
-    const response = await axiosInstance.get<TeamsResponse[]>('/api/team');
+    const response = await axiosInstance.get<Team[]>('/api/team');
     return response.data;
   } catch (error) {
     console.error('Errore durante la richiesta dei dati delle squadre:', error);
@@ -134,6 +137,15 @@ export const getTeams = async (): Promise<TeamsResponse[]> => {
   }
 };
 
+export const getFiles = async (): Promise<FileResponse[]> => {
+  try {
+    const response = await axiosInstance.get<FileResponse[]>('api/get-file');
+    return response.data;
+  } catch(error){
+    console.error('Errore durante la richiesta del recupero dei file:',error);
+    throw error;
+  }
+  }
 
 // 1. Recupera tutti i colori e gradienti
 export const getColorsAndGradients = async () => {

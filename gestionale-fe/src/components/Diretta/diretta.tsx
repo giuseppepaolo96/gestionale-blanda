@@ -4,9 +4,10 @@ import image1 from '../../assets/images/DREAMVOLLEY NARDO.jpg';
 import image2 from '../../assets/images/FAAM MATESE.jpg';
 import { useEffect, useState } from 'react';
 import * as signalR from "@microsoft/signalr";
-import { getMatchData, getSponsors, MatchDataResponse } from 'services/UserService';
+import { getMatchData, getSponsors, MatchDataResponse, Team } from 'services/UserService';
 import axios from 'axios';
 import 'primeicons/primeicons.css'; // Import PrimeIcons
+import { useParams } from 'react-router-dom';
 
 export interface SponsorResponse {
     name: string;
@@ -14,25 +15,26 @@ export interface SponsorResponse {
 }
 
 export default function Diretta() {
+    const { matchId } = useParams();
     const [homeScore, setHomeScore] = useState(0);
     const [awayScore, setAwayScore] = useState(0);
     const [setScores, setSetScores] = useState<number[][]>([[], [], [], [], []]); // Inizializza 5 set vuoti
     const [setsCount, setSetsCount] = useState(1);  // Numero di set
     const [set, setCompleteSet] = useState(1); // Indice del set corrente, inizia da 1
-    const [homeTeam, setHomeTeam] = useState("");
-    const [awayTeam, setAwayTeam] = useState("");
+    const [homeTeam, setHomeTeam] = useState<Team | null>(null); // Lo stato può essere un oggetto o null
+    const [awayTeam, setAwayTeam] = useState<Team | null>(null);
     const [sponsors, setSponsors] = useState<SponsorResponse[]>([]);
     const [possession, setPossession] = useState<'home' | 'away' | null>(null); // Stato per il possesso
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const connection = new signalR.HubConnectionBuilder()
-        .withUrl("http://51.20.66.229:8080/scoreHub")
+        .withUrl("http://localhost:8080/scoreHub")
         .withAutomaticReconnect()
         .build();
 
     const fetchSponsors = async () => {
         try {
-            const response = await axios.get<SponsorResponse[]>('http://51.20.66.229:8080/api/sponsor');
+            const response = await axios.get<SponsorResponse[]>('http://localhost:8080/api/sponsor');
             console.log('Sponsors fetched:', response.data);
             setSponsors(response.data);
         } catch (error) {
@@ -46,8 +48,9 @@ export default function Diretta() {
             const data = await getMatchData();
             const match = data.find(m => m.id === matchId);
             if (match) {
-                setHomeTeam(match.homeTeam);
-                setAwayTeam(match.awayTeam);
+                // Verifica che match.homeTeam e match.awayTeam siano del tipo Team
+                setHomeTeam(match.homeTeam as Team);  // Assicurati che match.homeTeam sia di tipo Team
+                setAwayTeam(match.awayTeam as Team);  // Assicurati che match.awayTeam sia di tipo Team
                 setHomeScore(0);
                 setAwayScore(0);
                 setSetScores([[], [], [], [], []]); // Resetta i punteggi dei set
@@ -109,31 +112,6 @@ export default function Diretta() {
         };
     }, []);
 
-    // Funzione per determinare le classi in base alla lunghezza dei nomi
-    /*    const getTeamClasses = (homeTeam: string, awayTeam: string) => {
-           // Confronta la lunghezza dei nomi delle squadre solo quando sono stati caricati
-           if (homeTeam.length > awayTeam.length) {
-               return {
-                   homeClass: 'team-name-long', // La squadra di casa ha il nome più lungo
-                   awayClass: 'team-name-short' // La squadra ospite ha il nome più corto
-               };
-           } else if (awayTeam.length > homeTeam.length) {
-               return {
-                   homeClass: 'team-name-short', // La squadra di casa ha il nome più corto
-                   awayClass: 'team-name-long' // La squadra ospite ha il nome più lungo
-               };
-           } else {
-               // Se i nomi sono uguali, possiamo gestirlo come preferisci
-               return {
-                   homeClass: 'team-name-short', // In caso di parità, assegniamo la classe breve
-                   awayClass: 'team-name-short' // Anche all'ospite
-               };
-           }
-       }; */
-
-    /*     // Calcoliamo le classi per casa e ospite
-        const { homeClass, awayClass } = getTeamClasses(homeTeam, awayTeam); */
-
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -145,19 +123,20 @@ export default function Diretta() {
     }, [sponsors.length]);
 
     return (
-        <div className="scoreboard">
+        <div className="scoreboard-diretta">
             <div className="diretta">
                 <div className="teams-container">
                     {/* Squadra Casa */}
                     <div className="team">
                         <div className="team-logo-container">
                             <div className="team-logo-container">
-                                <div className="color-strip home"></div>
+                               {/*  <div className="color-strip home"></div> */}
                                 <img src={image1} alt="Logo Squadra Casa" className="team-logo" />
-                            </div>
+                           
                             <div className="team-info">
                                 <div className="team-name-container">
-                                    <h2 className="team-name-long">{homeTeam || "DREAM VOLLEY 2011 ASD"}</h2>
+                                    <div className="team-name">{homeTeam ? homeTeam.name : "DREAM VOLLEY 2011 ASD"}</div>
+                                </div>
                                 </div>
                                 <div className="set-info">
                                     <div className="set-info">
@@ -190,13 +169,15 @@ export default function Diretta() {
                     {/* Squadra Ospite */}
                     <div className="team">
                         <div className="team-logo-container">
-                            <div className="color-strip away"></div>
+                           {/*  <div className="color-strip away"></div> */}
                             <img src={image2} alt="Logo Squadra Ospite" className="team-logo" />
-                        </div>
+                        
                         <div className="team-info">
                             <div className="team-name-container">
-                                <h2 className="team-name-short">{awayTeam || "POLISPORTIVA MATESE"}</h2>
+                                <div className="team-name">{awayTeam ? awayTeam.name : "POLISPORTIVA MATESE"}</div>
                             </div>
+                            </div>
+                            <div className="set-info">
                             <div className="set-info">
                                 {Array.from({ length: set }).map((_, i) => {
                                     const setNumber = i + 1;
@@ -214,6 +195,7 @@ export default function Diretta() {
                                         </div>
                                     );
                                 })}
+                            </div>
                             </div>
                         </div>
                     </div>

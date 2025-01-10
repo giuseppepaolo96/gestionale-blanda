@@ -19,7 +19,7 @@ const router = createBrowserRouter(
         <Route path="*" element={<Navigate to="login" />} />
         <Route path="login" element={<Login />} />
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="gestione" element={<GestionePunteggio />} />
+        <Route path="gestione/:matchId" element={<GestionePunteggio />} />
         <Route path="gestione-sponsor" element={<Sponsor />} />
         <Route path="ledwall" element={<Ledwall />} />
         <Route path="diretta" element={<Diretta />} />

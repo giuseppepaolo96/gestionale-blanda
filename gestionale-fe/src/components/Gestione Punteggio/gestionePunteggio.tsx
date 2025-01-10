@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './gestionePunteggio.scss';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { LABEL_CONSTANT } from 'constants/label_costant';
 import Navbar from 'views/Navbar/navbar';
 import { HubConnectionBuilder } from '@microsoft/signalr';
-import { getMatchData, MatchDataResponse } from 'services/UserService';
+import { getMatchData, MatchDataResponse, Team } from 'services/UserService';
 
 const connection = new HubConnectionBuilder()
-  .withUrl('http://51.20.66.229:8080/scorehub')
+  /* .withUrl('http://51.20.66.229:8080/scorehub') */
+  .withUrl('http://localhost:8080/scorehub')
   .build();
 
 export type MatchUpdate = {
@@ -30,9 +31,9 @@ export type MatchUpdate = {
 
 
 export default function GestionePunteggio() {
-
-  const [homeTeam, setHomeTeam] = useState('');
-  const [awayTeam, setAwayTeam] = useState('');
+  const { matchId } = useParams();
+  const [homeTeam, setHomeTeam] = useState<Team | null>(null);
+  const [awayTeam, setAwayTeam] = useState<Team | null>(null);
   const [matchCode, setMatchCode] = useState('');
   const [matchDate, setMatchDate] = useState('');
   const [matchTime, setMatchTime] = useState('');
@@ -464,7 +465,7 @@ export default function GestionePunteggio() {
       Timer: timer,
       RedCardCasa: homeRedCards,
       RedCardOspite: awayRedCards,
-      MatchWinner: winningTeam === 'home' ? homeTeam : awayTeam,
+      MatchWinner: winningTeam === 'home' ? (homeTeam?.name || 'Casa') : (awayTeam?.name || 'Ospite'),
     };
   
     // Invia aggiornamento punteggio
@@ -479,12 +480,13 @@ export default function GestionePunteggio() {
     if (winningTeam === 'home') {
       setHomeSetsWon((prev) => prev + 1);
       if (homeSetsWon + 1 === 3) {
-        setMatchWinner(homeTeam || 'Casa');
+        setMatchWinner(homeTeam?.name || 'Casa');
+
       }
     } else {
       setAwaySetsWon((prev) => prev + 1);
       if (awaySetsWon + 1 === 3) {
-        setMatchWinner(awayTeam || 'Ospite');
+        setMatchWinner(awayTeam?.name || 'Ospite');
       }
     }
   
@@ -551,31 +553,31 @@ export default function GestionePunteggio() {
     const fetchMatch = async () => {
       try {
         const matchData: MatchDataResponse[] = await getMatchData();
-        // Mappa i dati ricevuti nel formato corretto per Team
-        const mappedMatch: MatchDataResponse[] = matchData.map((match) => ({
-          id: match.id,
-          day: match.day,
-          outwardReturn: match.outwardReturn,
-          matchNumber: match.matchNumber,
-          matchDate: match.matchDate,
-          dayOfWeek: match.dayOfWeek,
-          time: match.time,
-          location: match.location,
-          homeTeam: match.homeTeam,
-          awayTeam: match.awayTeam,
-          female: match.female,
-          male: match.male,
-        }));
+        
+        // Verifica che matchId sia definito e numerico prima di usarlo
+        if (matchId) {
+          const match = matchData.find(m => m.id === parseInt(matchId, 10));
   
-        console.log("Fetched matches:", mappedMatch); // Debugging the fetched data
-        setMatch(mappedMatch); // Aggiorna lo stato con le squadre mappate
+          if (match) {
+            // Imposta le squadre di casa e ospite
+            setHomeTeam(match.homeTeam);
+            setAwayTeam(match.awayTeam);
+          } else {
+            console.error('Partita non trovata');
+          }
+        } else {
+          console.error('matchId non definito');
+        }
       } catch (error) {
         console.error("Errore durante il caricamento delle squadre:", error);
       }
     };
   
-    fetchMatch();
-  }, []);
+    if (matchId) {
+      fetchMatch();  // Esegui il recupero dei dati solo se matchId è presente
+    }
+  }, [matchId]);  // Esegui quando matchId cambia
+  
 
   return (
     <div className="dashboard">
@@ -585,11 +587,11 @@ export default function GestionePunteggio() {
           <form onSubmit={handleSubmit} className="form">
             <div className="title">{LABEL_CONSTANT.punteggio}</div>
             <div className="input-group form-row">
-              <div className="title-dash">{homeTeam || 'Casa'}: {homeScore} {homeScore >= MAX_SCORE && '(Max)'}</div>
-              <button type="button" onClick={increaseHomeScore} className="dash-button" disabled={isHomeButtonDisabled}>
+            <div className="title-dash">{homeTeam?.name || 'Casa'}: {homeScore} {homeScore >= MAX_SCORE && '(Max)'}</div>
+            <button type="button" onClick={increaseHomeScore} className="dash-button" disabled={isHomeButtonDisabled}>
                 {LABEL_CONSTANT.aggiungi_casa}
               </button>
-              <div className="title-dash">{awayTeam || 'Ospite'}: {awayScore} {awayScore >= MAX_SCORE && '(Max)'}</div>
+              <div className="title-dash">{awayTeam?.name || 'Ospite'}: {awayScore} {awayScore >= MAX_SCORE && '(Max)'}</div>
               <button type="button" onClick={increaseAwayScore} className="dash-button" disabled={isAwayButtonDisabled}>
                 {LABEL_CONSTANT.aggiungi_ospite}
               </button>

@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "views/Navbar/navbar";
 import './dashboard.scss';
 import { useEffect, useState } from "react";
-import { getMatchData, MatchDataResponse } from "services/UserService"; 
+import { getMatchData, MatchDataResponse } from "services/UserService";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { HubConnectionBuilder } from "@microsoft/signalr";
+import { Panel } from "primereact/panel";
 
 export type MatchUpdate = {
   MatchId?: string | number;
@@ -17,7 +18,7 @@ export type MatchUpdate = {
   ResetMatch?: boolean;
   ResetScore?: boolean;
   PossessoCasa?: boolean | null;
-  PossessoOspite?: boolean| null;
+  PossessoOspite?: boolean | null;
   Set?: number;
   TimeoutHome?: boolean;
   TimeoutAway?: boolean;
@@ -27,9 +28,11 @@ export type MatchUpdate = {
   MatchWinner?: string | null;
 };
 
-const connection = new HubConnectionBuilder()
-  .withUrl('http://51.20.66.229:8080/scorehub')
+const connection = new HubConnectionBuilder() 
+/*  .withUrl('http://51.20.66.229:8080/scorehub') 
+ */ .withUrl('http://localhost:8080/scorehub')
   .build();
+
 
 
 export default function Dashboard() {
@@ -48,23 +51,56 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    // Inizia la connessione senza ascoltare gli aggiornamenti
-    connection.start()
-      .then(() => console.log('Connesso a SignalR!'))
-      .catch((err) => console.error('Errore di connessione a SignalR:', err));
+    const startConnection = async () => {
+      try {
+        await connection.start();
+        console.log('Connesso a SignalR!');
+      } catch (err) {
+        console.error('Errore di connessione a SignalR:', err);
+        setTimeout(startConnection, 5000); // Riprova la connessione dopo 5 secondi
+      }
+    };
 
-    // Nessun handler per gli aggiornamenti del punteggio (solo invio dei dati)
+    startConnection();
+
+    connection.onclose(() => {
+      console.log('Connessione WebSocket chiusa');
+    });
+
     return () => {
       connection.stop();
     };
   }, []);
+
   const UpdateScore = (matchUpdate: MatchUpdate) => {
     if (connection.state !== 'Connected') {
       console.log('Connessione non disponibile. Impossibile inviare l\'aggiornamento del punteggio.');
+  
+      // Riprova a connettersi se la connessione è chiusa
+      const reconnect = async () => {
+        try {
+          console.log("Riprovo a connettermi...");
+          await connection.start();
+          console.log('Connesso a SignalR!');
+          // Una volta connesso, invia l'aggiornamento del punteggio
+          connection.invoke('UpdateScore', matchUpdate)
+            .then(() => {
+              console.log('Punteggio inviato con successo');
+            })
+            .catch((err) => {
+              console.error('Errore durante l\'invio dell\'aggiornamento del punteggio:', err);
+            });
+        } catch (err) {
+          console.error('Errore di connessione a SignalR:', err);
+          setTimeout(reconnect, 5000); // Riprova a connetterti dopo 5 secondi
+        }
+      };
+  
+      reconnect(); // Chiama la funzione per riconnettersi e inviare il punteggio
       return;
     }
   
-    console.log('Invio aggiornamento punteggio:', matchUpdate);  // Log per debug
+    console.log('Invio aggiornamento punteggio:', matchUpdate);
     connection.invoke('UpdateScore', matchUpdate)
       .then(() => {
         console.log('Punteggio inviato con successo');
@@ -74,6 +110,7 @@ export default function Dashboard() {
       });
   };
   
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -87,25 +124,32 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  const handleManageScore = (match: MatchDataResponse) => {
-    setSelectedMatch(match);
+  const handleManageScore = (matchNumber: number) => {
+    // Trova la partita selezionata
+    const selected = matchData.find(match => match.matchNumber === matchNumber);
+    setSelectedMatch(selected || null);
+
+    // Mostra il dialogo di conferma
     setShowDialog(true);
   };
 
   const confirmManageScore = () => {
     if (selectedMatch) {
-      // Usa MatchId anziché matchNumber
-      UpdateScore({ MatchId: selectedMatch.id });
-  
-      // Naviga alla pagina di gestione punteggio
-      navigate(`/gestione/`);
+      // Invia il MatchId tramite WebSocket
+      UpdateScore({ MatchId: selectedMatch.matchNumber });
+
+      // Naviga alla pagina di gestione punteggi con il matchNumber come parametro
+      navigate(`/gestione/${selectedMatch.matchNumber}`);
     }
+
+    // Chiudi il dialogo
     setShowDialog(false);
   };
 
   const cancelManageScore = () => {
-    setShowDialog(false);
+    setShowDialog(false); // Chiudi il dialogo senza fare nulla
   };
+
 
   const handleSponsor = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -117,77 +161,162 @@ export default function Dashboard() {
     navigate('/gestione-generale');
   };
 
+
+
   return (
     <div className="dashboard">
       <Navbar />
       <div className="login-container">
-        <div className="row-container">
-          <div className="box-dash-punteggio">
-            <div className="title-dashboard ">{LABEL_CONSTANT.title_punteggio}</div>
-            <div className="subtitle-dashboard">{LABEL_CONSTANT.subtitle_punteggio}</div>
-            <button type="button" onClick={() => navigate('/gestione')} className="dash-button">{LABEL_CONSTANT.accedi}</button>
+        <div className="generale">
+          <div className="title-generale">
+            {matchData.length > 0 ? LABEL_CONSTANT.cosa_vuoi_fare : ''}
           </div>
         </div>
-        <div className="row-container">
-          <div className="box-dash-ledwall">
-            <div className="title-dashboard ">{LABEL_CONSTANT.visualizza_ledwall}</div>
-            <div className="subtitle-dashboard">{LABEL_CONSTANT.subtitle_ledwall}</div>
-            <button type="button" onClick={() => navigate('/ledwall')} className="dash-button">{LABEL_CONSTANT.accedi}</button>
-          </div>
-          <div className="box-dash-diretta">
-            <div className="title-dashboard ">{LABEL_CONSTANT.visualizza_diretta}</div>
-            <div className="subtitle-dashboard">{LABEL_CONSTANT.subtitle_diretta}</div>
-            <button type="button" onClick={() => navigate('/diretta')} className="dash-button">{LABEL_CONSTANT.accedi}</button>
-          </div>
-        </div>
-        <div className="row-container">
-          <div className="box-dash-ledwall">
-            <div className="title-dashboard ">{LABEL_CONSTANT.title_sponsor}</div>
-            <div className="subtitle-dashboard">{LABEL_CONSTANT.subtitle_sponsor}</div>
-            <button type="button" onClick={handleSponsor} className="dash-button">{LABEL_CONSTANT.accedi}</button>
-          </div>
-          <div className="box-dash-ledwall">
-            <div className="title-dashboard ">{LABEL_CONSTANT.title_generale}</div>
-            <div className="subtitle-dashboard">{LABEL_CONSTANT.subtitle_generale}</div>
-            <button type="button" onClick={handleGestioneGenerale} className="dash-button">{LABEL_CONSTANT.accedi}</button>
-          </div>
-        </div>
-        <div className="card">
-          <DataTable value={filteredData} scrollable scrollHeight="400px" virtualScrollerOptions={{ itemSize: 46 }} tableStyle={{ minWidth: '50rem' }}>
-            <Column field="id" header="Id" style={{ width: '10%' }}></Column>
-            <Column field="homeTeam" header="Home Team" style={{ width: '20%' }}></Column>
-            <Column field="awayTeam" header="Away Team" style={{ width: '20%' }}></Column>
-            <Column field="matchDate" header="Match Date" body={(rowData) => formatDate(new Date(rowData.matchDate))} style={{ width: '20%' }} />
-            <Column field="location" header="Location" style={{ width: '20%' }}></Column>
-            <Column field="time" header="Time" style={{ width: '10%' }}></Column>
-            <Column field="female" header="Female" body={(rowData) => rowData.female ? 'Yes' : 'No'} style={{ width: '10%' }}></Column>
-            <Column field="male" header="Male" body={(rowData) => rowData.male ? 'Yes' : 'No'} style={{ width: '10%' }}></Column>
-            <Column header="Actions" body={(rowData) => (
-              <Button 
-                icon="pi pi-eye"
-                label="Gestisci Punteggi" 
-                onClick={() => handleManageScore(rowData)} 
-                className="p-button-secondary"
+        {matchData.length > 0 && (
+          <Panel header="Calendario" className="table">
+            <DataTable
+              value={filteredData.map((match) => ({
+                ...match,
+                homeTeamName: match.homeTeam?.name || "N/A", // Assegna il nome della squadra di casa
+                awayTeamName: match.awayTeam?.name || "N/A", // Assegna il nome della squadra ospite
+              }))}
+              scrollable
+              scrollHeight="400px"
+              virtualScrollerOptions={{ itemSize: 46 }}
+              tableStyle={{ minWidth: '50rem' }}
+            >
+              <Column field="day" header="Giornata" className="column" />
+              <Column field="outwardReturn" header="A/R" className="column" />
+              <Column field="matchNumber" header="Numero Gara" className="column" />
+              <Column
+                field="matchDate"
+                header="Data gara"
+                body={(rowData) => formatDate(new Date(rowData.matchDate))}
+                style={{ width: '20%' }}
               />
-            )} style={{ width: '10%' }}></Column>
-          </DataTable>
-        </div>
-      </div>
+              <Column field="dayOfWeek" header="Giorno settimana" className="column" />
+              <Column field="time" header="Time" className="column" />
+              <Column field="location" header="Luogo" className="column" />
+              <Column field="homeTeamName" header="Squadra casa" className="column" />
+              <Column field="awayTeamName" header="Squadra ospite" className="column" />
+              <Column
+                header="Actions"
+                body={(rowData) => (
+                  <Button
+                    icon="pi pi-eye"
+                    label="Gestisci Punteggi"
+                    onClick={() => handleManageScore(rowData.matchNumber)} // Passa matchNumber alla funzione
+                    className="p-button-secondary"
+                  />
+                )}
+                style={{ width: '10%' }}
+              />
+            </DataTable>
+            <Dialog
+              header="Conferma Gestione"
+              visible={showDialog}
+              style={{ width: '400px' }}
+              onHide={() => setShowDialog(false)}
+              footer={
+                <>
+                  <Button label="Annulla" icon="pi pi-times" onClick={cancelManageScore} className="p-button-text" />
+                  <Button label="Conferma" icon="pi pi-check" onClick={confirmManageScore} autoFocus />
+                </>
+              }
+            >
+              {LABEL_CONSTANT.dialog_conferma_gestione}
+              {selectedMatch ? `numero: ${selectedMatch.matchNumber}` : ''}
+              {' '}
+              {LABEL_CONSTANT.tra}
+              {' '}
+              {selectedMatch ? selectedMatch.homeTeam?.name : ''}
+              {' '} {/* Aggiunge uno spazio tra le squadre */}
+              {LABEL_CONSTANT.e}
+              {' '} {/* Aggiunge uno spazio tra "e" e la squadra ospite */}
+              {selectedMatch ? selectedMatch.awayTeam?.name : ''}
+              ?
+            </Dialog>
+          </Panel>
+        )}
 
-      {/* Pop-up di conferma */}
-      <Dialog 
-        visible={showDialog} 
-        style={{ width: '400px' }} 
-        header="Gestione Punteggi" 
-        modal 
-        onHide={cancelManageScore}
-      >
-        <div>
-          <p>Vuoi gestire i punteggi della partita {selectedMatch?.homeTeam} vs {selectedMatch?.awayTeam}?</p>
-          <Button label="Conferma" icon="pi pi-check" onClick={confirmManageScore} />
-          <Button label="Annulla" icon="pi pi-times" onClick={cancelManageScore} className="p-button-secondary" />
+        <div className="row-container">
+          <Panel header="Gestisci il punteggio" style={{ marginBottom: '20px' }}>
+            <div className="box-dash-punteggio">
+              <div className="title-dashboard">{LABEL_CONSTANT.title_punteggio}</div>
+              <div className="subtitle-dashboard">{LABEL_CONSTANT.subtitle_punteggio}</div>
+              <button
+                type="button"
+                onClick={() => navigate('/gestione')}
+                className="button-panel"
+              >
+                {LABEL_CONSTANT.accedi}
+              </button>
+            </div>
+          </Panel>
+
+          {/* Visualizza Ledwall */}
+          <Panel header="Visualizza Ledwall" style={{ marginBottom: '20px' }}>
+            <div className="box-dash-ledwall">
+              <div className="title-dashboard">{LABEL_CONSTANT.visualizza_ledwall}</div>
+              <div className="subtitle-dashboard">{LABEL_CONSTANT.subtitle_ledwall}</div>
+              <button
+                type="button"
+                onClick={() => navigate('/ledwall')}
+                className="button-panel"
+              >
+                {LABEL_CONSTANT.accedi}
+              </button>
+            </div>
+          </Panel>
+
+          {/* Visualizza Diretta */}
+          <Panel header="Visualizza Diretta" style={{ marginBottom: '20px' }}>
+            <div className="box-dash-diretta">
+              <div className="title-dashboard">{LABEL_CONSTANT.visualizza_diretta}</div>
+              <div className="subtitle-dashboard">{LABEL_CONSTANT.subtitle_diretta}</div>
+              <button
+                type="button"
+                onClick={() => navigate('/diretta')}
+                className="button-panel"
+              >
+                {LABEL_CONSTANT.accedi}
+              </button>
+            </div>
+          </Panel>
         </div>
-      </Dialog>
+        <div className="row-container">
+          {/* Gestione Sponsor */}
+          <Panel header="Gestione Sponsor" style={{ marginBottom: '20px' }}>
+            <div className="box-dash-ledwall">
+              <div className="title-dashboard">{LABEL_CONSTANT.title_sponsor}</div>
+              <div className="subtitle-dashboard">{LABEL_CONSTANT.subtitle_sponsor}</div>
+              <button
+                type="button"
+                onClick={handleSponsor}
+                className="button-panel"
+              >
+                {LABEL_CONSTANT.accedi}
+              </button>
+            </div>
+          </Panel>
+
+          {/* Gestisci Calendario e Loghi */}
+          <Panel header="Gestisci Calendario e Loghi" style={{ marginBottom: '20px' }}>
+            <div className="box-dash-ledwall">
+              <div className="title-dashboard">{LABEL_CONSTANT.title_generale}</div>
+              <div className="subtitle-dashboard">{LABEL_CONSTANT.subtitle_generale}</div>
+              <button
+                type="button"
+                onClick={handleGestioneGenerale}
+                className="button-panel"
+              >
+                {LABEL_CONSTANT.accedi}
+              </button>
+            </div>
+          </Panel>
+        </div>
+
+      </div>
     </div>
   );
 }

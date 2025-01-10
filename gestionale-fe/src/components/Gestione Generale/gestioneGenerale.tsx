@@ -1,17 +1,22 @@
 import { LABEL_CONSTANT } from "constants/label_costant";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FileTypeEnum, getTeams, TeamsResponse, uploadFile } from "services/UserService";
+import { FileResponse, FileTypeEnum, getTeams, Team, uploadFile } from "services/UserService";
 import Navbar from "views/Navbar/navbar";
 import './gestioneGenerale.scss';
 import * as signalR from "@microsoft/signalr";
-
+import { Panel } from "primereact/panel";
+import { InputText } from "primereact/inputtext";
+import { Dialog } from "primereact/dialog";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { Button } from "primereact/button";
+import { Calendar } from "primereact/calendar";
 export default function GestioneGenerale() {
     interface Toast {
         message: string;
         type: 'success' | 'error';
     }
-
     interface ImageType {
         id: number;
         src: string;
@@ -21,41 +26,68 @@ export default function GestioneGenerale() {
         file: File;
     }
 
-    interface Team {
-        id: number;
-        name: string;
-    }
-
-
     const connection = new signalR.HubConnectionBuilder()
-        .withUrl("http://51.20.66.229:8080/scoreHub")
+        /* .withUrl("http://51.20.66.229:8080/scoreHub") */
+        .withUrl("http://localhost:8080/scoreHub")
         .withAutomaticReconnect()
         .build();
 
-    const navigate = useNavigate();
 
+    const navigate = useNavigate();
     // Stati per Loghi Squadre
     const [logoImages, setLogoImages] = useState<ImageType[]>([]);
     const [logoFileNames, setLogoFileNames] = useState<string[]>([]);
     const [logoSelectedFiles, setLogoSelectedFiles] = useState<string[]>([]);
     const [logoSelectAll, setLogoSelectAll] = useState(false);
-
     // Stati per Calendario Partite
     const [calendarFiles, setCalendarFiles] = useState<File[]>([]);
     const [calendarSelectedFiles, setCalendarSelectedFiles] = useState<string[]>([]);
     const [calendarSelectAll, setCalendarSelectAll] = useState(false);
-
     const [toast, setToast] = useState<Toast | null>(null);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
-
     const [teams, setTeams] = useState<Team[]>([]);
     const [selectedTeam, setSelectedTeam] = useState<number | null>(null);
-
     const [maleFilter, setMaleFilter] = useState<boolean>(false); // Filtro per maschile
     const [femaleFilter, setFemaleFilter] = useState<boolean>(false); // Filtro per femminile
-
     const [colors, setColors] = useState<string[]>([]);
     const [gradients, setGradients] = useState<{ GradientId: number, GradientStyle: string }[]>([]);
+    const [value, setValue] = useState<string>('');
+    const [isDialogVisible, setIsDialogVisible] = useState(false);
+    const [delectedFile, setDeletedFile] = useState<FileResponse>();
+    const [tempFilterValue, setTempFilterValue] = useState<Date | null>(null);
+
+
+    const [filters, setFilters] = useState<{
+        UploadDate: { value: Date | null; dateFile: string };
+    }>({
+        UploadDate: { value: null, dateFile: 'custom' },
+    });
+
+
+    const dateFilter = (value: string | number | Date, UploadDate: { value: string | number | Date }) => {
+        if (!UploadDate || !UploadDate.value) {
+            return true; // Mostra tutti i record se non c'è un filtro
+        }
+
+        const filterDate = new Date(UploadDate.value).setHours(0, 0, 0, 0); // Normalizza a mezzanotte
+        const recordDate = new Date(value).setHours(0, 0, 0, 0); // Normalizza la data del record
+        return recordDate === filterDate;
+    };
+
+    const applyFilter = () => {
+        setFilters({
+            ...filters,
+            UploadDate: { value: tempFilterValue, dateFile: 'custom' },
+        });
+    };
+
+    const clearFilter = () => {
+        setTempFilterValue(null); // Resetta il valore del calendario
+        setFilters({
+            ...filters,
+            UploadDate: { value: null, dateFile: 'custom' },
+        });
+    };
 
     // Gestione dei file duplicati
     const isDuplicateFile = (file: File, fileType: "logo" | "calendar") => {
@@ -64,7 +96,6 @@ export default function GestioneGenerale() {
             (img: any) => img.name === file.name && img.size === file.size && img.type === file.type
         );
     };
-
     // Controllo del formato del file
     const isValidFileFormat = (file: File, fileType: "logo" | "calendar") => {
         if (fileType === "logo") {
@@ -82,16 +113,13 @@ export default function GestioneGenerale() {
         }
         return false;
     };
-
     // Caricamento dei loghi
     const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
         if (files && files.length > 0) {
             const newImages: ImageType[] = [];
             const newFileNames: string[] = [];
-
             const fileArray = Array.from(files);
-
             for (const file of fileArray) {
                 if (!isValidFileFormat(file, "logo")) {
                     setToast({
@@ -125,7 +153,6 @@ export default function GestioneGenerale() {
             setLogoFileNames(prevFileNames => [...prevFileNames, ...newFileNames]);
         }
     };
-
     // Caricamento dei calendari
     const handleCalendarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
@@ -140,7 +167,6 @@ export default function GestioneGenerale() {
                     });
                     continue;
                 }
-
                 if (isDuplicateFile(file, "calendar")) {
                     setToast({
                         message: `Il file ${file.name} è già stato caricato.`,
@@ -148,12 +174,10 @@ export default function GestioneGenerale() {
                     });
                     continue;
                 }
-
                 setCalendarFiles(prevFiles => [...prevFiles, file]);
             }
         }
     };
-
     // Gestione selezione multipla per loghi
     const handleLogoSelectAllChange = () => {
         if (logoSelectAll) {
@@ -163,7 +187,6 @@ export default function GestioneGenerale() {
         }
         setLogoSelectAll(prev => !prev);
     };
-
     // Gestione selezione singola per loghi
     const handleLogoCheckboxChange = (fileName: string) => {
         setLogoSelectedFiles(prevSelected =>
@@ -172,7 +195,6 @@ export default function GestioneGenerale() {
                 : [...prevSelected, fileName]
         );
     };
-
     // Gestione selezione multipla per calendari
     const handleCalendarSelectAllChange = () => {
         if (calendarSelectAll) {
@@ -182,7 +204,6 @@ export default function GestioneGenerale() {
         }
         setCalendarSelectAll(prev => !prev);
     };
-
     // Gestione selezione singola per calendari
     const handleCalendarCheckboxChange = (fileName: string) => {
         setCalendarSelectedFiles(prevSelected =>
@@ -191,7 +212,6 @@ export default function GestioneGenerale() {
                 : [...prevSelected, fileName]
         );
     };
-
     // Rimozione dei file selezionati
     const handleRemoveSelected = (fileType: "logo" | "calendar") => {
         if (fileType === "logo") {
@@ -206,16 +226,12 @@ export default function GestioneGenerale() {
             setCalendarSelectAll(false);
         }
     };
-
     // Funzione di invio per i loghi
     const handleLogoSubmit = async () => {
         try {
             const filesToUpload = logoImages.map(img => img.file);
-
             const response = await uploadFile(filesToUpload, FileTypeEnum.PNG);
-
             console.log('Loghi caricati con successo:', response);
-
             setLogoImages([]);
             setLogoFileNames([]);
             setToast({
@@ -230,22 +246,16 @@ export default function GestioneGenerale() {
             });
         }
     };
-
     // Funzione di invio per il calendario
-
     const handleCalendarSubmit = async () => {
         try {
             const filesToUpload = calendarFiles;
-
             // Determina dinamicamente il tipo di file in base all'estensione
             const fileType = calendarFiles.every(file => file.name.toLowerCase().endsWith('.csv'))
                 ? FileTypeEnum.CSV
                 : FileTypeEnum.PDF;
-
             const response = await uploadFile(filesToUpload, fileType); // Passa il tipo corretto
-
             console.log('Calendario caricato con successo:', response);
-
             setCalendarFiles([]); // Pulisci i file caricati
             setToast({
                 message: "Calendario caricato con successo.",
@@ -259,11 +269,10 @@ export default function GestioneGenerale() {
             });
         }
     };
-
     useEffect(() => {
         const fetchTeams = async () => {
             try {
-                const teamData: TeamsResponse[] = await getTeams();
+                const teamData: Team[] = await getTeams();
                 // Mappa i dati ricevuti nel formato corretto per Team
                 const mappedTeams: Team[] = teamData.map((team, index) => ({
                     id: index + 1, // Assegna un ID univoco (qui usa l'indice come esempio)
@@ -273,77 +282,171 @@ export default function GestioneGenerale() {
                 setTeams(mappedTeams); // Aggiorna lo stato con le squadre mappate
             } catch (error) {
                 console.error("Errore durante il caricamento delle squadre:", error);
-                setToast({
-                    message: "Errore nel recupero delle squadre.",
-                    type: "error",
-                });
             }
         };
-
         fetchTeams();
     }, []);
     const handleTeamChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const teamId = parseInt(e.target.value, 10);
         setSelectedTeam(teamId);
     };
-
     useEffect(() => {
         connection.start()
             .then(() => {
                 console.log("Connessione SignalR stabilita");
-    
                 // Ascolta gli aggiornamenti dei colori e gradienti
                 connection.on("ReceiveColorUpdate", async (colorUpdate: { Colors: string[], Gradients: { GradientId: number, GradientStyle: string }[] }) => {
                     console.log("Aggiornamento colori ricevuto:", colorUpdate);
-    
                     const { Colors, Gradients } = colorUpdate;
-    
                     // Esempio: Imposta i colori e i gradienti ricevuti nel tuo stato
                     if (Colors) {
                         setColors(Colors); // Ad esempio, imposta i colori nel tuo stato
                     }
-    
+
                     if (Gradients) {
                         setGradients(Gradients); // Imposta i gradienti nel tuo stato
                     }
-    
+
                     // Puoi aggiungere qui altre logiche per aggiornare altre variabili di stato
                 });
             })
             .catch(err => {
                 console.error("Errore nell'avvio della connessione SignalR: ", err);
             });
-    
         return () => {
             connection.stop();
         };
     }, []);
-    
+
+    const handleDialogClose = () => {
+        setIsDialogVisible(false);
+    };
+
+    const handleDeleteFile = (file: FileResponse) => {
+        setDeletedFile(file);
+    }
+
     return (
         <div className="dashboard">
             <Navbar />
             <div className="login-container">
-                <div className="sponsor-management-container">
+                <Panel header="Elenco calendari" className="panel-header">
+                    <div className="title">{LABEL_CONSTANT.lista_calendario}</div>
+                    <div className="subtitle-dashboard">{LABEL_CONSTANT.lista_calendari}</div>
+                    <button className="aggiungi" onClick={() => setIsDialogVisible(true)} >
+                        {LABEL_CONSTANT.carica_calendario}
+                    </button>
+                    <DataTable>
+                        <Column field="FileName" header="Nome file" style={{ width: '10%' }}></Column>
+                        <Column
+                        
+                            field="UploadDate"
+                            header="Data caricamento"
+                            style={{ width: '30%' }}
+                            filter
+                            filterField="UploadDate"
+                            filterMatchMode="custom"
+                            filterFunction={dateFilter}  // Filtro personalizzato per la data
+                            filterElement={(options) => (
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    
+                                    {/* <Calendar
+                                        value={tempFilterValue}
+                                        onChange={(e) => setTempFilterValue(e.value || null)}  // Gestisce 'undefined' e 'null'
+                                        dateFormat="dd/mm/yy"
+                                        placeholder="Seleziona una data"
+                                        icon="pi pi-calendar"
+                                        showIcon
+                                        readOnlyInput={false}  // Permette l'inserimento manuale
+                                    /> */}
+                                    <Calendar 
+                                    value={tempFilterValue} 
+                                    onChange={(e) => setTempFilterValue(e.value || null)} 
+                                    dateFormat="dd/mm/yy"
+                                    placeholder="Seleziona una data"
+                                    showIcon timeOnly  
+                                    icon={() => <i className="pi pi-calendar" />} />
+
+                                </div>
+                            )}
+                            body={(file) => new Date(file.UploadDate).toLocaleDateString()} // Formattare la data nella tabella
+                        />
+                        <Column
+                            header="Azione"
+                            body={(file) => (
+                                <Button
+                                    icon="pi pi-trash"
+                                    label="Gestisci Punteggi"
+                                    onClick={() => handleDeleteFile(file)}
+                                    className="p-button-secondary"
+                                />
+                            )}
+                            style={{ width: '10%' }}
+                        ></Column>
+                    </DataTable>
+                </Panel>
+                <Dialog
+                    header="Carica il calendario"
+                    visible={isDialogVisible}
+                    style={{ width: '50vw' }}
+                    modal
+                    onHide={handleDialogClose}
+                >
                     <div className="title">{LABEL_CONSTANT.carica_calendario}</div>
                     <div className="subtitle-dashboard">{LABEL_CONSTANT.subtitle_calendario}</div>
+                    <div className="subtitle-dashboard">{LABEL_CONSTANT.subtitle_sport}</div>
+                    <select
+                        value={selectedTeam ?? ""}
+                        onChange={handleTeamChange}
+                        className="team-select"
+                    >
+                        <option value="" disabled>
+                            {LABEL_CONSTANT.seleziona_sport}
+                        </option>
+                        {teams.map(team => (
+                            <option key={team.id} value={team.id}>
+                                {team.name}
+                            </option>
+                        ))}
+                    </select>
+                    <div className="subtitle-dashboard">{LABEL_CONSTANT.inserisci_categoria}</div>
+                    <InputText
+                        value={value}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
+                        className="team-select"
+                    />
+                    <div className="subtitle-dashboard">{LABEL_CONSTANT.inserisci_girone}</div>
+                    <InputText
+                        value={value}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
+                        className="team-select"
+                    />
                     <input
+                        className="upload"
                         type="file"
                         accept=".csv, .pdf"
                         multiple
                         onChange={handleCalendarUpload}
                     />
+
                     <div className="select-all-container">
-                        <input
-                            type="checkbox"
-                            checked={calendarSelectAll}
-                            onChange={handleCalendarSelectAllChange}
-                        />
-                        {LABEL_CONSTANT.selezione_multipla}
+                        {calendarFiles.length > 0 && (
+                            <>
+                                <input
+                                    className="upload"
+                                    type="checkbox"
+                                    checked={calendarSelectAll}
+                                    onChange={handleCalendarSelectAllChange}
+                                />
+                                {LABEL_CONSTANT.selezione_multipla}
+                            </>
+                        )}
                     </div>
                     <div className="file-names-list">
                         {calendarFiles.slice(0, 4).map((file, index) => (
                             <div key={index} className="file-name-container">
                                 <input
+                                    className="upload"
                                     type="checkbox"
                                     id={`calendar-checkbox-${file.name}`}
                                     checked={calendarSelectedFiles.includes(file.name)}
@@ -355,48 +458,54 @@ export default function GestioneGenerale() {
                             </div>
                         ))}
                     </div>
-                    <button onClick={handleCalendarSubmit} disabled={calendarFiles.length === 0}>
+                    <button
+                        onClick={handleCalendarSubmit}
+                        disabled={calendarFiles.length === 0}
+                    >
                         {LABEL_CONSTANT.carica_calendario}
                     </button>
-                </div>
+                </Dialog>
 
-                <div className="section-container">
+                <Panel header="Carica i loghi" style={{ marginBottom: '20px' }}>
                     <div className="title">{LABEL_CONSTANT.carica_logo}</div>
                     <div className="subtitle-dashboard">{LABEL_CONSTANT.subtitle_loghi}</div>
-
-                    <select
-                        value={selectedTeam ?? ""}
-                        onChange={handleTeamChange}
-                        className="team-select"
-                    >
-                        <option value="" disabled>
-                            {LABEL_CONSTANT.seleziona_squadra}
-                        </option>
-                        {teams.map(team => (
-                            <option key={team.id} value={team.id}>
-                                {team.name}
-                            </option>
-                        ))}
-                    </select>
-
-                    <input
+                    <input className="upload"
                         type="file"
                         accept="image/png, image/jpeg, image/svg+xml"
                         multiple
                         onChange={handleLogoUpload}
                     />
                     <div className="select-all-container">
-                        <input
-                            type="checkbox"
-                            checked={logoSelectAll}
-                            onChange={handleLogoSelectAllChange}
-                        />
-                        {LABEL_CONSTANT.selezione_multipla}
+                        <select
+                            value={selectedTeam ?? ""}
+                            onChange={handleTeamChange}
+                            className="team-select"
+                        >
+                            <option value="" disabled>
+                                {LABEL_CONSTANT.seleziona_squadra}
+                            </option>
+                            {teams.map(team => (
+                                <option key={team.id} value={team.id}>
+                                    {team.name}
+                                </option>
+                            ))}
+                        </select>
+                        {logoFileNames.length > 0 && (
+                            <>
+                                <input className="upload"
+                                    type="checkbox"
+                                    checked={logoSelectAll}
+                                    onChange={handleLogoSelectAllChange}
+                                />
+                                {LABEL_CONSTANT.selezione_multipla}
+                            </>
+                        )}
                     </div>
+
                     <div className="file-names-list">
                         {logoFileNames.slice(0, 4).map((file, index) => (
                             <div key={index} className="file-name-container">
-                                <input
+                                <input className="upload"
                                     type="checkbox"
                                     id={`logo-checkbox-${file}`}
                                     checked={logoSelectedFiles.includes(file)}
@@ -411,8 +520,8 @@ export default function GestioneGenerale() {
                     <button onClick={handleLogoSubmit} disabled={logoImages.length === 0}>
                         {LABEL_CONSTANT.carica_logo}
                     </button>
-                </div>
 
+                </Panel>
                 {toast && (
                     <div className={`toast ${toast.type}`}>
                         {toast.message}

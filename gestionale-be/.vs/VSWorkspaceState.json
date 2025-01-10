@@ -11,6 +11,6 @@
     "\\src\\Api\\Features\\GetMatchData\\Endpoint",
     "\\src\\Api\\Features\\WebSocket"
   ],
-  "SelectedNode": "\\src\\Api\\Features\\File\\Command\\UploadFileCommand.cs",
+  "SelectedNode": "\\src\\Api\\Program.cs",
   "PreviewInSolutionExplorer": false
 }

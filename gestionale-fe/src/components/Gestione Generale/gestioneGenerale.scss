@@ -46,3 +46,65 @@
     color: white;
     font-size: 12px;
 }
+
+.upload{
+    margin: 20px auto;
+    display: block;
+    font-size: 16px;
+}
+
+.team-select{
+    margin: 20px auto;
+    display: block;
+    border-radius: 8px;
+    font-size: 16px;
+    height: 34px;
+    margin: 20px auto;
+    display: block;
+    border-radius: 8px;
+    font-size: 16px;
+    height: 34px;
+    width: 55%;
+}
+
+
+.error-toast{
+        color: red;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+}
+
+.panel-header{
+    margin-bottom: 20px;
+    width: 50%;
+}
+
+.aggiungi{
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+    margin: 20px auto;
+    margin-right: 0%;
+}
+
+/* Rimuovi margini e dropdown di matchmode */
+.p-column-filter-overlay-menu .p-column-filter-constraint .p-column-filter-matchmode-dropdown {
+    display: none !important; /* Rimuove la selezione del tipo di corrispondenza */
+}
+
+/* Modifica l'aspetto dei dropdown (se applicabili) */
+.p-fluid .p-dropdown {
+    display: none !important; /* Nasconde il dropdown */
+}
+
+.p-column-filter-add-rule{
+    display: none !important;
+}
+
+.pi-calendar{
+    font-size: 30px;
+}
