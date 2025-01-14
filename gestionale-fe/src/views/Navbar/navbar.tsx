@@ -23,7 +23,7 @@ const Navbar = () => {
             }
         }
     ];
-    const start = <img src={require('assets/images/Logo_scritta.svg').default} alt="Logo" className="logo-image-col-nav" onClick={handleLogin} />
+    const start = <img src={require('assets/images/Scritta.svg').default} alt="Logo" className="logo-image-col-nav" onClick={handleLogin} />
     const end = (
         <div className="flex align-items-center gap-2">
             <Avatar

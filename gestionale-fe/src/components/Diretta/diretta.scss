@@ -95,13 +95,22 @@
 }
 
 .set-info {
-  display: flex;
+ /*  display: flex;
   flex-direction: row;
+  margin-left: 15px; /* Ridotto per adattare meglio 
+  font-weight: bold; */
+  display: flex;
+  flex-direction: row; /* Allinea orizzontalmente gli elementi */
   margin-left: 15px; /* Ridotto per adattare meglio */
   font-weight: bold;
+  
 }
 
 .set-container {
+  /* display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 40px; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -110,21 +119,38 @@
 
 .set-label,
 .set-number {
+  /* font-size: 65%; /* Ridotto per coerenza 
+  color: #343a40;
+  margin: 0;
+  font-weight: bold !important;
+  margin-bottom: 3px; */
   font-size: 65%; /* Ridotto per coerenza */
   color: #343a40;
   margin: 0;
   font-weight: bold !important;
   margin-bottom: 3px;
 }
+  .set-scores {
+    /*font-size: 85%;  Ridotto leggermente 
+    color: black;
+    min-width: 25px; /* Più piccolo 
+    text-align: center;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+  /*   justify-content: space-between; 
+  justify-content: flex-start;*/
 
-
-.set-scores {
-  font-size: 85%; /* Ridotto leggermente */
+  font-size: 85%;
   color: black;
-  min-width: 25px; /* Più piccolo */
+  min-width: 25px;
   text-align: center;
   font-weight: bold;
-}
+  display: flex;
+  flex-direction: column; /* Posiziona il punteggio uno sotto l'altro */
+  align-items: center;
+  position: relative; /* Necessario per posizionare l'icona */
+  }
 
 .divider {
   width: 109%;
@@ -170,7 +196,7 @@
 
 .logo-container-diretta {
   position: absolute; /* Allinea il logo rispetto al contenitore */
-  top: 10px; /* Posiziona in alto */
+  top: 3px; /* Posiziona in alto */
   left: 20px; /* Posiziona a sinistra */
   z-index: 10;
 }
@@ -183,12 +209,31 @@
 }
 
 .header-logo {
-  width: 95%;
-  height: 60%;
-  max-width: 300px;
-  max-height: 300px;
+  width: 98%;
+    height: 68%;
+    max-width: 352px;
+    max-height: 352px;
 }
+
 
 .set-icon{
   color: #343a40;
+  margin-left: 5px; /* Spazio tra il punteggio e l'icona */
+  font-size: 11px; /* Dimensione dell'icona */
+  display: inline-block;
+  margin-left: 10px;
+  top: 0; /* Allineamento verticale */
+} 
+
+.set-icon-container {
+ /*  margin-left: 5px; /* Distanza tra il punteggio e l'icona 
+  display: inline-block; */
+
+  position: absolute; /* Posizionamento assoluto rispetto al contenitore */
+  right: -20px; /* Posiziona l'icona a destra del punteggio */
+  top: 50%; /* Allinea verticalmente l'icona */
+  transform: translateY(-50%); /* Centra verticalmente */
+  display: inline-block;
+
+  
 }

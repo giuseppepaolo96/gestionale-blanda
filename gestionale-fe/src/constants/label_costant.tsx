@@ -19,7 +19,7 @@ export const LABEL_CONSTANT = {
     timeout_ospite:"Timeout Ospite",
     timer:"Timer",
     reset_timer:"Reset timer",
-    reset_punteggio:"Reset punteggio",
+    reset_punteggio:"Reset punteggio", 
     secondi:"Secondi",
     set_timer:"Avvia timer",
     visualizza_nuove_schede:"Visualizza le nuove schede",

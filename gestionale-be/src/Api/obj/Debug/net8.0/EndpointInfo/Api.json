@@ -75,7 +75,7 @@
         }
       }
     },
-    "/api/match-data/{matchNumber}": {
+    "/api/match-data/": {
       "get": {
         "tags": [
           "Api"
@@ -84,11 +84,11 @@
         "parameters": [
           {
             "name": "matchNumber",
-            "in": "path",
-            "required": true,
+            "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int32"
+              "format": "int32",
+              "nullable": true
             }
           }
         ],

@@ -187,7 +187,7 @@ export default function GestioneGenerale() {
         }
         setLogoSelectAll(prev => !prev);
     };
-    // Gestione selezione singola per loghi
+    // Gestione selezione singola per loghi 
     const handleLogoCheckboxChange = (fileName: string) => {
         setLogoSelectedFiles(prevSelected =>
             prevSelected.includes(fileName)

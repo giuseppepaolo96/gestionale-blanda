@@ -12,7 +12,7 @@
         color: $buttonTextHoverColor;
         border-color: $buttonHoverBorderColor;
     }
-
+ 
     &:not(:disabled):active {
         background: $buttonActiveBg;
         color: $buttonTextActiveColor;

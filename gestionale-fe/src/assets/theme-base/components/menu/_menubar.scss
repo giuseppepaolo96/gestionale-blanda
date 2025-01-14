@@ -15,7 +15,7 @@
 
 	.p-menuitem {
 		@include menuitem-link();
-	}
+	} 
 
 	.p-submenu-list {
 		padding: $verticalMenuPadding;

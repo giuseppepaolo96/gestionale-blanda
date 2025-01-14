@@ -15,7 +15,7 @@ const promiseWrapper = (promise: any) => {
       result = error;
     }
   );
-
+ 
   return () => {
     switch (status) {
       case "pending":

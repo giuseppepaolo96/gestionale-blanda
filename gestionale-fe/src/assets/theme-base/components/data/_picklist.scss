@@ -22,7 +22,7 @@
 		padding: $panelHeaderPadding;
 		background: $panelContentBg;
 		border: $panelHeaderBorder;
-		border-bottom: 0 none;
+		border-bottom: 0 none; 
 
 		.p-picklist-filter-input {
 			padding-right: nth($inputPadding, 2) + $primeIconFontSize;

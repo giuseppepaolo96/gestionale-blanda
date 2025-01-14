@@ -24,7 +24,7 @@
             .p-steps-title {
                 margin-top: $inlineSpacing;
                 color: $stepsItemTextColor;
-            }
+            } 
 
             &:not(.p-disabled):focus-visible {
                 @include focused();

@@ -25,7 +25,7 @@
 
 	.p-menuitem {
 		@include menuitem-link();
-	}
+	} 
 
 	.p-menuitem-separator {
 		border-top: $divider;

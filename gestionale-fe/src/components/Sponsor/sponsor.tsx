@@ -20,7 +20,7 @@ interface CarouselSettings {
     singleImageMode: boolean;
     displayPosition: 'top' | 'bottom' | 'center';
     displayMode: 'diretta' | 'ledwall' | 'entrambi';
-}
+} 
 
 interface ImageType {
     id: number;

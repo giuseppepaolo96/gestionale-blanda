@@ -18,7 +18,7 @@
     &:enabled:focus {
         @include focused-input();
     }
-
+ 
     &.p-invalid.p-component {
         @include invalid-input();
     }

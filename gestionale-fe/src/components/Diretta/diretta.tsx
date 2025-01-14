@@ -1,10 +1,9 @@
 import './diretta.scss';
-import logoSponsor from '../../assets/images/faam_spa_logo-removebg-preview.jpg';
-import image1 from '../../assets/images/DREAMVOLLEY NARDO.jpg';
-import image2 from '../../assets/images/FAAM MATESE.jpg';
+import logoSponsor from '../../assets/images/faam_spa_logo.jpg';
+import deafaultLogo from '../../assets/images/default-logo.png';
 import { useEffect, useState } from 'react';
 import * as signalR from "@microsoft/signalr";
-import { getMatchData, getSponsors, MatchDataResponse, Team } from 'services/UserService';
+import { getMatchData, getSponsors, getTeamLogos, MatchDataResponse, Team } from 'services/UserService';
 import axios from 'axios';
 import 'primeicons/primeicons.css'; // Import PrimeIcons
 import { useParams } from 'react-router-dom';
@@ -16,6 +15,7 @@ export interface SponsorResponse {
 
 export default function Diretta() {
     const { matchId } = useParams();
+    console.log('matchId estratto da useParams:', matchId);
     const [homeScore, setHomeScore] = useState(0);
     const [awayScore, setAwayScore] = useState(0);
     const [setScores, setSetScores] = useState<number[][]>([[], [], [], [], []]); // Inizializza 5 set vuoti
@@ -23,9 +23,12 @@ export default function Diretta() {
     const [set, setCompleteSet] = useState(1); // Indice del set corrente, inizia da 1
     const [homeTeam, setHomeTeam] = useState<Team | null>(null); // Lo stato può essere un oggetto o null
     const [awayTeam, setAwayTeam] = useState<Team | null>(null);
+    const [homeTeamLogo, setHomeTeamLogo] = useState<string | null>(null);
+    const [awayTeamLogo, setAwayTeamLogo] = useState<string | null>(null);
     const [sponsors, setSponsors] = useState<SponsorResponse[]>([]);
     const [possession, setPossession] = useState<'home' | 'away' | null>(null); // Stato per il possesso
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [reset, resetMatch] = useState(false);
 
     const connection = new signalR.HubConnectionBuilder()
         .withUrl("http://localhost:8080/scoreHub")
@@ -42,26 +45,65 @@ export default function Diretta() {
         }
     };
 
+    
+
+
+    useEffect(() => {
+        if (matchId) {
+            const parsedMatchId = parseInt(matchId, 10);  // Parsiamo il matchId in numero
+            if (!isNaN(parsedMatchId)) {
+                fetchMatchData(parsedMatchId);  // Passa matchId alla funzione per recuperare i dati
+            } else {
+                console.error('matchId non valido');
+            }
+        }
+    }, [matchId]);  // Esegui quando matchId cambia
+
 
     const fetchMatchData = async (matchId: number) => {
         try {
-            const data = await getMatchData();
-            const match = data.find(m => m.id === matchId);
+            const matchData: MatchDataResponse[] = await getMatchData();
+            const match = matchData.find(m => m.matchNumber === matchId); // Usa matchNumber per il confronto
             if (match) {
-                // Verifica che match.homeTeam e match.awayTeam siano del tipo Team
-                setHomeTeam(match.homeTeam as Team);  // Assicurati che match.homeTeam sia di tipo Team
-                setAwayTeam(match.awayTeam as Team);  // Assicurati che match.awayTeam sia di tipo Team
-                setHomeScore(0);
-                setAwayScore(0);
+                setHomeTeam(match.homeTeam);  // Imposta il team di casa
+                setAwayTeam(match.awayTeam);  // Imposta il team ospite
+                setHomeScore(0);              // Resetta il punteggio della squadra di casa
+                setAwayScore(0);              // Resetta il punteggio della squadra ospite
                 setSetScores([[], [], [], [], []]); // Resetta i punteggi dei set
             }
         } catch (error) {
             console.error('Failed to fetch match data', error);
         }
     };
+    useEffect(() => {
+        const fetchLogos = async () => {
+            if (!homeTeam || !awayTeam) return; // Aggiungi un controllo per evitare errori se le squadre non sono ancora impostate
+
+            try {
+                const teams = await getTeamLogos(); // Recupera tutte le squadre con i loghi
+
+                // Trova il logo per la squadra di casa e la squadra ospite
+                const homeTeamLogo = teams.find((team) => team.name.toLowerCase() === homeTeam.name.toLowerCase())?.logo || null;
+                const awayTeamLogo = teams.find((team) => team.name.toLowerCase() === awayTeam.name.toLowerCase())?.logo || null;
+
+                // Aggiorna gli stati con i loghi trovati
+                setHomeTeamLogo(homeTeamLogo);
+                setAwayTeamLogo(awayTeamLogo);
+            } catch (error) {
+                console.error("Errore durante il recupero dei loghi delle squadre:", error);
+            }
+        };
+
+        fetchLogos();
+    }, [homeTeam, awayTeam]); 
+
 
     useEffect(() => {
         fetchSponsors();
+        if (!matchId) {
+            console.log("matchId non definito, non posso iniziare a ricevere aggiornamenti.");
+            return; // Esci se matchId non è disponibile
+        }
 
         connection.start()
             .then(() => {
@@ -70,36 +112,78 @@ export default function Diretta() {
                 connection.on("ReceiveScoreUpdate", async (matchUpdate) => {
                     console.log("Dati ricevuti:", matchUpdate);
 
-                    const { matchId, scoreCasa, scoreOspite, set: currentSet, possessoCasa, possessoOspite } = matchUpdate;
+                    // Converte matchId estratto da useParams in stringa
+                    const parsedMatchId = String(matchId);
 
-                    await fetchMatchData(matchId);
+                    // Estrai il matchId ricevuto nei dati di matchUpdate
+                    const updateMatchId = String(matchUpdate.matchId);
 
-                    if (scoreCasa !== undefined && scoreOspite !== undefined) {
-                        setHomeScore(scoreCasa);
-                        setAwayScore(scoreOspite);
-                    }
+                    // Se i matchId corrispondono, aggiorna i punteggi
+                    if (updateMatchId === parsedMatchId) {
+                        console.log(`matchId ricevuto: ${updateMatchId}, matchId attuale: ${parsedMatchId}`);
 
-                    if (currentSet !== undefined) {
-                        setSetsCount(currentSet);
-                        setCompleteSet(currentSet);
+                        // Aggiorna i punteggi solo se sono definiti
+                        if (matchUpdate.scoreCasa !== undefined && matchUpdate.scoreOspite !== undefined) {
+                            console.log("Updating scores: ", matchUpdate.scoreCasa, matchUpdate.scoreOspite); // Log per monitorare i punteggi
+                            setHomeScore(matchUpdate.scoreCasa);  // Aggiorna il punteggio della squadra di casa
+                            setAwayScore(matchUpdate.scoreOspite); // Aggiorna il punteggio della squadra ospite
+                        }
 
-                        setSetScores((prevSetScores) => {
-                            const newSetScores = [...prevSetScores];
-                            if (!newSetScores[currentSet - 1]) {
-                                newSetScores[currentSet - 1] = [0, 0];
-                            }
-                            newSetScores[currentSet - 1] = [scoreCasa || 0, scoreOspite || 0];
-                            return newSetScores;
-                        });
-                    }
+                        // Aggiorna i set se il set è definito
+                        if (matchUpdate.set !== undefined) {
+                            setSetsCount(matchUpdate.set); // Imposta il numero totale di set
+                            setCompleteSet(matchUpdate.set); // Imposta il set corrente
 
-                    // Imposta il possesso corrente
-                    if (possessoCasa) {
-                        setPossession('home'); // La squadra di casa ha il possesso
-                    } else if (possessoOspite) {
-                        setPossession('away'); // La squadra ospite ha il possesso
+                            // Aggiorna il punteggio del set corrente
+                            setSetScores((prevSetScores) => {
+                                const newSetScores = [...prevSetScores];
+                                if (!newSetScores[matchUpdate.set - 1]) {
+                                    newSetScores[matchUpdate.set - 1] = [0, 0];
+                                }
+                                newSetScores[matchUpdate.set - 1] = [matchUpdate.scoreCasa || 0, matchUpdate.scoreOspite || 0];
+                                return newSetScores;
+                            });
+                        }
+
+                        // Imposta il possesso corrente
+                        if (matchUpdate.possessoCasa) {
+                            setPossession('home');  // La squadra di casa ha il possesso
+                        } else if (matchUpdate.possessoOspite) {
+                            setPossession('away');  // La squadra ospite ha il possesso
+                        } else {
+                            setPossession(null); // Nessuna squadra ha il possesso
+                        }
                     } else {
-                        setPossession(null); // Nessuna squadra ha il possesso
+                        console.log(`matchId non corrisponde, ricevuto: ${updateMatchId}, atteso: ${parsedMatchId}.`);
+
+
+                        if (matchUpdate.ResetMatch) {
+                            console.log("Ricevuto comando di reset del match");
+                            resetMatch(true);
+                            return;
+                        }
+
+
+
+                        // Fallback: se arriva un punteggio finale, aggiorna comunque i punteggi
+                        if (matchUpdate.scoreCasa !== undefined && matchUpdate.scoreOspite !== undefined) {
+                            console.log("Aggiornamento finale ricevuto, aggiornando punteggi...");
+                            setHomeScore(matchUpdate.scoreCasa);
+                            setAwayScore(matchUpdate.scoreOspite);
+                        }
+
+                        // Gestione dei set finali: se `set` è definito e `matchId` è nullo, forza l'aggiornamento finale
+                        if (matchUpdate.set !== undefined) {
+                            setSetsCount(matchUpdate.set);
+                            setCompleteSet(matchUpdate.set);
+
+                            // Forza l'aggiornamento del punteggio del set finale
+                            setSetScores((prevSetScores) => {
+                                const newSetScores = [...prevSetScores];
+                                newSetScores[matchUpdate.set - 1] = [matchUpdate.scoreCasa || 0, matchUpdate.scoreOspite || 0];
+                                return newSetScores;
+                            });
+                        }
                     }
                 });
             })
@@ -107,10 +191,12 @@ export default function Diretta() {
                 console.error("Error starting SignalR connection: ", err);
             });
 
+        // Cleanup della connessione quando il componente viene smontato
         return () => {
             connection.stop();
         };
-    }, []);
+    }, [matchId]);
+
 
 
     useEffect(() => {
@@ -130,13 +216,14 @@ export default function Diretta() {
                     <div className="team">
                         <div className="team-logo-container">
                             <div className="team-logo-container">
-                               {/*  <div className="color-strip home"></div> */}
-                                <img src={image1} alt="Logo Squadra Casa" className="team-logo" />
-                           
-                            <div className="team-info">
-                                <div className="team-name-container">
-                                    <div className="team-name">{homeTeam ? homeTeam.name : "DREAM VOLLEY 2011 ASD"}</div>
-                                </div>
+                                {/*  <div className="color-strip home"></div> */}
+
+                                <img src={homeTeamLogo || deafaultLogo}  alt="Logo Squadra Ospite" className="team-logo" />
+
+                                <div className="team-info">
+                                    <div className="team-name-container">
+                                        <div className="team-name">{homeTeam ? homeTeam.name : ""}</div>
+                                    </div>
                                 </div>
                                 <div className="set-info">
                                     <div className="set-info">
@@ -150,14 +237,19 @@ export default function Diretta() {
                                                         {setScores[setNumber - 1]?.[0] || 0}
                                                         {/* Mostra il cerchio se la squadra di casa ha il possesso */}
                                                         {setNumber === set && possession === 'home' && (
-                                                            <i
-                                                                className="pi pi-circle-fill set-icon"
-                                                            ></i>
+                                                            <div className="set-icon-container">
+                                                                <i
+                                                                    className="pi pi-circle-fill set-icon"
+                                                                ></i>
+                                                            </div>
                                                         )}
+                                                        
+                                                        
                                                     </div>
                                                 </div>
                                             );
                                         })}
+
                                     </div>
 
                                 </div>
@@ -169,33 +261,36 @@ export default function Diretta() {
                     {/* Squadra Ospite */}
                     <div className="team">
                         <div className="team-logo-container">
-                           {/*  <div className="color-strip away"></div> */}
-                            <img src={image2} alt="Logo Squadra Ospite" className="team-logo" />
                         
-                        <div className="team-info">
-                            <div className="team-name-container">
-                                <div className="team-name">{awayTeam ? awayTeam.name : "POLISPORTIVA MATESE"}</div>
-                            </div>
+                            {/*  <div className="color-strip away"></div> */}
+                            
+                            <img src={awayTeamLogo || deafaultLogo}  alt="Logo Squadra Ospite" className="team-logo" />
+                            <div className="team-info">
+                                <div className="team-name-container">
+                                    <div className="team-name">{awayTeam ? awayTeam.name : ""}</div>
+                                </div>
                             </div>
                             <div className="set-info">
-                            <div className="set-info">
-                                {Array.from({ length: set }).map((_, i) => {
-                                    const setNumber = i + 1;
-                                    return (
-                                        <div key={setNumber} className="set-container">
-                                            <div className="set-scores">
-                                                {setScores[setNumber - 1]?.[1] || 0}
-                                                {/* Mostra il cerchio se la squadra ospite ha il possesso */}
-                                                {setNumber === set && possession === 'away' && (
-                                                    <i
-                                                        className="pi pi-circle-fill set-icon"
-                                                    ></i>
-                                                )}
+                                <div className="set-info">
+                                    {Array.from({ length: set }).map((_, i) => {
+                                        const setNumber = i + 1;
+                                        return (
+                                            <div key={setNumber} className="set-container">
+                                                <div className="set-scores">
+                                                    {setScores[setNumber - 1]?.[1] || 0}
+                                                    {/* Mostra il cerchio se la squadra ospite ha il possesso */}
+                                                    {setNumber === set && possession === 'away' && (
+                                                        <div className="set-icon-container">
+                                                        <i
+                                                            className="pi pi-circle-fill set-icon"
+                                                        ></i>
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
+                                        );
+                                    })}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -236,3 +331,5 @@ export default function Diretta() {
         </div>
     );
 }
+
+

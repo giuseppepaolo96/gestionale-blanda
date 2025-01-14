@@ -22,7 +22,7 @@
     if (this.conf.init === true) {
       this.initialize();
     }
-  };
+  }; 
 
   /**
    * Initialize module

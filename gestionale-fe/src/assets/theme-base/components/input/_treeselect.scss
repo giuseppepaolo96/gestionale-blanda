@@ -13,7 +13,7 @@
     &:not(.p-disabled).p-focus {
         @include focused-input();
     }
-
+ 
     &.p-treeselect-clearable {
         .p-treeselect-label {
             padding-right: nth($inputPadding, 2) + $primeIconFontSize;

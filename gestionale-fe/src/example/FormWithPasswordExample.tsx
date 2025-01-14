@@ -23,7 +23,7 @@ export default function FormWithPasswordExample() {
   const onSubmit = () => {
     console.log("confermaPassword ", control.getFieldState("confermaPassword"));
     console.log("password ", control.getFieldState("password"));
-  };
+  }; 
 
   const getFormErrorMessage = (name: string) => {
     let message: any = (errors as any)[name]?.message;

@@ -19,3 +19,4 @@ export const ProtectedRoute = ({ logged, children }: any) => {
 
   return children;
 };
+ 

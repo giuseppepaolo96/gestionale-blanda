@@ -21,8 +21,8 @@ const router = createBrowserRouter(
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="gestione/:matchId" element={<GestionePunteggio />} />
         <Route path="gestione-sponsor" element={<Sponsor />} />
-        <Route path="ledwall" element={<Ledwall />} />
-        <Route path="diretta" element={<Diretta />} />
+        <Route path="ledwall/:matchId" element={<Ledwall />} />
+        <Route path="diretta/:matchId" element={<Diretta />} />
         <Route path="gestione-generale" element = {<GestioneGenerale/>}/>      
       </Route>
     </>

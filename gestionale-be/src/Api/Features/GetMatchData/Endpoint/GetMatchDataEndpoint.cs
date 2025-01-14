@@ -23,7 +23,7 @@ namespace Api.Features.GetMatchData.Endpoint
         public override void Configure()
         {
             // URL con parametro opzionale
-            Get("/api/match-data/{matchNumber?}");
+            Get("/api/match-data/");
             AllowAnonymous();
         }
 

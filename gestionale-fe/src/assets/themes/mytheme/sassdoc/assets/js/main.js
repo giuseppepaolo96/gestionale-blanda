@@ -21,7 +21,7 @@
       this.initialize();
     }
   };
-
+ 
   // Initialisation method
   App.prototype.initialize = function () {
     this.codePreview();

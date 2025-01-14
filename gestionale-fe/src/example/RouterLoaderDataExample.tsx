@@ -5,3 +5,4 @@ export default function RouterLoaderDataExample() {
 
   return <h2>"OK"</h2>;
 }
+ 

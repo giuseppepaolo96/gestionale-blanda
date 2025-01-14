@@ -23,7 +23,7 @@
 
                 .p-menuitem-icon {
                     margin-right: $inlineSpacing;
-                }
+                } 
 
                 &:not(.p-disabled):focus-visible {
                     @include focused-inset();

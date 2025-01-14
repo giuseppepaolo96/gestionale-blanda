@@ -24,4 +24,4 @@ export default function ExampleSuspense() {
       {/* //<Counter data={data} /> */}
     </Suspense>
   );
-}
+} 

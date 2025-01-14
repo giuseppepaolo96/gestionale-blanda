@@ -22,7 +22,7 @@
         &:not(.p-disabled).p-focus {
             @include focused-input();
         }
-
+ 
         .p-autocomplete-input-token {
             padding: math.div(nth($inputPadding, 1), 2) 0;
             

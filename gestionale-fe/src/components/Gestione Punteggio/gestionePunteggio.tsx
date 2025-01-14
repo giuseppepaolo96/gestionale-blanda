@@ -32,6 +32,7 @@ export type MatchUpdate = {
 
 export default function GestionePunteggio() {
   const { matchId } = useParams();
+  console.log('matchId estratto da useParams:', matchId);
   const [homeTeam, setHomeTeam] = useState<Team | null>(null);
   const [awayTeam, setAwayTeam] = useState<Team | null>(null);
   const [matchCode, setMatchCode] = useState('');
@@ -151,51 +152,57 @@ export default function GestionePunteggio() {
 
   const increaseHomeScore = () => {
     if (matchWinner) return;
-  
+
     const newHomeScore = homeScore + 1;
     console.log(`Punteggio casa: ${newHomeScore} - Punteggio ospite: ${awayScore}`);
     console.log(`Differenza di punteggio: ${newHomeScore - awayScore}`);
-  
+
     // Prima aggiorna il punteggio
     setHomeScore(newHomeScore);
-  
+
     // Verifica subito se il set è finito
     if (newHomeScore >= MAX_SCORE && (newHomeScore - awayScore) >= WINNING_DIFF) {
       console.log("Il set è finito, vittoria per casa");
       handleSetEnd('home');
       return; // Il set è terminato, non fare altre modifiche
     }
-  
+
     // Se il set non è finito, continua a inviare il punteggio aggiornato
     console.log(`Punteggio aggiornato: Casa - ${newHomeScore}, Ospite - ${awayScore}`);
-  
+
     let updatedPossession = possession;
     if (updatedPossession === null) {
       updatedPossession = 'home';
     }
-  
-    const matchUpdate: MatchUpdate = {
-      ScoreCasa: newHomeScore,  // Usa il punteggio appena calcolato
-      ScoreOspite: awayScore,
-      Set: selectedSet,
-      ResetMatch: false,
-      ResetScore: false,
-      PossessoCasa: updatedPossession === 'home',
-      PossessoOspite: updatedPossession === 'away',
-      TimeoutHome: timeoutHome,
-      TimeoutAway: timeoutAway,
-      Timer: timer,
-      RedCardCasa: homeRedCards,
-      RedCardOspite: awayRedCards,
-      MatchWinner: matchWinner, 
-    };
-  
-    console.log("Aggiornamento del match:", matchUpdate);
-  
-    // Aggiorniamo il punteggio solo quando lo stato è effettivamente cambiato
-    UpdateScore(matchUpdate);
-  };
-  
+
+    // Assicurati che matchId sia una stringa
+    if (matchId) {
+        const matchUpdate: MatchUpdate = {
+          MatchId: matchId,  // matchId è già una stringa
+          ScoreCasa: newHomeScore,  // Usa il punteggio appena calcolato
+          ScoreOspite: awayScore,
+          Set: selectedSet,
+          ResetMatch: false,
+          ResetScore: false,
+          PossessoCasa: updatedPossession === 'home',
+          PossessoOspite: updatedPossession === 'away',
+          TimeoutHome: timeoutHome,
+          TimeoutAway: timeoutAway,
+          Timer: timer,
+          RedCardCasa: homeRedCards,
+          RedCardOspite: awayRedCards,
+          MatchWinner: matchWinner, 
+        };
+
+        console.log("Aggiornamento del match:", matchUpdate);
+
+        // Aggiorniamo il punteggio solo quando lo stato è effettivamente cambiato
+        UpdateScore(matchUpdate);
+    } else {
+        console.error("matchId non definito!");
+    }
+};
+
   // Usa `useEffect` per inviare il punteggio dopo che `homeScore` è stato aggiornato
   useEffect(() => {
     if (homeScore !== 0) { // Se il punteggio della casa non è 0
@@ -244,8 +251,9 @@ export default function GestionePunteggio() {
     if (updatedPossession === null) {
       updatedPossession = 'away';
     }
-  
+    if (matchId) {
     const matchUpdate: MatchUpdate = {
+      MatchId: matchId,
       ScoreCasa: homeScore,  // Usa il punteggio esistente per la casa
       ScoreOspite: newAwayScore,  // Usa il punteggio appena calcolato per gli ospiti
       Set: selectedSet,
@@ -265,6 +273,9 @@ export default function GestionePunteggio() {
   
     // Aggiorniamo il punteggio solo quando lo stato è effettivamente cambiato
     UpdateScore(matchUpdate);
+  } else {
+    console.error("matchId non definito!");
+}
   };
   
   // Usa `useEffect` per inviare il punteggio dopo che `awayScore` è stato aggiornato
@@ -451,53 +462,57 @@ export default function GestionePunteggio() {
   const isAwayButtonDisabled = isBothButtonsDisabled;
 
   const handleSetEnd = (winningTeam: 'home' | 'away') => {
-    // Invia il punteggio definitivo
-    const finalMatchUpdate: MatchUpdate = {
-      ScoreCasa: homeScore,
-      ScoreOspite: awayScore,
-      Set: selectedSet,
-      ResetMatch: false,
-      ResetScore: false, // Non resettare ancora
-      PossessoCasa: null,
-      PossessoOspite: null,
-      TimeoutHome: timeoutHome,
-      TimeoutAway: timeoutAway,
-      Timer: timer,
-      RedCardCasa: homeRedCards,
-      RedCardOspite: awayRedCards,
-      MatchWinner: winningTeam === 'home' ? (homeTeam?.name || 'Casa') : (awayTeam?.name || 'Ospite'),
-    };
-  
-    // Invia aggiornamento punteggio
-    UpdateScore(finalMatchUpdate);
-  
+    // Verifica se matchId è definito prima di inviare
+    if (matchId) {
+        const finalMatchUpdate: MatchUpdate = {
+            MatchId: matchId,
+            ScoreCasa: homeScore,
+            ScoreOspite: awayScore,
+            Set: selectedSet,
+            ResetMatch: false,
+            ResetScore: false,
+            PossessoCasa: null,
+            PossessoOspite: null,
+            TimeoutHome: timeoutHome,
+            TimeoutAway: timeoutAway,
+            Timer: timer,
+            RedCardCasa: homeRedCards,
+            RedCardOspite: awayRedCards,
+            MatchWinner: winningTeam === 'home' ? (homeTeam?.name || 'Casa') : (awayTeam?.name || 'Ospite'),
+        };
+
+        UpdateScore(finalMatchUpdate); // Invia aggiornamento punteggio
+    } else {
+        console.error("matchId non definito!");
+    }
+
     // Aggiorna lo stato dei set
     const newSetScores = [...setScores];
     newSetScores[selectedSet - 1] = { home: homeScore, away: awayScore };
     setSetScores(newSetScores);
-  
-    // Aggiorna il conteggio dei set vinti
-    if (winningTeam === 'home') {
-      setHomeSetsWon((prev) => prev + 1);
-      if (homeSetsWon + 1 === 3) {
-        setMatchWinner(homeTeam?.name || 'Casa');
 
-      }
-    } else {
-      setAwaySetsWon((prev) => prev + 1);
-      if (awaySetsWon + 1 === 3) {
-        setMatchWinner(awayTeam?.name || 'Ospite');
-      }
-    }
-  
+    // Aggiorna il conteggio dei set vinti e verifica la vittoria
+    const incrementSetsWon = (team: 'home' | 'away') => {
+        if (team === 'home') {
+            setHomeSetsWon((prev) => prev + 1);
+            if (homeSetsWon + 1 === 3) setMatchWinner(homeTeam?.name || 'Casa');
+        } else {
+            setAwaySetsWon((prev) => prev + 1);
+            if (awaySetsWon + 1 === 3) setMatchWinner(awayTeam?.name || 'Ospite');
+        }
+    };
+
+    // Verifica se il team vincitore ha raggiunto 3 set
+    incrementSetsWon(winningTeam);
+
     // Aspetta l'invio e poi resetta
     setTimeout(() => {
-      resetScores(); // Reset dei punteggi
-      setSelectedSet((prevSet) => (prevSet < 5 ? prevSet + 1 : 5));
-      setPossession(null);
-    }, 500); // Assicurati che l'aggiornamento avvenga prima del reset
-  };
-    
+        resetScores(); // Reset dei punteggi
+        setSelectedSet((prevSet) => (prevSet < 5 ? prevSet + 1 : 5));
+        setPossession(null);
+    }, 500);
+};
+
   const resetScores = () => {
     setHomeScore(0);
     setAwayScore(0);
@@ -506,20 +521,44 @@ export default function GestionePunteggio() {
 
 
   const resetMatch = () => {
-    setHomeScore(0);
-    setAwayScore(0);
+    const resetHomeScore = 0;
+    const resetAwayScore = 0;
+    const resetSelectedSet = 1;
+    const resetSetScores = [
+        { home: 0, away: 0 },
+        { home: 0, away: 0 },
+        { home: 0, away: 0 },
+        { home: 0, away: 0 },
+        { home: 0, away: 0 },
+    ];
+
+    setHomeScore(resetHomeScore);
+    setAwayScore(resetAwayScore);
     setHomeSetsWon(0);
     setAwaySetsWon(0);
     setMatchWinner(null);
-    setSetScores([
-      { home: 0, away: 0 },
-      { home: 0, away: 0 },
-      { home: 0, away: 0 },
-      { home: 0, away: 0 },
-      { home: 0, away: 0 },
-    ]);
-    setSelectedSet(1);
-  };
+    setSetScores(resetSetScores);
+    setSelectedSet(resetSelectedSet);
+
+    const matchUpdate: MatchUpdate = {
+        ScoreCasa: resetHomeScore,
+        ScoreOspite: resetAwayScore,
+        Set: resetSelectedSet,
+        ResetMatch: false,
+        ResetScore: false,
+        PossessoCasa: possession === 'home',
+        PossessoOspite: possession === 'away',
+        TimeoutHome: timeoutHome,
+        TimeoutAway: timeoutAway,
+        Timer: timer,
+        RedCardCasa: homeRedCards,
+        RedCardOspite: awayRedCards,
+    };
+
+    // Invia l'aggiornamento al server
+    UpdateScore(matchUpdate);
+};
+ 
   const handleRedCard = (team: 'home' | 'away') => {
     if (team === 'home') {
       setHomeScore(prevScore => Math.max(prevScore - 1, 0)); // Riduce il punteggio della squadra di casa
@@ -549,17 +588,27 @@ export default function GestionePunteggio() {
     // Invia l'aggiornamento al server
     UpdateScore(matchUpdate);
   };
+  
   useEffect(() => {
     const fetchMatch = async () => {
       try {
         const matchData: MatchDataResponse[] = await getMatchData();
-        
-        // Verifica che matchId sia definito e numerico prima di usarlo
+        console.log('Dati della partita:', matchData);  // Log dei dati ricevuti
+  
         if (matchId) {
-          const match = matchData.find(m => m.id === parseInt(matchId, 10));
+          const parsedMatchId = parseInt(matchId, 10);  // Parsiamo matchId in numero
+          console.log('matchId parsato:', parsedMatchId);  // Log del matchId parsato
+  
+          if (isNaN(parsedMatchId)) {
+            console.error('matchId non valido');
+            return;
+          }
+  
+          // Cerca la partita corrispondente usando matchNumber
+          const match = matchData.find(m => m.matchNumber === parsedMatchId);
   
           if (match) {
-            // Imposta le squadre di casa e ospite
+            console.log('Partita trovata:', match);  // Log della partita trovata
             setHomeTeam(match.homeTeam);
             setAwayTeam(match.awayTeam);
           } else {
@@ -574,11 +623,10 @@ export default function GestionePunteggio() {
     };
   
     if (matchId) {
-      fetchMatch();  // Esegui il recupero dei dati solo se matchId è presente
+      fetchMatch();  // Esegui solo se matchId è presente
     }
   }, [matchId]);  // Esegui quando matchId cambia
   
-
   return (
     <div className="dashboard">
       <Navbar />

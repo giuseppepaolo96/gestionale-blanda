@@ -16,7 +16,7 @@ const Login = () => {
       <div className="login-container">
         <div className="logo-container">
           <img
-            src={require('../../assets/images/FAAM-MATESE.svg').default}
+            src={require('../../assets/images/FAAM-MATESE_black.svg').default}
             alt="Logo"
             className="logo-image"
           />

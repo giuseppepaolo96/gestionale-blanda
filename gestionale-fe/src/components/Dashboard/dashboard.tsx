@@ -34,7 +34,7 @@ const connection = new HubConnectionBuilder()
   .build();
 
 
-
+ 
 export default function Dashboard() {
   const navigate = useNavigate();
 

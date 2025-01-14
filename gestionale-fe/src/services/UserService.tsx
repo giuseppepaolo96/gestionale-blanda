@@ -102,15 +102,25 @@ export const getTeamLogos = async (): Promise<Team[]> => {
   }
 };
 
-export const getMatchData = async (): Promise<MatchDataResponse[]> => {
+export const getMatchData = async (matchNumber?: number): Promise<MatchDataResponse[]> => {
   try {
-    const response = await axiosInstance.get<MatchDataResponse[]>('/api/match-data');
+    // Crea l'URL base
+    let url = '/api/match-data';
+
+    // Se matchNumber è fornito, aggiungi il parametro alla URL
+    if (matchNumber !== undefined) {
+      url += `?matchNumber=${matchNumber}`;
+    }
+
+    // Esegui la richiesta GET con l'URL eventualmente modificato
+    const response = await axiosInstance.get<MatchDataResponse[]>(url);
     return response.data;
   } catch (error) {
     console.error('Errore durante la richiesta dei dati delle partite:', error);
     throw error;
   }
 };
+
 
 
 export const getSponsors = async (): Promise<SponsorResponse[]> => {

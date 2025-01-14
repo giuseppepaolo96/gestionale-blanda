@@ -21,3 +21,4 @@ const Counter = ({ data }: any) => {
 };
 
 export default Counter;
+ 

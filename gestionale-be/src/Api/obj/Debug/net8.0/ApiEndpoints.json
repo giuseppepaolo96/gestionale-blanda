@@ -40,7 +40,7 @@
   {
     "ContainingType": "FastEndpoints.MainExtensions\u002B\u003C\u003Ec",
     "Method": "\u003CMapFastEndpoints\u003Eb__2_1",
-    "RelativePath": "api/match-data/{matchNumber?}",
+    "RelativePath": "api/match-data/",
     "HttpMethod": "GET",
     "IsController": false,
     "Order": 0,

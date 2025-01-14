@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import * as signalR from "@microsoft/signalr";
 import logoOspite from '../../assets/images/CERIGNOLA.jpg';
 import logoCasa from '../../assets/images/FAAM MATESE.jpg';
-import logoSponsor1 from '../../assets/images/faam_spa_logo-senza-sfondo.png';
-import logoSponsor2 from '../../assets/images/SPONSOR_CARBAT.png';
+import logoSponsor1 from '../../assets/images/faam_spa_senza-sfondo.png';
+import logoSponsor2 from '../../assets/images/SPONSOR_CARBAT_consfondo.png';
 import './ledwall.scss';
 import axios from 'axios';
 import { LABEL_CONSTANT } from "constants/label_costant";
-import { getMatchData, MatchDataResponse } from 'services/UserService';
+import { getMatchData, MatchDataResponse, Team } from 'services/UserService';
 import { useParams } from "react-router-dom";
 
 export interface SponsorResponse {
@@ -32,8 +32,8 @@ export default function Ledwall() {
     const [homeScore, setHomeScore] = useState(0);
     const [awayScore, setAwayScore] = useState(0);
     const [setScores, setSetScores] = useState<number[][]>([[], [], [], [], []]);
-    const [homeTeam, setHomeTeam] = useState("");
-    const [awayTeam, setAwayTeam] = useState("");
+    const [homeTeam, setHomeTeam] = useState<Team | null>(null); // Lo stato può essere un oggetto o null
+        const [awayTeam, setAwayTeam] = useState<Team | null>(null);
     const [day, setDay] = useState("");
     const [matchNumber, setMatchNumber] = useState("");
     const [matchDate, setMatchDate] = useState("");
@@ -51,16 +51,15 @@ export default function Ledwall() {
     const [timeoutHomeFlags, setTimeoutHomeFlags] = useState<boolean[]>([]);  // Array per i timeout della squadra di casa
     const [timeoutAwayFlags, setTimeoutAwayFlags] = useState<boolean[]>([]);  // Array per i timeout della squadra ospite
 
-
-
     const connection = new signalR.HubConnectionBuilder()
-        .withUrl("http://51.20.66.229:8080/scoreHub")
+        /* .withUrl("http://51.20.66.229:8080/scoreHub") */
+        .withUrl("http://localhost:8080/scoreHub")
         .withAutomaticReconnect()
         .build();
 
     const fetchSponsors = async () => {
         try {
-            const response = await axios.get<SponsorResponse[]>('http://51.20.66.229:8080/api/sponsor');
+            const response = await axios.get<SponsorResponse[]>('http://localhost:8080/api/sponsor');
             console.log('Sponsors fetched:', response.data);
             setSponsors(response.data);
         } catch (error) {
@@ -68,13 +67,24 @@ export default function Ledwall() {
         }
     };
 
+    useEffect(() => {
+        if (matchId) {
+            const parsedMatchId = parseInt(matchId, 10);  // Parsiamo il matchId in numero
+            if (!isNaN(parsedMatchId)) {
+                fetchMatchData(parsedMatchId);  // Passa matchId alla funzione per recuperare i dati
+            } else {
+                console.error('matchId non valido');
+            }
+        }
+    }, [matchId]);
+
     const fetchMatchData = async (matchId: number) => {
         try {
-            const data = await getMatchData();
-            const match = data.find(m => m.id === matchId);
+            const matchData = await getMatchData();
+            const match = matchData.find(m => m.matchNumber === matchId); // Usa matchNumber per il confronto
             if (match) {
-/*                 setHomeTeam(match.homeTeam);
-                setAwayTeam(match.awayTeam); */
+             setHomeTeam(match.homeTeam);
+                setAwayTeam(match.awayTeam); 
                 setHomeScore(0);
                 setAwayScore(0);
                 setSetScores([[], [], [], [], []]); // Resetta i punteggi dei set
@@ -241,9 +251,9 @@ export default function Ledwall() {
                             </div>
                         ))}
                         <span className="team-score">{winSetHome}</span>
-                        <img src={logoCasa} alt="Logo Squadra di Casa" className="team-logo" />
+                        {/* <img src={logoCasa} alt="Logo Squadra di Casa" className="team-logo" /> */}
                     </div>
-                    <span className="team-name-prima">{homeTeam} FAAM MATESE CE</span>
+                    <span className="team-name-prima">{homeTeam ? homeTeam.name : ""}</span>
                 </div>
                 <div className="score">
                     <span className="score-value">{homeScore}</span>
@@ -257,10 +267,10 @@ export default function Ledwall() {
                                 <i className="pi pi-stopwatch"></i>
                             </div>
                         ))}
-                        <img src={logoOspite} alt="Logo Squadra Ospite" className="team-logo" />
+                        {/* <img src={logoOspite} alt="Logo Squadra Ospite" className="team-logo" /> */}
                         <span className="team-score">{winSetAway}</span>
                     </div>
-                    <span className="team-name-seconda">{awayTeam} MANDWINERY CERIGNOLA</span>
+                    <span className="team-name-seconda">{awayTeam ? awayTeam.name :"" }</span>
                 </div>
             </div>
             <div className="stripes-section">

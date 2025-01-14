@@ -15,7 +15,7 @@ interface ImageType {
 interface SponsorCarouselProps {
     defaultImages: ImageType[];
     defaultDisplayDuration: number;
-    defaultSequentialMode: boolean;
+    defaultSequentialMode: boolean; 
     scrollDirection: 'horizontal' | 'vertical';
 }
 

@@ -22,7 +22,7 @@
     if (this.conf.init === true) {
       this.initialize();
     }
-  };
+  }; 
 
   Search.prototype.initialize = function () {
     // Fuse engine instanciation
