@@ -78,10 +78,19 @@ builder.Services.AddTransient<GetSponsorCommandHandler>();
 
 var app = builder.Build();
 
+app.UseMiddleware<Middleware>();  // Il middleware che controlla la porta
 // Applica la policy CORS
 app.UseCors("AllowSpecificOrigins");
 
-// Middleware di autenticazione e autorizzazione
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    
+    // Applica le migrazioni
+    dbContext.Database.Migrate();
+}
+
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseRouting();
