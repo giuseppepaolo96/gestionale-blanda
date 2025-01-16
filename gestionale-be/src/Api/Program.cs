@@ -31,7 +31,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigins", policyBuilder =>
     {
         policyBuilder
-            .WithOrigins("http://localhost:4203", "http://localhost:3001")
+            .WithOrigins("http://13.60.136.85")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()
@@ -76,11 +76,11 @@ builder.Services.AddTransient<GetSponsorCommand>();
 builder.Services.AddTransient<GetSponsorCommandHandler>();
 
 
+
 var app = builder.Build();
 
-app.UseMiddleware<Middleware>();  // Il middleware che controlla la porta
 // Applica la policy CORS
-app.UseCors("AllowSpecificOrigins");
+
 
 using (var scope = app.Services.CreateScope())
 {
@@ -90,7 +90,7 @@ using (var scope = app.Services.CreateScope())
     dbContext.Database.Migrate();
 }
 
-
+app.UseCors("AllowSpecificOrigins");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseRouting();
@@ -102,4 +102,4 @@ app.UseEndpoints(endpoints =>
     endpoints.MapHub<ScoreHub>("/scoreHub");
 });
 
-app.Run();
+app.Run("http://0.0.0.0:8080");
