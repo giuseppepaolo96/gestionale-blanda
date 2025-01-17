@@ -3,7 +3,8 @@
     flex-direction: column;
     align-items: center;
     background-color: #000000;
-    color: #ffffff;
+    /* color: #ffffff; */
+    color: #abbcff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -17,7 +18,7 @@
         margin-bottom: 20px;
 
         h1 {
-            font-size: 4rem;
+            font-size: 3rem;
             font-weight: bold;
             margin: 0;
         }
@@ -42,47 +43,69 @@
             align-items: center;
             width: 50%; // Manteniamo la larghezza al 50%
 
+
             .logo-score {
                 display: flex;
                 align-items: center;
                 justify-content: flex-start; // Allineamento a sinistra (di default) ma possiamo cambiarlo se serve
-                gap: 10px;  /* Distanza tra gli elementi (logo, score, icon) */
+                gap: 10px;
+                /* Distanza tra gli elementi (logo, score, icon) */
             }
 
             .team-logo {
-                width: 200px;
-                height: 200px;
+                width: 300px !important;
+                height: 300px !important;
             }
 
             .team-score {
                 font-size: 10rem;
-                color: #ffff;
+                color: #abbcff;
                 font-weight: bold;
-                -webkit-text-stroke: 3px #FFED00; /* Bordo giallo del testo */
+                -webkit-text-stroke: 3px #FFED00;
+                /* Bordo giallo del testo */
                 text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
             }
 
-            .team-name-prima {
-                font-size: 2.2rem;
+            .team-name {
+                font-size: 1.5rem;
                 font-weight: bold;
-                color: #cccccc;
+                color: #abbcff;
                 margin-top: 10px;
-                max-width: 200px;
                 text-align: center;
+                word-wrap: break-word;
                 white-space: normal;
-                margin-left: 8%;
+                overflow-wrap: break-word;
+                max-width: 250px;
+                /* Limita la larghezza del nome della squadra */
+            }
+
+            .team-name-prima {
+                margin-left: 12%;
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: #abbcff;
+                margin-top: 10px;
+                text-align: center;
+                word-wrap: break-word;
+                white-space: normal;
+                overflow-wrap: break-word;
+                max-width: 250px;
             }
 
             .team-name-seconda {
-                font-size: 2.2rem;
-                font-weight: bold;
-                color: #cccccc;
-                margin-top: 10px;
-                max-width: 200px;
-                text-align: center;
-                white-space: normal;
                 margin-right: 13%;
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: #abbcff;
+                margin-top: 10px;
+                text-align: center;
+                word-wrap: break-word;
+                white-space: normal;
+                overflow-wrap: break-word;
+                max-width: 250px;
             }
+
+
         }
 
         .score {
@@ -93,17 +116,20 @@
             .score-value {
                 font-size: 14rem;
                 font-weight: bold;
-                color: #FFED00;
+                color: #abbcff;
                 -webkit-text-stroke: 3px #ffff;
                 text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
             }
 
             .versus {
                 font-size: 5rem;
-                color: #ffffff;
+                color: #abbcff;
+                -webkit-text-stroke: 3px #ffff;
             }
         }
     }
+
+
 
     .stripes-section {
         display: flex;
@@ -114,12 +140,16 @@
 
         .stripe {
             flex: 1;
-            height: 50px;
+            height: 60px;
             margin: 0 5px;
             position: relative;
 
             .stripe-background {
-                display: block;
+                display: flex;
+                justify-content: center;
+                /* Centra il contenuto orizzontalmente */
+                align-items: center;
+                /* Centra il contenuto verticalmente */
                 height: 62%;
                 background-color: #ccc;
             }
@@ -146,57 +176,83 @@
 
             .stripe-values {
                 display: flex;
-                flex-direction: column;
+                flex-direction: row;
                 align-items: center;
-                margin-top: 20px;
+                justify-content: center;
+                margin-top: -31px;
+                gap: 5px;
 
                 .stripe-value {
-                    font-size: 6rem;
+                    font-size: 4rem;
                     font-weight: bold;
-                    color: #fff;
+                    color: #abbcff;
                 }
+            }
+
+            .label-set {
+                font-size: 39px;
+                font-weight: bold;
+                color: #333333;
+                text-align: center;
             }
         }
     }
 
+
     .carousel-container-ledwall {
         width: 100%;
-        max-width: 500px;
-        height: 500px;
+        max-width: 326px;
+        height: 610px;
         overflow: hidden;
         position: relative;
-        margin-top: 185px;
+        margin-top: 80px;
         margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .carousel-scroll {
         display: flex;
-        animation: scroll-left 10s linear infinite;
-        white-space: nowrap;
+        flex-direction: row;
+        transition: transform 1s ease-in-out;
+        /* Aggiungi transizione per scorrere */
+        width: 100%;
+        /* Imposta larghezza al 100% */
     }
 
     .carousel-item {
         flex-shrink: 0;
-        max-width: 1000px;
-        max-height: 1000px;
         width: 100%;
         height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
         margin-right: 30px;
+        opacity: 0;
+        transition: opacity 40s ease-in-out;
+        /* Aggiungi transizione per visibilità */
+    }
+
+    .carousel-item.active {
+        opacity: 1;
     }
 
     .carousel-item img {
-        max-width: 200%;
-        max-height: 319%;
+        max-width: 100%;
+        /* Imposta larghezza massima al 100% */
+        max-height: 100%;
+        /* Imposta altezza massima al 100% */
         object-fit: contain;
+        /* Mantieni le proporzioni senza distorcere l'immagine */
+        object-position: center;
+        /* Centra l'immagine nel contenitore */
     }
 
     .logo-container-ledwall-primo,
     .logo-container-ledwall-secondo {
         position: absolute;
-        top: 110%;
+        top: 98%;
         transform: translateY(-50%);
         width: 200px;
         height: 170px;
@@ -226,7 +282,8 @@
 
 /* Icona timeout posizionata correttamente */
 .timeout-icon-home {
-    margin-left: 10px; /* Distanza tra l'icona e il punteggio */
+    margin-left: 10px;
+    /* Distanza tra l'icona e il punteggio */
 }
 
 .pi-stopwatch:before {
@@ -236,7 +293,16 @@
 
 /* Posiziona l'icona timeout-away a destra del punteggio e logo */
 .timeout-icon-away {
-    margin-left: 10px; /* Mantieni un po' di spazio tra l'icona e il logo */
-    order: 1; /* Posiziona l'icona a destra se necessario */
+    margin-left: 10px;
+    /* Mantieni un po' di spazio tra l'icona e il logo */
+    order: 1;
+    /* Posiziona l'icona a destra se necessario */
 }
- 
+
+.stripe-value-separator {
+    font-size: 94px;
+}
+
+.winner{
+    font-size: 70px;
+}

@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import * as signalR from "@microsoft/signalr";
-import logoOspite from '../../assets/images/CERIGNOLA.jpg';
-import logoCasa from '../../assets/images/FAAM MATESE.jpg';
+import defaultLogo from '../../assets/images/default_white.png';
 import logoSponsor1 from '../../assets/images/faam_spa_senza-sfondo.png';
-import logoSponsor2 from '../../assets/images/SPONSOR_CARBAT_consfondo.png';
+import logoSponsor2 from '../../assets/images/SPONSOR_CARBAT-removebg-preview.png';
 import './ledwall.scss';
 import axios from 'axios';
 import { LABEL_CONSTANT } from "constants/label_costant";
-import { getMatchData, MatchDataResponse, Team } from 'services/UserService';
+import { getMatchData, getTeamLogos, MatchDataResponse, Team } from 'services/UserService';
 import { useParams } from "react-router-dom";
 
 export interface SponsorResponse {
@@ -33,10 +32,11 @@ export default function Ledwall() {
     const [awayScore, setAwayScore] = useState(0);
     const [setScores, setSetScores] = useState<number[][]>([[], [], [], [], []]);
     const [homeTeam, setHomeTeam] = useState<Team | null>(null); // Lo stato può essere un oggetto o null
-        const [awayTeam, setAwayTeam] = useState<Team | null>(null);
+    const [awayTeam, setAwayTeam] = useState<Team | null>(null);
     const [day, setDay] = useState("");
-    const [matchNumber, setMatchNumber] = useState("");
+    const [matchNumber, setMatchNumber] = useState<number | null>(null);
     const [matchDate, setMatchDate] = useState("");
+    const [dayOfWeek, setDayOffWeek] = useState("");
     const [matchData, setMatchData] = useState<MatchDataResponse | null>(null);
     const [set, setCompleteSet] = useState(0);
     const [setsCount, setSetsCount] = useState(1);
@@ -50,6 +50,11 @@ export default function Ledwall() {
     const [timeoutsAway, setTimeoutsAway] = useState(0);  // Numero di timeout ricevuti per la squadra ospite
     const [timeoutHomeFlags, setTimeoutHomeFlags] = useState<boolean[]>([]);  // Array per i timeout della squadra di casa
     const [timeoutAwayFlags, setTimeoutAwayFlags] = useState<boolean[]>([]);  // Array per i timeout della squadra ospite
+    const [homeTeamLogo, setHomeTeamLogo] = useState<string | null>(null);
+    const [awayTeamLogo, setAwayTeamLogo] = useState<string | null>(null);
+    const [isMale, setIsMale] = useState<boolean>(false);
+    const [isFemale, setIsFemale] = useState<boolean>(false);
+    const [winner, setMatchWinner] = useState<Team | null>(null);
 
     const connection = new signalR.HubConnectionBuilder()
         /* .withUrl("http://51.20.66.229:8080/scoreHub") */
@@ -83,11 +88,37 @@ export default function Ledwall() {
             const matchData = await getMatchData();
             const match = matchData.find(m => m.matchNumber === matchId); // Usa matchNumber per il confronto
             if (match) {
-             setHomeTeam(match.homeTeam);
-                setAwayTeam(match.awayTeam); 
+                setHomeTeam(match.homeTeam);
+                setAwayTeam(match.awayTeam);
+                setDay(match.day);
+                setDayOffWeek(match.dayOfWeek);
+
+                const date = new Date(match.matchDate);
+                const day = date.getDate();
+                const months = [
+                    "gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno",
+                    "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"
+                ];
+                const month = months[date.getMonth()];
+                const year = date.getFullYear();
+                const formattedDate = `${day} ${month} ${year}`;
+
+                setMatchDate(formattedDate); // Imposta la data formattata
+                setMatchNumber(match.matchNumber);
+
+
                 setHomeScore(0);
                 setAwayScore(0);
+
                 setSetScores([[], [], [], [], []]); // Resetta i punteggi dei set
+
+                const isMaleFlag = match.male;
+                const isFemaleFlag = match.female;
+
+                // Impostiamo direttamente i valori booleani
+                setIsMale(isMaleFlag || false); // default a false se undefined
+                setIsFemale(isFemaleFlag || false); // default a false se undefined
+
             }
         } catch (error) {
             console.error('Failed to fetch match data', error);
@@ -104,7 +135,7 @@ export default function Ledwall() {
                 connection.on("ReceiveScoreUpdate", async (matchUpdate) => {
                     console.log("Dati ricevuti:", matchUpdate);
 
-                    const { matchId, scoreCasa, scoreOspite, set: currentSet, possessoCasa, possessoOspite, timeoutHome, timeoutAway , matchWinner } = matchUpdate;
+                    const { matchId, scoreCasa, scoreOspite, set: currentSet, possessoCasa, possessoOspite, timeoutHome, timeoutAway, matchWinner } = matchUpdate;
 
                     await fetchMatchData(matchId);
 
@@ -133,7 +164,7 @@ export default function Ledwall() {
                         // Aggiungi il vincitore dell'ultimo set
                         const winningTeam = matchWinner === "home" ? homeTeam : awayTeam;
                         const lastSetIndex = setScores.length - 1;
-    
+
                         if (setScores[lastSetIndex].length === 2) {
                             // Se l'ultimo set è completato, visualizza il vincitore
                             if (matchWinner === "home") {
@@ -143,6 +174,15 @@ export default function Ledwall() {
                             }
                         }
                     }
+
+                    if (matchWinner) {
+                        // Se matchWinner è il nome della squadra vincente, imposta direttamente il vincitore
+                        setMatchWinner(matchWinner);
+                    }
+
+
+
+
 
                     if (timeoutHome && timeoutsHome < 2) {
                         setTimeoutHomeFlags(prev => [...prev, true]);  // Aggiungi il flag a true
@@ -210,7 +250,7 @@ export default function Ledwall() {
         SetWinHome(homeWins.toString());
     }, [setScores]);
 
-    
+
 
 
     useEffect(() => {
@@ -232,45 +272,93 @@ export default function Ledwall() {
 
 
 
+    useEffect(() => {
+        const fetchLogos = async () => {
+            if (!homeTeam || !awayTeam) return;
+
+            try {
+                const teams = await getTeamLogos();  // Recupera tutte le squadre con i loghi
+
+                // Trova il logo per la squadra di casa e la squadra ospite
+                const homeTeamLogoBase64 = teams.find((team) => team.name.toLowerCase() === homeTeam.name.toLowerCase())?.logo || null;
+                const awayTeamLogoBase64 = teams.find((team) => team.name.toLowerCase() === awayTeam.name.toLowerCase())?.logo || null;
+
+                // Se il logo è in formato Base64
+                const homeLogoUrl = homeTeamLogoBase64?.startsWith('data:image/png;base64,')
+                    ? homeTeamLogoBase64
+                    : `data:image/png;base64,${homeTeamLogoBase64}`;
+
+                const awayLogoUrl = awayTeamLogoBase64?.startsWith('data:image/png;base64,')
+                    ? awayTeamLogoBase64
+                    : `data:image/png;base64,${awayTeamLogoBase64}`;
+
+                // Imposta i loghi nelle variabili di stato
+                setHomeTeamLogo(homeLogoUrl || defaultLogo);
+                setAwayTeamLogo(awayLogoUrl || defaultLogo);
+            } catch (error) {
+                console.error("Errore durante il recupero dei loghi delle squadre:", error);
+                setHomeTeamLogo(defaultLogo);  // Imposta un logo di default in caso di errore
+                setAwayTeamLogo(defaultLogo);  // Imposta un logo di default in caso di errore
+            }
+        };
+
+        fetchLogos();
+    }, [homeTeam, awayTeam]);
+
+
+
     return (
         <div className="scoreboard-ledwall">
             <div className="match-info">
                 <h1>
-                    {LABEL_CONSTANT.categoria} FEMMINILE {/* {matchData?.female ? LABEL_CONSTANT.femminile : LABEL_CONSTANT.maschile} */}
+                    {LABEL_CONSTANT.categoria} {isFemale ? LABEL_CONSTANT.femminile : isMale ? LABEL_CONSTANT.maschile : ""}
                 </h1>
                 <h1>
-                    {/* {day} */} 7 {LABEL_CONSTANT.giornata} - sabato 23 novembre 2024 - {LABEL_CONSTANT.numero} {/* {matchNumber} */} 11305
+                    {day}{LABEL_CONSTANT.giornata} - {dayOfWeek} {matchDate} - {LABEL_CONSTANT.numero} {matchNumber}
                 </h1>
             </div>
             <div className="score-section">
                 <div className="team">
                     <div className="logo-score">
-                    {[...Array(timeoutsHome)].map((_, index) => (
+                        {[...Array(timeoutsHome)].map((_, index) => (
                             <div key={index} className="timeout-icon-home">
                                 <i className="pi pi-stopwatch"></i>
                             </div>
                         ))}
                         <span className="team-score">{winSetHome}</span>
-                        {/* <img src={logoCasa} alt="Logo Squadra di Casa" className="team-logo" /> */}
+                        <img src={homeTeamLogo || defaultLogo} alt="Logo Squadra Ospite" className="team-logo" />
+
                     </div>
                     <span className="team-name-prima">{homeTeam ? homeTeam.name : ""}</span>
                 </div>
                 <div className="score">
-                    <span className="score-value">{homeScore}</span>
-                    <span className="versus">{LABEL_CONSTANT.vs}</span>
-                    <span className="score-value">{awayScore}</span>
+                    {winner ? (
+                        <div className="winner">
+                            {LABEL_CONSTANT.winner + " " + winner} {/* Concatenando in una singola stringa */}
+                        </div>
+                    ) : (
+                        <div className="score-container">
+                            <span className="score-value">{homeScore}</span>
+                            <span className="versus">{LABEL_CONSTANT.vs}</span>
+                            <span className="score-value">{awayScore}</span>
+                        </div>
+                    )}
                 </div>
+
+
+
+
                 <div className="team">
                     <div className="logo-score">
-                    {[...Array(timeoutsAway)].map((_, index) => (
+                        {[...Array(timeoutsAway)].map((_, index) => (
                             <div key={index} className="timeout-icon-away">
                                 <i className="pi pi-stopwatch"></i>
                             </div>
                         ))}
-                        {/* <img src={logoOspite} alt="Logo Squadra Ospite" className="team-logo" /> */}
+                        <img src={awayTeamLogo || defaultLogo} alt="Logo Squadra Ospite" className="team-logo" />
                         <span className="team-score">{winSetAway}</span>
                     </div>
-                    <span className="team-name-seconda">{awayTeam ? awayTeam.name :"" }</span>
+                    <div className="team-name-seconda">{awayTeam ? awayTeam.name : ""}</div >
                 </div>
             </div>
             <div className="stripes-section">
@@ -288,8 +376,8 @@ export default function Ledwall() {
                                     <div className="label-set">{LABEL_CONSTANT.set} {index + 1}</div>
                                 </span>
                                 <div className="stripe-values">
-                                    {/* Punteggi della squadra di casa e ospite */}
                                     <span className="stripe-value">{set[0]}</span>
+                                    <span className="stripe-value-separator">-</span>
                                     <span className="stripe-value">{set[1]}</span>
                                 </div>
                             </div>
@@ -297,6 +385,7 @@ export default function Ledwall() {
                     );
                 })}
             </div>
+
 
             <div className="carousel-container-ledwall">
                 <div className="carousel-scroll">
@@ -320,10 +409,10 @@ export default function Ledwall() {
                         ))
                     ) : null}
                 </div>
-               
+
             </div>
-             {/* Logo Sponsor */}
-             <div className="logo-container-ledwall-primo">
+            {/* Logo Sponsor */}
+            <div className="logo-container-ledwall-primo">
                 <img src={logoSponsor1} alt="Logo Sponsor" className="header-logo" />
             </div>
             {/* Logo Sponsor */}

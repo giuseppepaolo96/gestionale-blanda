@@ -461,57 +461,81 @@ export default function GestionePunteggio() {
   const isHomeButtonDisabled = isBothButtonsDisabled;
   const isAwayButtonDisabled = isBothButtonsDisabled;
 
-  const handleSetEnd = (winningTeam: 'home' | 'away') => {
-    // Verifica se matchId è definito prima di inviare
-    if (matchId) {
-        const finalMatchUpdate: MatchUpdate = {
-            MatchId: matchId,
-            ScoreCasa: homeScore,
-            ScoreOspite: awayScore,
-            Set: selectedSet,
-            ResetMatch: false,
-            ResetScore: false,
-            PossessoCasa: null,
-            PossessoOspite: null,
-            TimeoutHome: timeoutHome,
-            TimeoutAway: timeoutAway,
-            Timer: timer,
-            RedCardCasa: homeRedCards,
-            RedCardOspite: awayRedCards,
-            MatchWinner: winningTeam === 'home' ? (homeTeam?.name || 'Casa') : (awayTeam?.name || 'Ospite'),
-        };
 
-        UpdateScore(finalMatchUpdate); // Invia aggiornamento punteggio
-    } else {
-        console.error("matchId non definito!");
-    }
-
-    // Aggiorna lo stato dei set
-    const newSetScores = [...setScores];
-    newSetScores[selectedSet - 1] = { home: homeScore, away: awayScore };
-    setSetScores(newSetScores);
-
-    // Aggiorna il conteggio dei set vinti e verifica la vittoria
-    const incrementSetsWon = (team: 'home' | 'away') => {
-        if (team === 'home') {
-            setHomeSetsWon((prev) => prev + 1);
-            if (homeSetsWon + 1 === 3) setMatchWinner(homeTeam?.name || 'Casa');
-        } else {
-            setAwaySetsWon((prev) => prev + 1);
-            if (awaySetsWon + 1 === 3) setMatchWinner(awayTeam?.name || 'Ospite');
-        }
+const handleSetEnd = (winningTeam: 'home' | 'away') => {
+  // Verifica se matchId è definito prima di inviare
+  if (matchId) {
+    const finalMatchUpdate: MatchUpdate = {
+      MatchId: matchId,
+      ScoreCasa: homeScore,
+      ScoreOspite: awayScore,
+      Set: selectedSet,
+      ResetMatch: false,
+      ResetScore: false,
+      PossessoCasa: null,
+      PossessoOspite: null,
+      TimeoutHome: timeoutHome,
+      TimeoutAway: timeoutAway,
+      Timer: timer,
+      RedCardCasa: homeRedCards,
+      RedCardOspite: awayRedCards,
+      // Non aggiorniamo matchWinner qui, lo aggiorniamo solo alla fine del match
+      MatchWinner: matchWinner,
     };
 
-    // Verifica se il team vincitore ha raggiunto 3 set
-    incrementSetsWon(winningTeam);
+    UpdateScore(finalMatchUpdate); // Invia aggiornamento punteggio
+  } else {
+    console.error("matchId non definito!");
+  }
 
-    // Aspetta l'invio e poi resetta
+  // Aggiorna lo stato dei set
+  const newSetScores = [...setScores];
+  newSetScores[selectedSet - 1] = { home: homeScore, away: awayScore };
+  setSetScores(newSetScores);
+
+  // Aggiorna il conteggio dei set vinti
+  const incrementSetsWon = (team: 'home' | 'away') => {
+    if (team === 'home') {
+      setHomeSetsWon((prev) => prev + 1);
+      if (homeSetsWon + 1 === 3) {
+        // Solo qui impostiamo il vincitore del match, quando un team vince 3 set
+        setMatchWinner(homeTeam?.name || 'Casa');
+      }
+    } else {
+      setAwaySetsWon((prev) => prev + 1);
+      if (awaySetsWon + 1 === 3) {
+        setMatchWinner(awayTeam?.name || 'Ospite');
+      }
+    }
+  };
+
+  // Verifica se il team vincitore ha raggiunto 3 set
+  incrementSetsWon(winningTeam);
+
+  // Se il match è finito (un team ha vinto 3 set), resetta solo i timeout
+  if (homeSetsWon === 3 || awaySetsWon === 3) {
+    // Aspetta l'invio e poi resetta solo i timeout
     setTimeout(() => {
-        resetScores(); // Reset dei punteggi
-        setSelectedSet((prevSet) => (prevSet < 5 ? prevSet + 1 : 5));
-        setPossession(null);
+      setTimeoutHomeCount(0);  // Reset timeout per la casa
+      setTimeoutAwayCount(0);  // Reset timeout per gli ospiti
+      setTimeoutHomeState(false);  // Resetta lo stato timeout casa
+      setTimeoutAwayState(false);  // Resetta lo stato timeout ospite
+      setPossession(null);  // Reset del possesso
     }, 500);
+  } else {
+    // Se il match non è finito, resetta i punteggi e i timeout per il set successivo
+    setTimeout(() => {
+      resetScores(); // Reset dei punteggi
+      setTimeoutHomeCount(0);  // Reset timeout per la casa
+      setTimeoutAwayCount(0);  // Reset timeout per gli ospiti
+      setTimeoutHomeState(false);  // Resetta lo stato timeout casa
+      setTimeoutAwayState(false);  // Resetta lo stato timeout ospite
+      setSelectedSet((prevSet) => (prevSet < 5 ? prevSet + 1 : 5)); // Passa al set successivo
+      setPossession(null);  // Reset del possesso
+    }, 500);
+  }
 };
+
 
   const resetScores = () => {
     setHomeScore(0);
@@ -636,11 +660,12 @@ export default function GestionePunteggio() {
             <div className="title">{LABEL_CONSTANT.punteggio}</div>
             <div className="input-group form-row">
             <div className="title-dash">{homeTeam?.name || 'Casa'}: {homeScore} {homeScore >= MAX_SCORE && '(Max)'}</div>
-            <button type="button" onClick={increaseHomeScore} className="dash-button" disabled={isHomeButtonDisabled}>
+            <button type="button" onClick={increaseHomeScore} className="dash-button" disabled={isHomeButtonDisabled || timeoutHome || timeoutAway}>
                 {LABEL_CONSTANT.aggiungi_casa}
+                
               </button>
               <div className="title-dash">{awayTeam?.name || 'Ospite'}: {awayScore} {awayScore >= MAX_SCORE && '(Max)'}</div>
-              <button type="button" onClick={increaseAwayScore} className="dash-button" disabled={isAwayButtonDisabled}>
+              <button type="button" onClick={increaseAwayScore} className="dash-button" disabled={isAwayButtonDisabled || timeoutHome || timeoutAway}>
                 {LABEL_CONSTANT.aggiungi_ospite}
               </button>
             </div>
@@ -673,13 +698,13 @@ export default function GestionePunteggio() {
             <div className="input-group form-row">
               <div className="title-dash">{LABEL_CONSTANT.timeout_casa}</div>
               <div className="timeout-status">{timeoutHome ? 'Attivo' : 'Non attivo'}</div>
-              <button type="button" onClick={handleTimeoutHome} className="dash-button" disabled={(!isTimerRunning && !timerStarted) || timeoutHomeCount >= 2 || (timeoutAway && !timeoutHome)} >
+              <button type="button" onClick={handleTimeoutHome} className="dash-button" disabled={/*( !isTimerRunning && !timerStarted) || */ timeoutHomeCount >= 2 || (timeoutAway && !timeoutHome)} >
                 {timeoutHome ? 'Ferma Timeout' : 'Avvia Timeout'}
                 
               </button>
               <div className="title-dash">{LABEL_CONSTANT.timeout_ospite}</div>
               <div className="timeout-status">{timeoutAway ? 'Attivo' : 'Non attivo'}</div>
-              <button type="button" onClick={handleTimeoutAway} className="dash-button" disabled={(!isTimerRunning && !timerStarted) || timeoutAwayCount >= 2 || (timeoutHome && !timeoutAway) }>
+              <button type="button" onClick={handleTimeoutAway} className="dash-button" disabled={/*(!isTimerRunning && !timerStarted) ||*/ timeoutAwayCount >= 2 || (timeoutHome && !timeoutAway) }>
                 {timeoutAway ? 'Ferma Timeout' : 'Avvia Timeout'}
               </button>
               </div>

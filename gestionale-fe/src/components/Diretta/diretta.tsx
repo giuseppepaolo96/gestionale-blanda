@@ -1,6 +1,6 @@
 import './diretta.scss';
 import logoSponsor from '../../assets/images/faam_spa_logo.jpg';
-import deafaultLogo from '../../assets/images/default-logo.png';
+import defaultLogo from '../../assets/images/default-logo.png';
 import { useEffect, useState } from 'react';
 import * as signalR from "@microsoft/signalr";
 import { getMatchData, getSponsors, getTeamLogos, MatchDataResponse, Team } from 'services/UserService';
@@ -75,27 +75,40 @@ export default function Diretta() {
             console.error('Failed to fetch match data', error);
         }
     };
+
+
     useEffect(() => {
         const fetchLogos = async () => {
-            if (!homeTeam || !awayTeam) return; // Aggiungi un controllo per evitare errori se le squadre non sono ancora impostate
+            if (!homeTeam || !awayTeam) return;
 
             try {
-                const teams = await getTeamLogos(); // Recupera tutte le squadre con i loghi
+                const teams = await getTeamLogos();  // Recupera tutte le squadre con i loghi
 
                 // Trova il logo per la squadra di casa e la squadra ospite
-                const homeTeamLogo = teams.find((team) => team.name.toLowerCase() === homeTeam.name.toLowerCase())?.logo || null;
-                const awayTeamLogo = teams.find((team) => team.name.toLowerCase() === awayTeam.name.toLowerCase())?.logo || null;
+                const homeTeamLogoBase64 = teams.find((team) => team.name.toLowerCase() === homeTeam.name.toLowerCase())?.logo || null;
+                const awayTeamLogoBase64 = teams.find((team) => team.name.toLowerCase() === awayTeam.name.toLowerCase())?.logo || null;
 
-                // Aggiorna gli stati con i loghi trovati
-                setHomeTeamLogo(homeTeamLogo);
-                setAwayTeamLogo(awayTeamLogo);
+                // Se il logo è in formato Base64
+                const homeLogoUrl = homeTeamLogoBase64?.startsWith('data:image/png;base64,') 
+                    ? homeTeamLogoBase64 
+                    : `data:image/png;base64,${homeTeamLogoBase64}`;
+                
+                const awayLogoUrl = awayTeamLogoBase64?.startsWith('data:image/png;base64,') 
+                    ? awayTeamLogoBase64 
+                    : `data:image/png;base64,${awayTeamLogoBase64}`;
+
+                // Imposta i loghi nelle variabili di stato
+                setHomeTeamLogo(homeLogoUrl || defaultLogo);
+                setAwayTeamLogo(awayLogoUrl || defaultLogo);
             } catch (error) {
                 console.error("Errore durante il recupero dei loghi delle squadre:", error);
+                setHomeTeamLogo(defaultLogo);  // Imposta un logo di default in caso di errore
+                setAwayTeamLogo(defaultLogo);  // Imposta un logo di default in caso di errore
             }
         };
 
         fetchLogos();
-    }, [homeTeam, awayTeam]); 
+    }, [homeTeam, awayTeam]);
 
 
     useEffect(() => {
@@ -218,7 +231,7 @@ export default function Diretta() {
                             <div className="team-logo-container">
                                 {/*  <div className="color-strip home"></div> */}
 
-                                <img src={homeTeamLogo || deafaultLogo}  alt="Logo Squadra Ospite" className="team-logo" />
+                                <img src={homeTeamLogo || defaultLogo}  alt="Logo Squadra Ospite" className="team-logo" />
 
                                 <div className="team-info">
                                     <div className="team-name-container">
@@ -264,7 +277,7 @@ export default function Diretta() {
                         
                             {/*  <div className="color-strip away"></div> */}
                             
-                            <img src={awayTeamLogo || deafaultLogo}  alt="Logo Squadra Ospite" className="team-logo" />
+                            <img src={awayTeamLogo || defaultLogo}  alt="Logo Squadra Ospite" className="team-logo" />
                             <div className="team-info">
                                 <div className="team-name-container">
                                     <div className="team-name">{awayTeam ? awayTeam.name : ""}</div>
