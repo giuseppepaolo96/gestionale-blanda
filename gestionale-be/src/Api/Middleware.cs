@@ -9,7 +9,6 @@ public class Middleware
     {
         _next = next;
     }
-
     public async Task InvokeAsync(HttpContext context)
     {
         var origin = context.Request.Headers["Origin"].ToString();
