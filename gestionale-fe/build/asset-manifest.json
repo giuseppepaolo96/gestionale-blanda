@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.a148b575.css",
-    "main.js": "/static/js/main.e9480161.js",
+    "main.css": "/static/css/main.a1ca88e7.css",
+    "main.js": "/static/js/main.72f90cf7.js",
     "static/js/453.f3bd854d.chunk.js": "/static/js/453.f3bd854d.chunk.js",
     "static/media/Scritta.svg": "/static/media/Scritta.e6ae75f603055a8af79a1f10a34d3da4.svg",
     "static/media/primeicons.svg": "/static/media/primeicons.6ed59f962963a4a73af2.svg",
@@ -14,12 +14,12 @@
     "static/media/SPONSOR_CARBAT-removebg-preview.png": "/static/media/SPONSOR_CARBAT-removebg-preview.dc7caee5f403ad8c6cd3.png",
     "static/media/faam_spa_logo.jpg": "/static/media/faam_spa_logo.2a530aaff05fceb96d62.jpg",
     "index.html": "/index.html",
-    "main.a148b575.css.map": "/static/css/main.a148b575.css.map",
-    "main.e9480161.js.map": "/static/js/main.e9480161.js.map",
+    "main.a1ca88e7.css.map": "/static/css/main.a1ca88e7.css.map",
+    "main.72f90cf7.js.map": "/static/js/main.72f90cf7.js.map",
     "453.f3bd854d.chunk.js.map": "/static/js/453.f3bd854d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.a148b575.css",
-    "static/js/main.e9480161.js"
+    "static/css/main.a1ca88e7.css",
+    "static/js/main.72f90cf7.js"
   ]
 }

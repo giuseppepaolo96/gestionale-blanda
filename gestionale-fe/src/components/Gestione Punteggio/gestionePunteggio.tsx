@@ -18,7 +18,7 @@ export type MatchUpdate = {
   ResetMatch?: boolean;
   ResetScore?: boolean;
   PossessoCasa?: boolean | null;
-  PossessoOspite?: boolean| null;
+  PossessoOspite?: boolean | null;
   Set?: number;
   TimeoutHome?: boolean;
   TimeoutAway?: boolean;
@@ -47,7 +47,7 @@ export default function GestionePunteggio() {
   const [homeScore, setHomeScore] = useState(0);
   const [awayScore, setAwayScore] = useState(0);
   const [selectedSet, setSelectedSet] = useState(1);
-  const [possession, setPossession] = useState<string | null>(null);  
+  const [possession, setPossession] = useState<string | null>(null);
   const [timeoutHome, setTimeoutHomeState] = useState(false);
   const [timeoutAway, setTimeoutAwayState] = useState(false);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -177,31 +177,31 @@ export default function GestionePunteggio() {
 
     // Assicurati che matchId sia una stringa
     if (matchId) {
-        const matchUpdate: MatchUpdate = {
-          MatchId: matchId,  // matchId è già una stringa
-          ScoreCasa: newHomeScore,  // Usa il punteggio appena calcolato
-          ScoreOspite: awayScore,
-          Set: selectedSet,
-          ResetMatch: false,
-          ResetScore: false,
-          PossessoCasa: updatedPossession === 'home',
-          PossessoOspite: updatedPossession === 'away',
-          TimeoutHome: timeoutHome,
-          TimeoutAway: timeoutAway,
-          Timer: timer,
-          RedCardCasa: homeRedCards,
-          RedCardOspite: awayRedCards,
-          MatchWinner: matchWinner, 
-        };
+      const matchUpdate: MatchUpdate = {
+        MatchId: matchId,  // matchId è già una stringa
+        ScoreCasa: newHomeScore,  // Usa il punteggio appena calcolato
+        ScoreOspite: awayScore,
+        Set: selectedSet,
+        ResetMatch: false,
+        ResetScore: false,
+        PossessoCasa: updatedPossession === 'home',
+        PossessoOspite: updatedPossession === 'away',
+        TimeoutHome: timeoutHome,
+        TimeoutAway: timeoutAway,
+        Timer: timer,
+        RedCardCasa: homeRedCards,
+        RedCardOspite: awayRedCards,
+        MatchWinner: matchWinner,
+      };
 
-        console.log("Aggiornamento del match:", matchUpdate);
+      console.log("Aggiornamento del match:", matchUpdate);
 
-        // Aggiorniamo il punteggio solo quando lo stato è effettivamente cambiato
-        UpdateScore(matchUpdate);
+      // Aggiorniamo il punteggio solo quando lo stato è effettivamente cambiato
+      UpdateScore(matchUpdate);
     } else {
-        console.error("matchId non definito!");
+      console.error("matchId non definito!");
     }
-};
+  };
 
   // Usa `useEffect` per inviare il punteggio dopo che `homeScore` è stato aggiornato
   useEffect(() => {
@@ -226,58 +226,58 @@ export default function GestionePunteggio() {
       UpdateScore(matchUpdate);
     }
   }, [homeScore]);
-  
+
   const increaseAwayScore = () => {
     if (matchWinner) return; // Blocca l'incremento se c'è già un vincitore
-  
+
     const newAwayScore = awayScore + 1;
     console.log(`Punteggio casa: ${homeScore} - Punteggio ospite: ${newAwayScore}`);
     console.log(`Differenza di punteggio: ${newAwayScore - homeScore}`);
-  
+
     // Prima aggiorna il punteggio
     setAwayScore(newAwayScore);
-  
+
     // Verifica subito se il set è finito
     if (newAwayScore >= MAX_SCORE && (newAwayScore - homeScore) >= WINNING_DIFF) {
       console.log("Il set è finito, vittoria per ospite");
       handleSetEnd('away');
       return; // Il set è terminato, non fare altre modifiche
     }
-  
+
     // Se il set non è finito, continua a inviare il punteggio aggiornato
     console.log(`Punteggio aggiornato: Casa - ${homeScore}, Ospite - ${newAwayScore}`);
-  
+
     let updatedPossession = possession;
     if (updatedPossession === null) {
       updatedPossession = 'away';
     }
     if (matchId) {
-    const matchUpdate: MatchUpdate = {
-      MatchId: matchId,
-      ScoreCasa: homeScore,  // Usa il punteggio esistente per la casa
-      ScoreOspite: newAwayScore,  // Usa il punteggio appena calcolato per gli ospiti
-      Set: selectedSet,
-      ResetMatch: false,
-      ResetScore: false,
-      PossessoCasa: updatedPossession === 'home',
-      PossessoOspite: updatedPossession === 'away',
-      TimeoutHome: timeoutHome,
-      TimeoutAway: timeoutAway,
-      Timer: timer,
-      RedCardCasa: homeRedCards,
-      RedCardOspite: awayRedCards,
-      MatchWinner: matchWinner,
-    };
-  
-    console.log("Aggiornamento del match:", matchUpdate);
-  
-    // Aggiorniamo il punteggio solo quando lo stato è effettivamente cambiato
-    UpdateScore(matchUpdate);
-  } else {
-    console.error("matchId non definito!");
-}
+      const matchUpdate: MatchUpdate = {
+        MatchId: matchId,
+        ScoreCasa: homeScore,  // Usa il punteggio esistente per la casa
+        ScoreOspite: newAwayScore,  // Usa il punteggio appena calcolato per gli ospiti
+        Set: selectedSet,
+        ResetMatch: false,
+        ResetScore: false,
+        PossessoCasa: updatedPossession === 'home',
+        PossessoOspite: updatedPossession === 'away',
+        TimeoutHome: timeoutHome,
+        TimeoutAway: timeoutAway,
+        Timer: timer,
+        RedCardCasa: homeRedCards,
+        RedCardOspite: awayRedCards,
+        MatchWinner: matchWinner,
+      };
+
+      console.log("Aggiornamento del match:", matchUpdate);
+
+      // Aggiorniamo il punteggio solo quando lo stato è effettivamente cambiato
+      UpdateScore(matchUpdate);
+    } else {
+      console.error("matchId non definito!");
+    }
   };
-  
+
   // Usa `useEffect` per inviare il punteggio dopo che `awayScore` è stato aggiornato
   useEffect(() => {
     if (awayScore !== 0) { // Se il punteggio degli ospiti non è 0
@@ -301,25 +301,25 @@ export default function GestionePunteggio() {
       UpdateScore(matchUpdate);
     }
   }, [awayScore]);
-   
+
   useEffect(() => {
     // Quando selectedSet cambia, resettiamo i conteggi dei timeout
     setTimeoutHomeCount(0);
     setTimeoutAwayCount(0);
   }, [selectedSet]);
-  
+
   const handleTimeoutHome = () => {
     // Verifica che la squadra di casa non abbia già usato 2 timeout
     if (timeoutHomeCount < 2) {
       const newTimeoutHome = !timeoutHome; // Inverte lo stato del timeout
       setTimeoutHomeState(newTimeoutHome);
       setIsTimerRunning(!newTimeoutHome); // Se il timeout è attivo, ferma il timer
-  
+
       // Incrementa il conteggio dei timeout per la squadra di casa
       if (!newTimeoutHome) {  // Se il timeout è appena stato fermato, non incrementarlo
         setTimeoutHomeCount(timeoutHomeCount + 1);
       }
-  
+
       const matchUpdate: MatchUpdate = {
         ScoreCasa: homeScore,
         ScoreOspite: awayScore,
@@ -334,24 +334,24 @@ export default function GestionePunteggio() {
         RedCardOspite: awayRedCards,
         MatchWinner: matchWinner,
       };
-  
+
       // Invia l'aggiornamento al server
       UpdateScore(matchUpdate);
     }
   };
-  
+
   const handleTimeoutAway = () => {
     // Verifica che la squadra ospite non abbia già usato 2 timeout
     if (timeoutAwayCount < 2) {
       const newTimeoutAway = !timeoutAway;
       setTimeoutAwayState(newTimeoutAway);
       setIsTimerRunning(!newTimeoutAway);
-  
+
       // Incrementa il conteggio dei timeout per la squadra ospite
       if (!newTimeoutAway) {  // Se il timeout è appena stato fermato, non incrementarlo
         setTimeoutAwayCount(timeoutAwayCount + 1);
       }
-  
+
       const matchUpdate: MatchUpdate = {
         ScoreCasa: homeScore,
         ScoreOspite: awayScore,
@@ -366,11 +366,11 @@ export default function GestionePunteggio() {
         RedCardOspite: awayRedCards,
         MatchWinner: matchWinner,
       };
-  
+
       UpdateScore(matchUpdate);
     }
   };
-  
+
 
   const startTimer = () => {
     setTimer(0);
@@ -462,79 +462,79 @@ export default function GestionePunteggio() {
   const isAwayButtonDisabled = isBothButtonsDisabled;
 
 
-const handleSetEnd = (winningTeam: 'home' | 'away') => {
-  // Verifica se matchId è definito prima di inviare
-  if (matchId) {
-    const finalMatchUpdate: MatchUpdate = {
-      MatchId: matchId,
-      ScoreCasa: homeScore,
-      ScoreOspite: awayScore,
-      Set: selectedSet,
-      ResetMatch: false,
-      ResetScore: false,
-      PossessoCasa: null,
-      PossessoOspite: null,
-      TimeoutHome: timeoutHome,
-      TimeoutAway: timeoutAway,
-      Timer: timer,
-      RedCardCasa: homeRedCards,
-      RedCardOspite: awayRedCards,
-      // Non aggiorniamo matchWinner qui, lo aggiorniamo solo alla fine del match
-      MatchWinner: matchWinner,
+  const handleSetEnd = (winningTeam: 'home' | 'away') => {
+    // Verifica se matchId è definito prima di inviare
+    if (matchId) {
+      const finalMatchUpdate: MatchUpdate = {
+        MatchId: matchId,
+        ScoreCasa: homeScore,
+        ScoreOspite: awayScore,
+        Set: selectedSet,
+        ResetMatch: false,
+        ResetScore: false,
+        PossessoCasa: null,
+        PossessoOspite: null,
+        TimeoutHome: timeoutHome,
+        TimeoutAway: timeoutAway,
+        Timer: timer,
+        RedCardCasa: homeRedCards,
+        RedCardOspite: awayRedCards,
+        // Non aggiorniamo matchWinner qui, lo aggiorniamo solo alla fine del match
+        MatchWinner: matchWinner,
+      };
+
+      UpdateScore(finalMatchUpdate); // Invia aggiornamento punteggio
+    } else {
+      console.error("matchId non definito!");
+    }
+
+    // Aggiorna lo stato dei set
+    const newSetScores = [...setScores];
+    newSetScores[selectedSet - 1] = { home: homeScore, away: awayScore };
+    setSetScores(newSetScores);
+
+    // Aggiorna il conteggio dei set vinti
+    const incrementSetsWon = (team: 'home' | 'away') => {
+      if (team === 'home') {
+        setHomeSetsWon((prev) => prev + 1);
+        if (homeSetsWon + 1 === 3) {
+          // Solo qui impostiamo il vincitore del match, quando un team vince 3 set
+          setMatchWinner(homeTeam?.name || 'Casa');
+        }
+      } else {
+        setAwaySetsWon((prev) => prev + 1);
+        if (awaySetsWon + 1 === 3) {
+          setMatchWinner(awayTeam?.name || 'Ospite');
+        }
+      }
     };
 
-    UpdateScore(finalMatchUpdate); // Invia aggiornamento punteggio
-  } else {
-    console.error("matchId non definito!");
-  }
+    // Verifica se il team vincitore ha raggiunto 3 set
+    incrementSetsWon(winningTeam);
 
-  // Aggiorna lo stato dei set
-  const newSetScores = [...setScores];
-  newSetScores[selectedSet - 1] = { home: homeScore, away: awayScore };
-  setSetScores(newSetScores);
-
-  // Aggiorna il conteggio dei set vinti
-  const incrementSetsWon = (team: 'home' | 'away') => {
-    if (team === 'home') {
-      setHomeSetsWon((prev) => prev + 1);
-      if (homeSetsWon + 1 === 3) {
-        // Solo qui impostiamo il vincitore del match, quando un team vince 3 set
-        setMatchWinner(homeTeam?.name || 'Casa');
-      }
+    // Se il match è finito (un team ha vinto 3 set), resetta solo i timeout
+    if (homeSetsWon === 3 || awaySetsWon === 3) {
+      // Aspetta l'invio e poi resetta solo i timeout
+      setTimeout(() => {
+        setTimeoutHomeCount(0);  // Reset timeout per la casa
+        setTimeoutAwayCount(0);  // Reset timeout per gli ospiti
+        setTimeoutHomeState(false);  // Resetta lo stato timeout casa
+        setTimeoutAwayState(false);  // Resetta lo stato timeout ospite
+        setPossession(null);  // Reset del possesso
+      }, 500);
     } else {
-      setAwaySetsWon((prev) => prev + 1);
-      if (awaySetsWon + 1 === 3) {
-        setMatchWinner(awayTeam?.name || 'Ospite');
-      }
+      // Se il match non è finito, resetta i punteggi e i timeout per il set successivo
+      setTimeout(() => {
+        resetScores(); // Reset dei punteggi
+        setTimeoutHomeCount(0);  // Reset timeout per la casa
+        setTimeoutAwayCount(0);  // Reset timeout per gli ospiti
+        setTimeoutHomeState(false);  // Resetta lo stato timeout casa
+        setTimeoutAwayState(false);  // Resetta lo stato timeout ospite
+        setSelectedSet((prevSet) => (prevSet < 5 ? prevSet + 1 : 5)); // Passa al set successivo
+        setPossession(null);  // Reset del possesso
+      }, 500);
     }
   };
-
-  // Verifica se il team vincitore ha raggiunto 3 set
-  incrementSetsWon(winningTeam);
-
-  // Se il match è finito (un team ha vinto 3 set), resetta solo i timeout
-  if (homeSetsWon === 3 || awaySetsWon === 3) {
-    // Aspetta l'invio e poi resetta solo i timeout
-    setTimeout(() => {
-      setTimeoutHomeCount(0);  // Reset timeout per la casa
-      setTimeoutAwayCount(0);  // Reset timeout per gli ospiti
-      setTimeoutHomeState(false);  // Resetta lo stato timeout casa
-      setTimeoutAwayState(false);  // Resetta lo stato timeout ospite
-      setPossession(null);  // Reset del possesso
-    }, 500);
-  } else {
-    // Se il match non è finito, resetta i punteggi e i timeout per il set successivo
-    setTimeout(() => {
-      resetScores(); // Reset dei punteggi
-      setTimeoutHomeCount(0);  // Reset timeout per la casa
-      setTimeoutAwayCount(0);  // Reset timeout per gli ospiti
-      setTimeoutHomeState(false);  // Resetta lo stato timeout casa
-      setTimeoutAwayState(false);  // Resetta lo stato timeout ospite
-      setSelectedSet((prevSet) => (prevSet < 5 ? prevSet + 1 : 5)); // Passa al set successivo
-      setPossession(null);  // Reset del possesso
-    }, 500);
-  }
-};
 
 
   const resetScores = () => {
@@ -549,11 +549,11 @@ const handleSetEnd = (winningTeam: 'home' | 'away') => {
     const resetAwayScore = 0;
     const resetSelectedSet = 1;
     const resetSetScores = [
-        { home: 0, away: 0 },
-        { home: 0, away: 0 },
-        { home: 0, away: 0 },
-        { home: 0, away: 0 },
-        { home: 0, away: 0 },
+      { home: 0, away: 0 },
+      { home: 0, away: 0 },
+      { home: 0, away: 0 },
+      { home: 0, away: 0 },
+      { home: 0, away: 0 },
     ];
 
     setHomeScore(resetHomeScore);
@@ -565,34 +565,42 @@ const handleSetEnd = (winningTeam: 'home' | 'away') => {
     setSelectedSet(resetSelectedSet);
 
     const matchUpdate: MatchUpdate = {
-        ScoreCasa: resetHomeScore,
-        ScoreOspite: resetAwayScore,
-        Set: resetSelectedSet,
-        ResetMatch: false,
-        ResetScore: false,
-        PossessoCasa: possession === 'home',
-        PossessoOspite: possession === 'away',
-        TimeoutHome: timeoutHome,
-        TimeoutAway: timeoutAway,
-        Timer: timer,
-        RedCardCasa: homeRedCards,
-        RedCardOspite: awayRedCards,
+      ScoreCasa: resetHomeScore,
+      ScoreOspite: resetAwayScore,
+      Set: resetSelectedSet,
+      ResetMatch: false,
+      ResetScore: false,
+      PossessoCasa: possession === 'home',
+      PossessoOspite: possession === 'away',
+      TimeoutHome: timeoutHome,
+      TimeoutAway: timeoutAway,
+      Timer: timer,
+      RedCardCasa: homeRedCards,
+      RedCardOspite: awayRedCards,
     };
 
     // Invia l'aggiornamento al server
     UpdateScore(matchUpdate);
-};
- 
+  };
+
   const handleRedCard = (team: 'home' | 'away') => {
+    if ((team === 'home' && homeScore === 0) || (team === 'away' && awayScore === 0)) {
+      // Non fare nulla se il punteggio della squadra che ha ricevuto il cartellino rosso è già 0
+      return;
+    }
+
     if (team === 'home') {
       setHomeScore(prevScore => Math.max(prevScore - 1, 0)); // Riduce il punteggio della squadra di casa
+      setAwayScore(prevScore => prevScore + 1); // Incrementa il punteggio della squadra ospite
       setHomeRedCards(prev => prev + 1); // Aumenta i cartellini rossi per la squadra di casa
       setPossession('away'); // Passa il possesso alla squadra ospite
     } else {
       setAwayScore(prevScore => Math.max(prevScore - 1, 0)); // Riduce il punteggio della squadra ospite
+      setHomeScore(prevScore => prevScore + 1); // Incrementa il punteggio della squadra di casa
       setAwayRedCards(prev => prev + 1); // Aumenta i cartellini rossi per la squadra ospite
       setPossession('home'); // Passa il possesso alla squadra di casa
     }
+
     // Creiamo l'oggetto MatchUpdate da inviare via WebSocket
     const matchUpdate: MatchUpdate = {
       ScoreCasa: homeScore,
@@ -612,25 +620,25 @@ const handleSetEnd = (winningTeam: 'home' | 'away') => {
     // Invia l'aggiornamento al server
     UpdateScore(matchUpdate);
   };
-  
+
   useEffect(() => {
     const fetchMatch = async () => {
       try {
         const matchData: MatchDataResponse[] = await getMatchData();
         console.log('Dati della partita:', matchData);  // Log dei dati ricevuti
-  
+
         if (matchId) {
           const parsedMatchId = parseInt(matchId, 10);  // Parsiamo matchId in numero
           console.log('matchId parsato:', parsedMatchId);  // Log del matchId parsato
-  
+
           if (isNaN(parsedMatchId)) {
             console.error('matchId non valido');
             return;
           }
-  
+
           // Cerca la partita corrispondente usando matchNumber
           const match = matchData.find(m => m.matchNumber === parsedMatchId);
-  
+
           if (match) {
             console.log('Partita trovata:', match);  // Log della partita trovata
             setHomeTeam(match.homeTeam);
@@ -645,12 +653,12 @@ const handleSetEnd = (winningTeam: 'home' | 'away') => {
         console.error("Errore durante il caricamento delle squadre:", error);
       }
     };
-  
+
     if (matchId) {
       fetchMatch();  // Esegui solo se matchId è presente
     }
   }, [matchId]);  // Esegui quando matchId cambia
-  
+
   return (
     <div className="dashboard">
       <Navbar />
@@ -659,10 +667,10 @@ const handleSetEnd = (winningTeam: 'home' | 'away') => {
           <form onSubmit={handleSubmit} className="form">
             <div className="title">{LABEL_CONSTANT.punteggio}</div>
             <div className="input-group form-row">
-            <div className="title-dash">{homeTeam?.name || 'Casa'}: {homeScore} {homeScore >= MAX_SCORE && '(Max)'}</div>
-            <button type="button" onClick={increaseHomeScore} className="dash-button" disabled={isHomeButtonDisabled || timeoutHome || timeoutAway}>
+              <div className="title-dash">{homeTeam?.name || 'Casa'}: {homeScore} {homeScore >= MAX_SCORE && '(Max)'}</div>
+              <button type="button" onClick={increaseHomeScore} className="dash-button" disabled={isHomeButtonDisabled || timeoutHome || timeoutAway}>
                 {LABEL_CONSTANT.aggiungi_casa}
-                
+
               </button>
               <div className="title-dash">{awayTeam?.name || 'Ospite'}: {awayScore} {awayScore >= MAX_SCORE && '(Max)'}</div>
               <button type="button" onClick={increaseAwayScore} className="dash-button" disabled={isAwayButtonDisabled || timeoutHome || timeoutAway}>
@@ -700,15 +708,15 @@ const handleSetEnd = (winningTeam: 'home' | 'away') => {
               <div className="timeout-status">{timeoutHome ? 'Attivo' : 'Non attivo'}</div>
               <button type="button" onClick={handleTimeoutHome} className="dash-button" disabled={/*( !isTimerRunning && !timerStarted) || */ timeoutHomeCount >= 2 || (timeoutAway && !timeoutHome)} >
                 {timeoutHome ? 'Ferma Timeout' : 'Avvia Timeout'}
-                
+
               </button>
               <div className="title-dash">{LABEL_CONSTANT.timeout_ospite}</div>
               <div className="timeout-status">{timeoutAway ? 'Attivo' : 'Non attivo'}</div>
-              <button type="button" onClick={handleTimeoutAway} className="dash-button" disabled={/*(!isTimerRunning && !timerStarted) ||*/ timeoutAwayCount >= 2 || (timeoutHome && !timeoutAway) }>
+              <button type="button" onClick={handleTimeoutAway} className="dash-button" disabled={/*(!isTimerRunning && !timerStarted) ||*/ timeoutAwayCount >= 2 || (timeoutHome && !timeoutAway)}>
                 {timeoutAway ? 'Ferma Timeout' : 'Avvia Timeout'}
               </button>
-              </div>
-              <div className="input-group form-row">
+            </div>
+            <div className="input-group form-row">
               <p className="timer-text">{LABEL_CONSTANT.timer}: {formatTimer(timer)}</p>
               <button type="button" onClick={startTimer} className="dash-button">
                 {LABEL_CONSTANT.set_timer}

@@ -133,7 +133,7 @@ export default function Dashboard() {
     setShowDialog(true);
   };
 
-  const confirmManageScore = () => {
+/*   const confirmManageScore = () => {
     if (selectedMatch) {
       // Invia il MatchId tramite WebSocket
       UpdateScore({ MatchId: selectedMatch.matchNumber });
@@ -144,7 +144,33 @@ export default function Dashboard() {
 
     // Chiudi il dialogo
     setShowDialog(false);
+  }; */
+
+  const confirmManageScore = () => {
+    if (selectedMatch) {
+      const matchId = selectedMatch.matchNumber;
+  
+      // Invia il MatchId tramite WebSocket
+      UpdateScore({ MatchId: matchId });
+  
+      // Naviga alla pagina di gestione punteggi con il matchNumber nella stessa finestra
+      navigate(`/gestione/${matchId}`);
+  
+      // Apre la prima pagina "diretta" in una nuova scheda
+      window.open(`/diretta/${matchId}`, '_blank');
+  
+      // Aggiungi un ritardo prima di aprire la seconda scheda per evitare blocchi pop-up
+      setTimeout(() => {
+        window.open(`/ledwall/${matchId}`, '_blank');
+      }, 500); // Attendere 500ms prima di aprire la seconda scheda
+    }
+  
+    // Chiudi il dialogo
+    setShowDialog(false);
   };
+  
+  
+  
 
   const cancelManageScore = () => {
     setShowDialog(false); // Chiudi il dialogo senza fare nulla

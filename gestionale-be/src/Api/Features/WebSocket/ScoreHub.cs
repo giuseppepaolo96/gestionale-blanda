@@ -11,20 +11,7 @@ public class ScoreHub : Hub
         await Clients.All.SendAsync("ReceiveScoreUpdate", matchUpdate);
     }
 
-    public async Task UpdateColors(List<string> colors)
-    {
-        var colorUpdate = new
-        {
-            Colors = colors,
-            Gradients = colors.Select((color, index) => new
-            {
-                GradientId = index + 1,
-                GradientStyle = $"linear-gradient(to right, {color}, #FFFFFF)"
-            }).ToList()
-        };
 
-        await Clients.All.SendAsync("ReceiveColorUpdate", colorUpdate);
-    }
     // Metodo per notificare i client quando un nuovo utente si connette
     public override async Task OnConnectedAsync()
     {
@@ -33,6 +20,8 @@ public class ScoreHub : Hub
         await base.OnConnectedAsync();
 
     }
+
+
 
     // Metodo per gestire la disconnessione
     public override async Task OnDisconnectedAsync(Exception? exception)

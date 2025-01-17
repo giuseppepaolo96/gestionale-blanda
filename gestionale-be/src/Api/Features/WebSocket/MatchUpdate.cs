@@ -20,16 +20,4 @@
     }
 
 
-    public class ColorUpdate
-    {
-        public List<string>? Colors { get; set; }
-        public List<Gradient>? Gradients { get; set; }
-    }
-
-    public class Gradient
-    {
-        public int GradientId { get; set; }
-        public string GradientStyle { get; set; } = string.Empty;
-    }
-
 }

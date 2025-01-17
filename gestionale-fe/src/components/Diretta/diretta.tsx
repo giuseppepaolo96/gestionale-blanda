@@ -11,7 +11,7 @@ import { useParams } from 'react-router-dom';
 export interface SponsorResponse {
     name: string;
     logoBase64: string;
-}
+} 
 
 export default function Diretta() {
     const { matchId } = useParams();
