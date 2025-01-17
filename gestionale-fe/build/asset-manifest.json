@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.042eedd0.css",
-    "main.js": "/static/js/main.3fb79d1d.js",
+    "main.css": "/static/css/main.a148b575.css",
+    "main.js": "/static/js/main.e9480161.js",
     "static/js/453.f3bd854d.chunk.js": "/static/js/453.f3bd854d.chunk.js",
     "static/media/Scritta.svg": "/static/media/Scritta.e6ae75f603055a8af79a1f10a34d3da4.svg",
     "static/media/primeicons.svg": "/static/media/primeicons.6ed59f962963a4a73af2.svg",
@@ -11,14 +11,15 @@
     "static/media/faam_spa_senza-sfondo.png": "/static/media/faam_spa_senza-sfondo.8837c75ca343215ea6e1.png",
     "static/media/FAAM-MATESE_black.svg": "/static/media/FAAM-MATESE_black.b9e014f33f883e5008c334e813b1bcf2.svg",
     "static/media/primeicons.woff2": "/static/media/primeicons.024b32cc7bf399b1a847.woff2",
+    "static/media/SPONSOR_CARBAT-removebg-preview.png": "/static/media/SPONSOR_CARBAT-removebg-preview.dc7caee5f403ad8c6cd3.png",
     "static/media/faam_spa_logo.jpg": "/static/media/faam_spa_logo.2a530aaff05fceb96d62.jpg",
     "index.html": "/index.html",
-    "main.042eedd0.css.map": "/static/css/main.042eedd0.css.map",
-    "main.3fb79d1d.js.map": "/static/js/main.3fb79d1d.js.map",
+    "main.a148b575.css.map": "/static/css/main.a148b575.css.map",
+    "main.e9480161.js.map": "/static/js/main.e9480161.js.map",
     "453.f3bd854d.chunk.js.map": "/static/js/453.f3bd854d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.042eedd0.css",
-    "static/js/main.3fb79d1d.js"
+    "static/css/main.a148b575.css",
+    "static/js/main.e9480161.js"
   ]
 }
