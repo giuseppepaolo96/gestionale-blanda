@@ -1,5 +1,5 @@
 import './diretta.scss';
-import logoSponsor from '../../assets/images/faam_spa_logo-senza-sfondo.png';
+import logoSponsor from '../../assets/images/faam_spa_senza-sfondo.png';
 import defaultLogo from '../../assets/images/default-logo.png';
 import { useEffect, useState } from 'react';
 import * as signalR from "@microsoft/signalr";
