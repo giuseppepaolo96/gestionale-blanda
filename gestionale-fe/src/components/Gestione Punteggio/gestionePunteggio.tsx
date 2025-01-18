@@ -46,7 +46,7 @@ export default function GestionePunteggio() {
   const [homeScore, setHomeScore] = useState(0);
   const [awayScore, setAwayScore] = useState(0);
   const [selectedSet, setSelectedSet] = useState(1);
-  const [possession, setPossession] = useState<string | null>(null);
+  const [possession, setPossession] = useState<'home' | 'away' | null>(null);
   const [timeoutHome, setTimeoutHomeState] = useState(false);
   const [timeoutAway, setTimeoutAwayState] = useState(false);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -61,7 +61,7 @@ export default function GestionePunteggio() {
   const WINNING_DIFF = 2;
   const [timeoutHomeCount, setTimeoutHomeCount] = useState(0); // Numero di timeout per la squadra di casa
   const [timeoutAwayCount, setTimeoutAwayCount] = useState(0); // Numero di timeout per la squadra ospite
-
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const openTwoTabs = () => {
     window.open('/ledwall', '_blank');
@@ -169,10 +169,7 @@ export default function GestionePunteggio() {
     // Se il set non è finito, continua a inviare il punteggio aggiornato
     console.log(`Punteggio aggiornato: Casa - ${newHomeScore}, Ospite - ${awayScore}`);
 
-    let updatedPossession = possession;
-    if (updatedPossession === null) {
-      updatedPossession = 'home';
-    }
+    let updatedPossession = 'home';
 
     // Assicurati che matchId sia una stringa
     if (matchId) {
@@ -224,6 +221,80 @@ export default function GestionePunteggio() {
       console.log("Aggiornamento finale inviato:", matchUpdate);
       UpdateScore(matchUpdate);
     }
+  }, [homeScore,possession]);
+
+
+  const decreaseHomeScore = () => {
+    if (homeScore === 0 || matchWinner) return;
+
+    const newHomeScore = homeScore - 1;
+    console.log(`Punteggio casa: ${newHomeScore} - Punteggio ospite: ${awayScore}`);
+    console.log(`Differenza di punteggio: ${newHomeScore - awayScore}`);
+
+    // Prima aggiorna il punteggio
+    setHomeScore(newHomeScore);
+
+    // Verifica subito se il set è finito
+    if (newHomeScore >= MAX_SCORE && (newHomeScore - awayScore) >= WINNING_DIFF) {
+      console.log("Il set è finito, vittoria per casa");
+      handleSetEnd('home');
+      return; // Il set è terminato, non fare altre modifiche
+    }
+
+    // Se il set non è finito, continua a inviare il punteggio aggiornato
+    console.log(`Punteggio aggiornato: Casa - ${newHomeScore}, Ospite - ${awayScore}`);
+
+    let updatedPossession = possession;
+    if (updatedPossession === null) {
+      updatedPossession = 'home';
+    }
+
+    // Assicurati che matchId sia una stringa
+    if (matchId) {
+      const matchUpdate: MatchUpdate = {
+        MatchId: matchId,  // matchId è già una stringa
+        ScoreCasa: newHomeScore,  // Usa il punteggio appena calcolato
+        ScoreOspite: awayScore,
+        Set: selectedSet,
+        ResetMatch: false,
+        ResetScore: false,
+        TimeoutHome: timeoutHome,
+        TimeoutAway: timeoutAway,
+        Timer: timer,
+        RedCardCasa: homeRedCards,
+        RedCardOspite: awayRedCards,
+        MatchWinner: matchWinner,
+      };
+
+      console.log("Aggiornamento del match:", matchUpdate);
+
+      // Aggiorniamo il punteggio solo quando lo stato è effettivamente cambiato
+      UpdateScore(matchUpdate);
+    } else {
+      console.error("matchId non definito!");
+    }
+  };
+
+  // Usa `useEffect` per inviare il punteggio dopo che `homeScore` è stato aggiornato
+  useEffect(() => {
+    if (homeScore !== 0) { // Se il punteggio della casa non è 0
+      console.log(`Punteggio finale casa: ${homeScore}`);
+      const matchUpdate: MatchUpdate = {
+        ScoreCasa: homeScore,
+        ScoreOspite: awayScore,
+        Set: selectedSet,
+        ResetMatch: false,
+        ResetScore: false,
+        TimeoutHome: timeoutHome,
+        TimeoutAway: timeoutAway,
+        Timer: timer,
+        RedCardCasa: homeRedCards,
+        RedCardOspite: awayRedCards,
+        MatchWinner: matchWinner,
+      };
+      console.log("Aggiornamento finale inviato:", matchUpdate);
+      UpdateScore(matchUpdate);
+    }
   }, [homeScore]);
 
   const increaseAwayScore = () => {
@@ -246,10 +317,8 @@ export default function GestionePunteggio() {
     // Se il set non è finito, continua a inviare il punteggio aggiornato
     console.log(`Punteggio aggiornato: Casa - ${homeScore}, Ospite - ${newAwayScore}`);
 
-    let updatedPossession = possession;
-    if (updatedPossession === null) {
-      updatedPossession = 'away';
-    }
+    let updatedPossession = 'away';
+
     if (matchId) {
       const matchUpdate: MatchUpdate = {
         MatchId: matchId,
@@ -289,6 +358,78 @@ export default function GestionePunteggio() {
         ResetScore: false,
         PossessoCasa: possession === 'home',
         PossessoOspite: possession === 'away',
+        TimeoutHome: timeoutHome,
+        TimeoutAway: timeoutAway,
+        Timer: timer,
+        RedCardCasa: homeRedCards,
+        RedCardOspite: awayRedCards,
+        MatchWinner: matchWinner,
+      };
+      console.log("Aggiornamento finale inviato:", matchUpdate);
+      UpdateScore(matchUpdate);
+    }
+  }, [awayScore]);
+
+
+  const decreaseAwayScore = () => {
+    if (awayScore === 0 || matchWinner) return; // Blocca l'incremento se c'è già un vincitore
+
+    const newAwayScore = awayScore - 1;
+    console.log(`Punteggio casa: ${homeScore} - Punteggio ospite: ${newAwayScore}`);
+    console.log(`Differenza di punteggio: ${newAwayScore - homeScore}`);
+
+    // Prima aggiorna il punteggio
+    setAwayScore(newAwayScore);
+
+    // Verifica subito se il set è finito
+    if (newAwayScore >= MAX_SCORE && (newAwayScore - homeScore) >= WINNING_DIFF) {
+      console.log("Il set è finito, vittoria per ospite");
+      handleSetEnd('away');
+      return; // Il set è terminato, non fare altre modifiche
+    }
+
+    // Se il set non è finito, continua a inviare il punteggio aggiornato
+    console.log(`Punteggio aggiornato: Casa - ${homeScore}, Ospite - ${newAwayScore}`);
+
+    let updatedPossession = possession;
+    if (updatedPossession === null) {
+      updatedPossession = 'away';
+    }
+    if (matchId) {
+      const matchUpdate: MatchUpdate = {
+        MatchId: matchId,
+        ScoreCasa: homeScore,  // Usa il punteggio esistente per la casa
+        ScoreOspite: newAwayScore,  // Usa il punteggio appena calcolato per gli ospiti
+        Set: selectedSet,
+        ResetMatch: false,
+        ResetScore: false,
+        TimeoutHome: timeoutHome,
+        TimeoutAway: timeoutAway,
+        Timer: timer,
+        RedCardCasa: homeRedCards,
+        RedCardOspite: awayRedCards,
+        MatchWinner: matchWinner,
+      };
+
+      console.log("Aggiornamento del match:", matchUpdate);
+
+      // Aggiorniamo il punteggio solo quando lo stato è effettivamente cambiato
+      UpdateScore(matchUpdate);
+    } else {
+      console.error("matchId non definito!");
+    }
+  };
+
+  // Usa `useEffect` per inviare il punteggio dopo che `awayScore` è stato aggiornato
+  useEffect(() => {
+    if (awayScore !== 0) { // Se il punteggio degli ospiti non è 0
+      console.log(`Punteggio finale ospite: ${awayScore}`);
+      const matchUpdate: MatchUpdate = {
+        ScoreCasa: homeScore,
+        ScoreOspite: awayScore,
+        Set: selectedSet,
+        ResetMatch: false,
+        ResetScore: false,
         TimeoutHome: timeoutHome,
         TimeoutAway: timeoutAway,
         Timer: timer,
@@ -422,27 +563,37 @@ export default function GestionePunteggio() {
   };
 
 
-  const togglePossession = () => {
+  const togglePossession = (team: 'home' | 'away') => {
+    if (possession === team) {
+      // Se il possesso è già della squadra selezionata, non fare nulla
+      return;
+    }
+
     const newPossession = possession === 'home' ? 'away' : 'home';
     setPossession(newPossession); // Cambia il possesso
-    const matchUpdate: MatchUpdate = {
-      ScoreCasa: homeScore,
-      ScoreOspite: awayScore,
-      Set: selectedSet,
-      ResetMatch: false,
-      ResetScore: false,
-      PossessoCasa: newPossession === 'home',
-      PossessoOspite: newPossession === 'away',
-      TimeoutHome: timeoutHome,
-      TimeoutAway: timeoutAway,
-      Timer: timer,
-      RedCardCasa: homeRedCards,
-      RedCardOspite: awayRedCards,
-      MatchWinner: matchWinner,
-    };
+    if (matchId) {
+      const matchUpdate: MatchUpdate = {
+        MatchId: matchId,
+        ScoreCasa: homeScore,
+        ScoreOspite: awayScore,
+        Set: selectedSet,
+        ResetMatch: false,
+        ResetScore: false,
+        PossessoCasa: newPossession === 'home',
+        PossessoOspite: newPossession === 'away',
+        TimeoutHome: timeoutHome,
+        TimeoutAway: timeoutAway,
+        Timer: timer,
+        RedCardCasa: homeRedCards,
+        RedCardOspite: awayRedCards,
+        MatchWinner: matchWinner,
+      };
 
-    // Invia l'aggiornamento al server
-    UpdateScore(matchUpdate);
+      // Invia l'aggiornamento al server
+      UpdateScore(matchUpdate);
+    } else {
+      console.error("matchId non definito!");
+    }
   };
 
 
@@ -658,6 +809,17 @@ export default function GestionePunteggio() {
     }
   }, [matchId]);  // Esegui quando matchId cambia
 
+  useEffect(() => {
+    if (homeScore > awayScore) {
+      setPossession('home');
+    } else if (awayScore > homeScore) {
+      setPossession('away');
+    } else {
+      setPossession(null); // Se i punteggi sono uguali, non c'è possesso
+    }
+  }, [homeScore, awayScore]);
+
+  
   return (
     <div className="dashboard">
       <Navbar />
@@ -668,12 +830,19 @@ export default function GestionePunteggio() {
             <div className="input-group form-row">
               <div className="title-dash">{homeTeam?.name || 'Casa'}: {homeScore} {homeScore >= MAX_SCORE && '(Max)'}</div>
               <button type="button" onClick={increaseHomeScore} className="dash-button" disabled={isHomeButtonDisabled || timeoutHome || timeoutAway}>
-                {LABEL_CONSTANT.aggiungi_casa}
+                <i className="pi pi-plus" />
+              </button>
+              <button type="button" onClick={decreaseHomeScore} className="dash-button" disabled={isHomeButtonDisabled || timeoutHome || timeoutAway}>
+                <i className="pi pi-minus" />
 
               </button>
               <div className="title-dash">{awayTeam?.name || 'Ospite'}: {awayScore} {awayScore >= MAX_SCORE && '(Max)'}</div>
               <button type="button" onClick={increaseAwayScore} className="dash-button" disabled={isAwayButtonDisabled || timeoutHome || timeoutAway}>
-                {LABEL_CONSTANT.aggiungi_ospite}
+                <i className="pi pi-plus" />
+
+              </button>
+              <button type="button" onClick={decreaseAwayScore} className="dash-button" disabled={isHomeButtonDisabled || timeoutHome || timeoutAway}>
+                <i className="pi pi-minus" />
               </button>
             </div>
             <div>
@@ -698,8 +867,29 @@ export default function GestionePunteggio() {
 
             <div className="input-group form-row">
               <div className="title-dash">{LABEL_CONSTANT.possesso_palla}</div>
-              <div className={`team-possession ${possession}`}>{possession === 'home' ? 'Casa' : 'Ospite'}</div>
-              <button type="button" onClick={togglePossession} className="dash-button">{LABEL_CONSTANT.possesso}</button>
+              <div className={`team-possession ${possession}`}>{possession === 'home' ? 'Casa' : possession === 'away' ? 'Ospite' : 'Nessun possesso'}</div>
+              <button
+                type="button"
+                onClick={() => togglePossession('home')}
+                className={`dash-button ${possession === 'home' ? 'active' : ''}`}
+              >
+                {LABEL_CONSTANT.possesso_home}
+              </button>
+              <button
+    type="button"
+    onClick={() => togglePossession('away')}
+    className={`dash-button ${possession === 'away' ? 'active' : ''}`}
+    disabled={possession === 'away'}
+  >
+    {LABEL_CONSTANT.possesso_away}
+  </button>
+              {/* <button
+                type="button"
+                onClick={togglePossession}
+                className={`dash-button ${possession === 'away' ? 'active' : ''}`}
+              >
+                {LABEL_CONSTANT.possesso_away}
+              </button> */}
             </div>
 
             <div className="input-group form-row">
