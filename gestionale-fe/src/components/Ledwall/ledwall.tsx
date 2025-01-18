@@ -57,21 +57,59 @@ export default function Ledwall() {
     const [winner, setMatchWinner] = useState<Team | null>(null);
 
     const connection = new signalR.HubConnectionBuilder()
-        /* .withUrl("http://51.20.66.229:8080/scoreHub") */
-        .withUrl("http://localhost:8080/scoreHub")
+             .withUrl(`${process.env.REACT_APP_API_BASE_URL}/scoreHub`)
         .withAutomaticReconnect()
         .build();
 
-    const fetchSponsors = async () => {
+
+ /*    const fetchSponsors = async () => {
         try {
-            const response = await axios.get<SponsorResponse[]>('http://localhost:8080/api/sponsor');
+            // Recupera l'URL di base dalla variabile di ambiente
+            const apiUrl = process.env.REACT_APP_API_BASE_URL;
+    
+            // Controlla che apiUrl sia definito
+            if (!apiUrl) {
+                console.error('API base URL is not defined!');
+                return;
+            }
+    
+            // Usa la sintassi di template literals per concatenare
+            const response = await axios.get<SponsorResponse[]>(`${apiUrl}/api/sponsor`);
             console.log('Sponsors fetched:', response.data);
             setSponsors(response.data);
         } catch (error) {
             console.error('Error fetching sponsors:', error);
         }
+    }; */
+    
+    const fetchSponsors = async () => {
+        try {
+            // Recupera l'URL di base dalla variabile di ambiente
+            const apiUrl = process.env.REACT_APP_API_BASE_URL;
+    
+            // Controlla che apiUrl sia definito
+            if (!apiUrl) {
+                console.error('API base URL is not defined!');
+                return;
+            }
+    
+            // Effettua la richiesta GET
+            const response = await axios.get<SponsorResponse[]>(`${apiUrl}/api/sponsor`);
+            console.log('Sponsors fetched:', response.data);
+    
+            // Filtra i risultati escludendo quelli che contengono 'CARBAT' nel nome (case-insensitive)
+            const filteredSponsors = response.data.filter(sponsor => 
+                !sponsor.name.toLowerCase().includes('carbat')
+            );
+            console.log('Filtered sponsors:', filteredSponsors);
+    
+            // Imposta lo stato con i risultati filtrati
+            setSponsors(filteredSponsors);
+        } catch (error) {
+            console.error('Error fetching sponsors:', error);
+        }
     };
-
+    
     useEffect(() => {
         if (matchId) {
             const parsedMatchId = parseInt(matchId, 10);  // Parsiamo il matchId in numero

@@ -7,8 +7,7 @@ import { HubConnectionBuilder } from '@microsoft/signalr';
 import { getMatchData, MatchDataResponse, Team } from 'services/UserService';
 
 const connection = new HubConnectionBuilder()
-  /* .withUrl('http://51.20.66.229:8080/scorehub') */
-  .withUrl('http://localhost:8080/scorehub')
+  .withUrl(`${process.env.REACT_APP_API_BASE_URL}/scoreHub`)
   .build();
 
 export type MatchUpdate = {

@@ -1,5 +1,5 @@
 import './diretta.scss';
-import logoSponsor from '../../assets/images/faam_spa_logo.jpg';
+import logoSponsor from '../../assets/images/faam_spa_logo-senza-sfondo.png';
 import defaultLogo from '../../assets/images/default-logo.png';
 import { useEffect, useState } from 'react';
 import * as signalR from "@microsoft/signalr";
@@ -31,20 +31,30 @@ export default function Diretta() {
     const [reset, resetMatch] = useState(false);
 
     const connection = new signalR.HubConnectionBuilder()
-        .withUrl("http://localhost:8080/scoreHub")
+        .withUrl(`${process.env.REACT_APP_API_BASE_URL}/scoreHub`)
         .withAutomaticReconnect()
         .build();
 
-    const fetchSponsors = async () => {
-        try {
-            const response = await axios.get<SponsorResponse[]>('http://localhost:8080/api/sponsor');
-            console.log('Sponsors fetched:', response.data);
-            setSponsors(response.data);
-        } catch (error) {
-            console.error('Error fetching sponsors:', error);
-        }
-    };
-
+        const fetchSponsors = async () => {
+            try {
+                // Recupera l'URL di base dalla variabile di ambiente
+                const apiUrl = process.env.REACT_APP_API_BASE_URL;
+        
+                // Controlla che apiUrl sia definito
+                if (!apiUrl) {
+                    console.error('API base URL is not defined!');
+                    return;
+                }
+        
+                // Usa la sintassi di template literals per concatenare
+                const response = await axios.get<SponsorResponse[]>(`${apiUrl}/api/sponsor`);
+                console.log('Sponsors fetched:', response.data);
+                setSponsors(response.data);
+            } catch (error) {
+                console.error('Error fetching sponsors:', error);
+            }
+        };
+        
     
 
 
