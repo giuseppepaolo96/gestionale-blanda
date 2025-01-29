@@ -93,7 +93,7 @@ export const LABEL_CONSTANT = {
     cosa_vuoi_fare:"Quale attività vuoi svolgere?",
     nessun_dato:"Dati di calendario e squadre non presenti",
     lista_calendari:"Questa è la lista dei calendari caricati fino ad adesso",
-    dialog_conferma_gestione:"Sei sicuro di voler gestire il punteggio per la gara :",
+    dialog_conferma_gestione:"Sei sicuro di voler gestire il punteggio per la seguente gara: ",
     tra:"tra",
     e:"e",
     winner:"Vince la partita la squadra:"

@@ -152,10 +152,128 @@
 }
 
 .table{
-  width: 70%;
+  width: 100%;
 }
+
 
 .column{
   width: 10%;
-
+  border: 1px solid #e9ecef;
+  height: 10%;
 } 
+
+.pi-eye{
+  color: #000000;
+}
+
+.p-button-secondary{
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.p-button-text{
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  /* border-top: 1px solid #eee; */
+}
+
+.next-button,
+.prev-button {
+  width: 120px;
+  padding: 10px;
+  background-color: transparent;
+  color: #000000;
+  border: 2px solid #000000;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  text-align: center;
+  margin-top: 10%;
+}
+
+.prev-button {
+  order: 1;
+  margin-left: -149%;
+}
+
+.card-header {
+  flex-direction: column; /* Passa a colonna per schermi più piccoli */
+  align-items: center; /* Allinea al centro */
+  padding: 1rem;
+}
+
+.card {
+  width: 90%;
+  max-width: 900px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.content-card{
+  font-size: 1.5rem; /* Imposta la dimensione del testo */
+  color: #667682; /* Colore del testo */
+  padding: 20px;
+  justify-content: center; /* Centra orizzontalmente il contenuto */
+  align-items: center; /* Centra verticalmente il contenuto */
+  margin: 15px 0; /* Spaziatura tra le righe */
+  display: flex;
+  flex-direction: column; /* Imposta una colonna per il layout */
+  gap: 20px; /* Aggiunge spazio tra le righe */
+  text-align: center; /* Allinea tutto il testo al centro */
+}
+
+
+/* Personalizza il bottone di chiusura */
+.p-dialog .p-dialog-header {
+  display: flex;
+  justify-content: space-between;  /* Spaziatura tra il titolo e l'icona di chiusura */
+  align-items: center;  /* Centra verticalmente gli elementi nel contenitore */
+  position: relative;  /* Imposta il contenitore come relativo per il posizionamento assoluto dell'icona */
+}
+
+.p-dialog .p-dialog-header-icon {
+  display: flex;
+  justify-content: center!important;  /* Centra l'icona orizzontalmente */
+  align-items: center!important;  /* Centra l'icona verticalmente */
+  position: absolute;  /* Posiziona l'icona in modo assoluto rispetto al contenitore */
+  top: 2%;  /* Centra l'icona verticalmente */
+  right: 20px;  /* Distanza dal lato destro */
+  transform: translateY(-50%);  /* Centra verticalmente rispetto al suo contenitore */
+}
+
+.p-dialog .p-dialog-header-close {
+  color: #000;
+  font-size: 1.5rem;
+  display: block;
+  border: none;
+  width: 50px; /* Impostiamo una larghezza per evitare il taglio dell'icona */
+  height: 50px; /* Impostiamo un'altezza per evitare il taglio dell'icona */
+}
+
+.p-dialog .p-dialog-header-close:hover {
+  color: red; /* Cambia colore al passaggio del mouse */
+}
+
+/* Se vuoi usare un'icona personalizzata, ad esempio una "x" */
+.p-dialog .p-dialog-header-close::before {
+  content: '\00d7';  /* Questo è il carattere '×' per una 'x' */
+  font-size: 2rem;  /* Puoi cambiare la dimensione dell'icona */
+}
+
+
+.p-dialog .p-dialog-header .p-dialog-title {
+  font-weight: 600;
+  font-size: 2.25rem;
+}
+
+.p-panel-header {
+  margin-top: 2%;
+}

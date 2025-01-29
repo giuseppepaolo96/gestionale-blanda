@@ -1,7 +1,7 @@
 import { LABEL_CONSTANT } from "constants/label_costant";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FileResponse, FileTypeEnum, getTeams, Team, uploadFile } from "services/UserService";
+import { FileResponse, FileTypeEnum, getFiles, getTeams, Team, uploadFile } from "services/UserService";
 import Navbar from "views/Navbar/navbar";
 import './gestioneGenerale.scss';
 import * as signalR from "@microsoft/signalr";
@@ -55,13 +55,34 @@ export default function GestioneGenerale() {
     const [isDialogVisible, setIsDialogVisible] = useState(false);
     const [delectedFile, setDeletedFile] = useState<FileResponse>();
     const [tempFilterValue, setTempFilterValue] = useState<Date | null>(null);
+    const [fileData, setFileData] = useState<FileResponse[]>([]);
+    const [filteredData, setFilteredData] = useState<FileResponse[]>([]);
 
+    useEffect(() => {
+        const fetchFile = async () => {
+            try {
+                const data = await getFiles();
+                setFileData(data);
+                setFilteredData(data);
+            } catch (error) {
+                console.error('Errore durante il recupero dei dati delle partite:', error);
+            }
+        };
+        fetchFile();
+    }, []);
 
     const [filters, setFilters] = useState<{
         UploadDate: { value: Date | null; dateFile: string };
     }>({
         UploadDate: { value: null, dateFile: 'custom' },
     });
+
+    const formatDate = (date: Date) => {
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day} - ${month} - ${year}`;
+    };
 
 
     const dateFilter = (value: string | number | Date, UploadDate: { value: string | number | Date }) => {
@@ -73,6 +94,7 @@ export default function GestioneGenerale() {
         const recordDate = new Date(value).setHours(0, 0, 0, 0); // Normalizza la data del record
         return recordDate === filterDate;
     };
+
 
     const applyFilter = () => {
         setFilters({
@@ -336,47 +358,48 @@ export default function GestioneGenerale() {
                     <button className="aggiungi" onClick={() => setIsDialogVisible(true)} >
                         {LABEL_CONSTANT.carica_calendario}
                     </button>
-                    <DataTable>
-                        <Column field="FileName" header="Nome file" style={{ width: '10%' }}></Column>
+                    <DataTable
+                        value={filteredData
+                            .filter((file) => file.uploadDate)
+                            .map((file) => ({
+                                ...file,
+                                fileName: file.fileName ?? "N/A", // Nome file predefinito
+                                uploadDate: file.uploadDate ?? "N/A", // Data caricamento predefinita
+                            }))}
+                        scrollable
+                        scrollHeight="400px"
+                        tableStyle={{ minWidth: '50rem' }}
+                    >
+                        <Column field="fileName" header="Nome file" className="column" />
                         <Column
-                        
-                            field="UploadDate"
+                            field="uploadDate"
                             header="Data caricamento"
-                            style={{ width: '30%' }}
+                            body={(rowData) => formatDate(new Date(rowData.uploadDate))}
+                            style={{ width: '20%' }}
                             filter
-                            filterField="UploadDate"
-                            filterMatchMode="custom"
-                            filterFunction={dateFilter}  // Filtro personalizzato per la data
+                            filterField="uploadDate" // Nome corretto del campo
+                            filterMatchMode="custom" // Modalità filtro personalizzata
+                            filterFunction={dateFilter} // Funzione filtro personalizzata
                             filterElement={(options) => (
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    
-                                    {/* <Calendar
+                                    <Calendar
                                         value={tempFilterValue}
-                                        onChange={(e) => setTempFilterValue(e.value || null)}  // Gestisce 'undefined' e 'null'
-                                        dateFormat="dd/mm/yy"
+                                        onChange={(e) => setTempFilterValue(e.value || null)} // Gestione dello stato
+                                        dateFormat="dd/mm/yy" // Formato della data
                                         placeholder="Seleziona una data"
                                         icon="pi pi-calendar"
                                         showIcon
-                                        readOnlyInput={false}  // Permette l'inserimento manuale
-                                    /> */}
-                                    <Calendar 
-                                    value={tempFilterValue} 
-                                    onChange={(e) => setTempFilterValue(e.value || null)} 
-                                    dateFormat="dd/mm/yy"
-                                    placeholder="Seleziona una data"
-                                    showIcon timeOnly  
-                                    icon={() => <i className="pi pi-calendar" />} />
-
+                                    />
                                 </div>
                             )}
-                            body={(file) => new Date(file.UploadDate).toLocaleDateString()} // Formattare la data nella tabella
                         />
                         <Column
                             header="Azione"
+                            className="column"
                             body={(file) => (
                                 <Button
                                     icon="pi pi-trash"
-                                    label="Gestisci Punteggi"
+                                    label="Elimina"
                                     onClick={() => handleDeleteFile(file)}
                                     className="p-button-secondary"
                                 />

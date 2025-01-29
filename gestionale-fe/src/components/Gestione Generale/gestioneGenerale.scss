@@ -105,7 +105,68 @@
     display: none !important;
 }
 
-.pi-calendar{
-    font-size: 30px;
+.pi-calendar {
+    display: flex; /* Usa Flexbox per centrare */
+    justify-content: center; /* Centra orizzontalmente */
+    align-items: center; /* Centra verticalmente */
+    position: relative; /* Necessario per gestire il ::before */
+    width: 40px; /* Larghezza del contenitore */
+    height: 40px; /* Altezza del contenitore */
 }
- 
+
+.pi-calendar:before {
+    content: "\e927";
+    font-family: "PrimeIcons";
+    font-size: 37px;
+    display: block;
+    text-align: center;
+    position: absolute;
+    top: 66%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+}
+
+
+.p-fluid .p-button-icon-only {
+    width: 5.357rem;
+}
+
+.p-datepicker-prev, .p-datepicker-next {
+    cursor: pointer;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+
+/* Pulsante "Avanti" */
+.p-datepicker-next:before {
+    content: "\e901"; /* Codice unicode per pi-chevron-right */
+    font-family: "PrimeIcons";
+}
+
+/* Pulsante "Indietro" */
+.p-datepicker-prev:before {
+    content: "\e900"; /* Codice unicode per pi-chevron-left */
+    font-family: "PrimeIcons";
+}
+
+.p-column-filter-menu-button {
+    display: flex;
+    justify-content: center; /* Centra orizzontalmente */
+    align-items: center; /* Centra verticalmente */
+    position: relative; /* Necessario per il posizionamento del ::after */
+    height: 40px; /* Altezza del contenitore, da adattare */
+    width: 40px; /* Larghezza del contenitore, da adattare */
+}
+
+.p-column-filter-menu-button::after {
+    content: "\e927";
+    font-family: 'PrimeIcons';
+    font-size: 16px; /* Dimensione dell'icona */
+    display: block; /* Assicura che l'elemento ::after sia trattato come un blocco */
+    text-align: center; /* Centra il testo al suo interno */
+}
+
