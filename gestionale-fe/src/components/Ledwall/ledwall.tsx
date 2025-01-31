@@ -61,26 +61,6 @@ export default function Ledwall() {
         .withAutomaticReconnect()
         .build();
 
-
- /*    const fetchSponsors = async () => {
-        try {
-            // Recupera l'URL di base dalla variabile di ambiente
-            const apiUrl = process.env.REACT_APP_API_BASE_URL;
-    
-            // Controlla che apiUrl sia definito
-            if (!apiUrl) {
-                console.error('API base URL is not defined!');
-                return;
-            }
-    
-            // Usa la sintassi di template literals per concatenare
-            const response = await axios.get<SponsorResponse[]>(`${apiUrl}/api/sponsor`);
-            console.log('Sponsors fetched:', response.data);
-            setSponsors(response.data);
-        } catch (error) {
-            console.error('Error fetching sponsors:', error);
-        }
-    }; */
     
     const fetchSponsors = async () => {
         try {
@@ -173,8 +153,11 @@ export default function Ledwall() {
                 connection.on("ReceiveScoreUpdate", async (matchUpdate) => {
                     console.log("Dati ricevuti:", matchUpdate);
 
+                    if (matchId && matchUpdate.matchId && parseInt(matchId, 10) === Number(matchUpdate.matchId)) {
+                        console.log("Aggiornamento ricevuto per il matchId corretto:", matchUpdate);
                     const { matchId, scoreCasa, scoreOspite, set: currentSet, possessoCasa, possessoOspite, timeoutHome, timeoutAway, matchWinner } = matchUpdate;
 
+ 
                     await fetchMatchData(matchId);
 
                     if (scoreCasa !== undefined && scoreOspite !== undefined) {
@@ -219,9 +202,6 @@ export default function Ledwall() {
                     }
 
 
-
-
-
                     if (timeoutHome && timeoutsHome < 2) {
                         setTimeoutHomeFlags(prev => [...prev, true]);  // Aggiungi il flag a true
                         setTimeoutsHome(prev => prev + 1);  // Incrementa il conteggio dei timeout
@@ -240,6 +220,9 @@ export default function Ledwall() {
                     } else {
                         setPossession(null); // Nessuna squadra ha il possesso
                     }
+                } else {
+                    console.log("matchId non corrisponde, ignorando aggiornamento...");
+                }
                 });
             })
             .catch(err => {

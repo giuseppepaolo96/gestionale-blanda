@@ -11,7 +11,7 @@ import { useParams } from 'react-router-dom';
 export interface SponsorResponse {
     name: string;
     logoBase64: string;
-} 
+}
 
 export default function Diretta() {
     const { matchId } = useParams();
@@ -35,28 +35,25 @@ export default function Diretta() {
         .withAutomaticReconnect()
         .build();
 
-        const fetchSponsors = async () => {
-            try {
-                // Recupera l'URL di base dalla variabile di ambiente
-                const apiUrl = process.env.REACT_APP_API_BASE_URL;
-        
-                // Controlla che apiUrl sia definito
-                if (!apiUrl) {
-                    console.error('API base URL is not defined!');
-                    return;
-                }
-        
-                // Usa la sintassi di template literals per concatenare
-                const response = await axios.get<SponsorResponse[]>(`${apiUrl}/api/sponsor`);
-                console.log('Sponsors fetched:', response.data);
-                setSponsors(response.data);
-            } catch (error) {
-                console.error('Error fetching sponsors:', error);
-            }
-        };
-        
-    
+    const fetchSponsors = async () => {
+        try {
+            // Recupera l'URL di base dalla variabile di ambiente
+            const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
+            // Controlla che apiUrl sia definito
+            if (!apiUrl) {
+                console.error('API base URL is not defined!');
+                return;
+            }
+
+            // Usa la sintassi di template literals per concatenare
+            const response = await axios.get<SponsorResponse[]>(`${apiUrl}/api/sponsor`);
+            console.log('Sponsors fetched:', response.data);
+            setSponsors(response.data);
+        } catch (error) {
+            console.error('Error fetching sponsors:', error);
+        }
+    };
 
     useEffect(() => {
         if (matchId) {
@@ -99,12 +96,12 @@ export default function Diretta() {
                 const awayTeamLogoBase64 = teams.find((team) => team.name.toLowerCase() === awayTeam.name.toLowerCase())?.logo || null;
 
                 // Se il logo è in formato Base64
-                const homeLogoUrl = homeTeamLogoBase64?.startsWith('data:image/png;base64,') 
-                    ? homeTeamLogoBase64 
+                const homeLogoUrl = homeTeamLogoBase64?.startsWith('data:image/png;base64,')
+                    ? homeTeamLogoBase64
                     : `data:image/png;base64,${homeTeamLogoBase64}`;
-                
-                const awayLogoUrl = awayTeamLogoBase64?.startsWith('data:image/png;base64,') 
-                    ? awayTeamLogoBase64 
+
+                const awayLogoUrl = awayTeamLogoBase64?.startsWith('data:image/png;base64,')
+                    ? awayTeamLogoBase64
                     : `data:image/png;base64,${awayTeamLogoBase64}`;
 
                 // Imposta i loghi nelle variabili di stato
@@ -123,6 +120,7 @@ export default function Diretta() {
 
     useEffect(() => {
         fetchSponsors();
+
         if (!matchId) {
             console.log("matchId non definito, non posso iniziare a ricevere aggiornamenti.");
             return; // Esci se matchId non è disponibile
@@ -135,78 +133,49 @@ export default function Diretta() {
                 connection.on("ReceiveScoreUpdate", async (matchUpdate) => {
                     console.log("Dati ricevuti:", matchUpdate);
 
-                    // Converte matchId estratto da useParams in stringa
-                    const parsedMatchId = String(matchId);
+                    // Blocco qualsiasi aggiornamento se i matchId non corrispondono
+                    if (!matchId || !matchUpdate.matchId || parseInt(matchId, 10) !== Number(matchUpdate.matchId)) {
+                        console.log(`Aggiornamento ignorato: ricevuto ${matchUpdate.matchId}, atteso ${matchId}.`);
+                        return;
+                    }
 
-                    // Estrai il matchId ricevuto nei dati di matchUpdate
-                    const updateMatchId = String(matchUpdate.matchId);
+                    console.log(`matchId ricevuto: ${matchUpdate.matchId}, matchId attuale: ${matchId}`);
 
-                    // Se i matchId corrispondono, aggiorna i punteggi
-                    if (updateMatchId === parsedMatchId) {
-                        console.log(`matchId ricevuto: ${updateMatchId}, matchId attuale: ${parsedMatchId}`);
+                    // Aggiorna i punteggi solo se sono definiti
+                    if (matchUpdate.scoreCasa !== undefined && matchUpdate.scoreOspite !== undefined) {
+                        console.log("Updating scores: ", matchUpdate.scoreCasa, matchUpdate.scoreOspite);
+                        setHomeScore(matchUpdate.scoreCasa);
+                        setAwayScore(matchUpdate.scoreOspite);
+                    }
 
-                        // Aggiorna i punteggi solo se sono definiti
-                        if (matchUpdate.scoreCasa !== undefined && matchUpdate.scoreOspite !== undefined) {
-                            console.log("Updating scores: ", matchUpdate.scoreCasa, matchUpdate.scoreOspite); // Log per monitorare i punteggi
-                            setHomeScore(matchUpdate.scoreCasa);  // Aggiorna il punteggio della squadra di casa
-                            setAwayScore(matchUpdate.scoreOspite); // Aggiorna il punteggio della squadra ospite
-                        }
+                    // Aggiorna i set se il set è definito
+                    if (matchUpdate.set !== undefined) {
+                        setSetsCount(matchUpdate.set);
+                        setCompleteSet(matchUpdate.set);
 
-                        // Aggiorna i set se il set è definito
-                        if (matchUpdate.set !== undefined) {
-                            setSetsCount(matchUpdate.set); // Imposta il numero totale di set
-                            setCompleteSet(matchUpdate.set); // Imposta il set corrente
+                        setSetScores((prevSetScores) => {
+                            const newSetScores = [...prevSetScores];
+                            if (!newSetScores[matchUpdate.set - 1]) {
+                                newSetScores[matchUpdate.set - 1] = [0, 0];
+                            }
+                            newSetScores[matchUpdate.set - 1] = [matchUpdate.scoreCasa || 0, matchUpdate.scoreOspite || 0];
+                            return newSetScores;
+                        });
+                    }
 
-                            // Aggiorna il punteggio del set corrente
-                            setSetScores((prevSetScores) => {
-                                const newSetScores = [...prevSetScores];
-                                if (!newSetScores[matchUpdate.set - 1]) {
-                                    newSetScores[matchUpdate.set - 1] = [0, 0];
-                                }
-                                newSetScores[matchUpdate.set - 1] = [matchUpdate.scoreCasa || 0, matchUpdate.scoreOspite || 0];
-                                return newSetScores;
-                            });
-                        }
-
-                        // Imposta il possesso corrente
-                        if (matchUpdate.possessoCasa) {
-                            setPossession('home');  // La squadra di casa ha il possesso
-                        } else if (matchUpdate.possessoOspite) {
-                            setPossession('away');  // La squadra ospite ha il possesso
-                        } else {
-                            setPossession(null); // Nessuna squadra ha il possesso
-                        }
+                    // Imposta il possesso corrente
+                    if (matchUpdate.possessoCasa) {
+                        setPossession('home');
+                    } else if (matchUpdate.possessoOspite) {
+                        setPossession('away');
                     } else {
-                        console.log(`matchId non corrisponde, ricevuto: ${updateMatchId}, atteso: ${parsedMatchId}.`);
+                        setPossession(null);
+                    }
 
-
-                        if (matchUpdate.ResetMatch) {
-                            console.log("Ricevuto comando di reset del match");
-                            resetMatch(true);
-                            return;
-                        }
-
-
-
-                        // Fallback: se arriva un punteggio finale, aggiorna comunque i punteggi
-                        if (matchUpdate.scoreCasa !== undefined && matchUpdate.scoreOspite !== undefined) {
-                            console.log("Aggiornamento finale ricevuto, aggiornando punteggi...");
-                            setHomeScore(matchUpdate.scoreCasa);
-                            setAwayScore(matchUpdate.scoreOspite);
-                        }
-
-                        // Gestione dei set finali: se `set` è definito e `matchId` è nullo, forza l'aggiornamento finale
-                        if (matchUpdate.set !== undefined) {
-                            setSetsCount(matchUpdate.set);
-                            setCompleteSet(matchUpdate.set);
-
-                            // Forza l'aggiornamento del punteggio del set finale
-                            setSetScores((prevSetScores) => {
-                                const newSetScores = [...prevSetScores];
-                                newSetScores[matchUpdate.set - 1] = [matchUpdate.scoreCasa || 0, matchUpdate.scoreOspite || 0];
-                                return newSetScores;
-                            });
-                        }
+                    // Se è stato ricevuto un comando di reset, resettare il match
+                    if (matchUpdate.ResetMatch) {
+                        console.log("Ricevuto comando di reset del match");
+                        resetMatch(true);
                     }
                 });
             })
@@ -214,13 +183,10 @@ export default function Diretta() {
                 console.error("Error starting SignalR connection: ", err);
             });
 
-        // Cleanup della connessione quando il componente viene smontato
         return () => {
             connection.stop();
         };
     }, [matchId]);
-
-
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -241,7 +207,7 @@ export default function Diretta() {
                             <div className="team-logo-container">
                                 {/*  <div className="color-strip home"></div> */}
 
-                                <img src={homeTeamLogo || defaultLogo}  alt="Logo Squadra Ospite" className="team-logo" />
+                                <img src={homeTeamLogo || defaultLogo} alt="Logo Squadra Ospite" className="team-logo" />
 
                                 <div className="team-info">
                                     <div className="team-name-container">
@@ -266,8 +232,8 @@ export default function Diretta() {
                                                                 ></i>
                                                             </div>
                                                         )}
-                                                        
-                                                        
+
+
                                                     </div>
                                                 </div>
                                             );
@@ -284,10 +250,10 @@ export default function Diretta() {
                     {/* Squadra Ospite */}
                     <div className="team">
                         <div className="team-logo-container">
-                        
+
                             {/*  <div className="color-strip away"></div> */}
-                            
-                            <img src={awayTeamLogo || defaultLogo}  alt="Logo Squadra Ospite" className="team-logo" />
+
+                            <img src={awayTeamLogo || defaultLogo} alt="Logo Squadra Ospite" className="team-logo" />
                             <div className="team-info">
                                 <div className="team-name-container">
                                     <div className="team-name">{awayTeam ? awayTeam.name : ""}</div>
@@ -304,9 +270,9 @@ export default function Diretta() {
                                                     {/* Mostra il cerchio se la squadra ospite ha il possesso */}
                                                     {setNumber === set && possession === 'away' && (
                                                         <div className="set-icon-container">
-                                                        <i
-                                                            className="pi pi-circle-fill set-icon"
-                                                        ></i>
+                                                            <i
+                                                                className="pi pi-circle-fill set-icon"
+                                                            ></i>
                                                         </div>
                                                     )}
                                                 </div>

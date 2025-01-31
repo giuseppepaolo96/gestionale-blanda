@@ -188,13 +188,13 @@ export default function Dashboard() {
 
   const dateFilter = (value: string | number | Date, UploadDate: { value: string | number | Date }) => {
     if (!UploadDate || !UploadDate.value) {
-        return true; // Mostra tutti i record se non c'è un filtro
+      return true; // Mostra tutti i record se non c'è un filtro
     }
 
     const filterDate = new Date(UploadDate.value).setHours(0, 0, 0, 0); // Normalizza a mezzanotte
     const recordDate = new Date(value).setHours(0, 0, 0, 0); // Normalizza la data del record
     return recordDate === filterDate;
-};
+  };
   return (
     <div className="dashboard">
       <Navbar />
@@ -221,34 +221,34 @@ export default function Dashboard() {
               <Column field="day" header="Giornata" className="column" />
               <Column field="outwardReturn" header="A/R" className="column" />
               <Column field="matchNumber" header="Numero Gara" className="column" />
-        {/*       <Column
+              {/*       <Column
                 field="matchDate"
                 header="Data gara"
                 body={(rowData) => formatDate(new Date(rowData.matchDate))}
                 className="column" 
               /> */}
               <Column
-                                          field="matchDate"
-                                          header="Data gara"
-                                          body={(rowData) => formatDate(new Date(rowData.matchDate))}
-                                          style={{ width: '20%' }}
-                                          filter
-                                          filterField="uploadDate" // Nome corretto del campo
-                                          filterMatchMode="custom" // Modalità filtro personalizzata
-                                          filterFunction={dateFilter} // Funzione filtro personalizzata
-                                          filterElement={(options) => (
-                                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                                  <Calendar
-                                                      value={tempFilterValue}
-                                                      onChange={(e) => setTempFilterValue(e.value || null)} // Gestione dello stato
-                                                      dateFormat="dd/mm/yy" // Formato della data
-                                                      placeholder="Seleziona una data"
-                                                      icon="pi pi-calendar"
-                                                      showIcon
-                                                  />
-                                              </div>
-                                          )}
-                                      />
+                field="matchDate"
+                header="Data gara"
+                body={(rowData) => formatDate(new Date(rowData.matchDate))}
+                style={{ width: '20%' }}
+                filter
+                filterField="uploadDate" // Nome corretto del campo
+                filterMatchMode="custom" // Modalità filtro personalizzata
+                filterFunction={dateFilter} // Funzione filtro personalizzata
+                filterElement={(options) => (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <Calendar
+                      value={tempFilterValue}
+                      onChange={(e) => setTempFilterValue(e.value || null)} // Gestione dello stato
+                      dateFormat="dd/mm/yy" // Formato della data
+                      placeholder="Seleziona una data"
+                      icon="pi pi-calendar"
+                      showIcon
+                    />
+                  </div>
+                )}
+              />
               <Column field="dayOfWeek" header="Giorno settimana" className="column" />
               <Column field="time" header="Time" className="column" />
               <Column field="location" header="Luogo" className="column" />
@@ -357,7 +357,7 @@ export default function Dashboard() {
               ?
             </Dialog>
           </Panel>
-          
+
         )}
         <div className="row-container">
           <Panel header="Gestisci il punteggio" style={{ marginBottom: '20px' }}>

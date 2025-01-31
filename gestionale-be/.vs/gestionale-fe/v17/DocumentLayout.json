@@ -3,6 +3,22 @@
   "WorkspaceRootPath": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\features\\websocket\\scorehub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\features\\websocket\\scorehub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\features\\websocket\\matchupdate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\features\\websocket\\matchupdate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\entities\\tabledb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\entities\\tabledb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\features\\logo\\command\\deletelogocommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\features\\logo\\command\\deletelogocommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -13,10 +29,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\infrastructure\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\infrastructure\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\entities\\tabledb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\entities\\tabledb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,8 +38,47 @@
       "DocumentGroups": [
         {
           "DockedWidth": 85,
-          "SelectedChildIndex": 16,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ScoreHub.cs",
+              "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\WebSocket\\ScoreHub.cs",
+              "RelativeDocumentMoniker": "src\\Api\\Features\\WebSocket\\ScoreHub.cs",
+              "ToolTip": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\WebSocket\\ScoreHub.cs",
+              "RelativeToolTip": "src\\Api\\Features\\WebSocket\\ScoreHub.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-29T17:20:31.67Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MatchUpdate.cs",
+              "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\WebSocket\\MatchUpdate.cs",
+              "RelativeDocumentMoniker": "src\\Api\\Features\\WebSocket\\MatchUpdate.cs",
+              "ToolTip": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\WebSocket\\MatchUpdate.cs",
+              "RelativeToolTip": "src\\Api\\Features\\WebSocket\\MatchUpdate.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-29T17:20:58.026Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\appsettings.json",
+              "RelativeDocumentMoniker": "src\\Api\\appsettings.json",
+              "ToolTip": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\appsettings.json",
+              "RelativeToolTip": "src\\Api\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-01-29T17:20:08.655Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
@@ -86,7 +137,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "GetSponsorCommand.cs",
               "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\Sponsor\\Command\\GetSponsorCommand.cs",
               "RelativeDocumentMoniker": "src\\Api\\Features\\Sponsor\\Command\\GetSponsorCommand.cs",
@@ -94,12 +145,11 @@
               "RelativeToolTip": "src\\Api\\Features\\Sponsor\\Command\\GetSponsorCommand.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-17T20:24:14.974Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-17T20:24:14.974Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Infrastructure\\Data\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "src\\Api\\Infrastructure\\Data\\ApplicationDbContext.cs",
@@ -107,25 +157,24 @@
               "RelativeToolTip": "src\\Api\\Infrastructure\\Data\\ApplicationDbContext.cs",
               "ViewState": "AgIAAAgAAAAAAAAAAAAAACcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-17T20:10:25.421Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-17T20:10:25.421Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "DeleteLogoCommand.cs",
               "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\Logo\\Command\\DeleteLogoCommand.cs",
               "RelativeDocumentMoniker": "src\\Api\\Features\\Logo\\Command\\DeleteLogoCommand.cs",
               "ToolTip": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\Logo\\Command\\DeleteLogoCommand.cs",
               "RelativeToolTip": "src\\Api\\Features\\Logo\\Command\\DeleteLogoCommand.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAA3wBUAAAAjAAAAAAAAAA==",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAYwBUAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-17T20:02:53.366Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "TableDb.cs",
               "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Entities\\TableDb.cs",
               "RelativeDocumentMoniker": "src\\Api\\Entities\\TableDb.cs",
