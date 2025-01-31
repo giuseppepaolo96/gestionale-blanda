@@ -49,8 +49,6 @@ export default function GestioneGenerale() {
     const [selectedTeam, setSelectedTeam] = useState<number | null>(null);
     const [maleFilter, setMaleFilter] = useState<boolean>(false); // Filtro per maschile
     const [femaleFilter, setFemaleFilter] = useState<boolean>(false); // Filtro per femminile
-    const [colors, setColors] = useState<string[]>([]);
-    const [gradients, setGradients] = useState<{ GradientId: number, GradientStyle: string }[]>([]);
     const [value, setValue] = useState<string>('');
     const [isDialogVisible, setIsDialogVisible] = useState(false);
     const [delectedFile, setDeletedFile] = useState<FileResponse>();
@@ -62,14 +60,16 @@ export default function GestioneGenerale() {
         const fetchFile = async () => {
             try {
                 const data = await getFiles();
+                const calendarData = data.filter(item => item.fileName.toLowerCase().includes("calendario")); // Adatta la stringa di ricerca se necessario
                 setFileData(data);
-                setFilteredData(data);
+                setFilteredData(calendarData);
             } catch (error) {
                 console.error('Errore durante il recupero dei dati delle partite:', error);
             }
         };
         fetchFile();
     }, []);
+    
 
     const [filters, setFilters] = useState<{
         UploadDate: { value: Date | null; dateFile: string };
@@ -312,33 +312,7 @@ export default function GestioneGenerale() {
         const teamId = parseInt(e.target.value, 10);
         setSelectedTeam(teamId);
     };
-    useEffect(() => {
-        connection.start()
-            .then(() => {
-                console.log("Connessione SignalR stabilita");
-                // Ascolta gli aggiornamenti dei colori e gradienti
-                connection.on("ReceiveColorUpdate", async (colorUpdate: { Colors: string[], Gradients: { GradientId: number, GradientStyle: string }[] }) => {
-                    console.log("Aggiornamento colori ricevuto:", colorUpdate);
-                    const { Colors, Gradients } = colorUpdate;
-                    // Esempio: Imposta i colori e i gradienti ricevuti nel tuo stato
-                    if (Colors) {
-                        setColors(Colors); // Ad esempio, imposta i colori nel tuo stato
-                    }
 
-                    if (Gradients) {
-                        setGradients(Gradients); // Imposta i gradienti nel tuo stato
-                    }
-
-                    // Puoi aggiungere qui altre logiche per aggiornare altre variabili di stato
-                });
-            })
-            .catch(err => {
-                console.error("Errore nell'avvio della connessione SignalR: ", err);
-            });
-        return () => {
-            connection.stop();
-        };
-    }, []);
 
     const handleDialogClose = () => {
         setIsDialogVisible(false);
@@ -375,7 +349,7 @@ export default function GestioneGenerale() {
                             field="uploadDate"
                             header="Data caricamento"
                             body={(rowData) => formatDate(new Date(rowData.uploadDate))}
-                            style={{ width: '20%' }}
+                            className="column"
                             filter
                             filterField="uploadDate" // Nome corretto del campo
                             filterMatchMode="custom" // Modalità filtro personalizzata
@@ -404,7 +378,6 @@ export default function GestioneGenerale() {
                                     className="p-button-secondary"
                                 />
                             )}
-                            style={{ width: '10%' }}
                         ></Column>
                     </DataTable>
                 </Panel>

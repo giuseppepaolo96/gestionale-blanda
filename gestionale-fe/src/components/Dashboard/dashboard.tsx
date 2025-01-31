@@ -221,17 +221,11 @@ export default function Dashboard() {
               <Column field="day" header="Giornata" className="column" />
               <Column field="outwardReturn" header="A/R" className="column" />
               <Column field="matchNumber" header="Numero Gara" className="column" />
-              {/*       <Column
-                field="matchDate"
-                header="Data gara"
-                body={(rowData) => formatDate(new Date(rowData.matchDate))}
-                className="column" 
-              /> */}
               <Column
                 field="matchDate"
                 header="Data gara"
                 body={(rowData) => formatDate(new Date(rowData.matchDate))}
-                style={{ width: '20%' }}
+                className="column"
                 filter
                 filterField="uploadDate" // Nome corretto del campo
                 filterMatchMode="custom" // Modalità filtro personalizzata
