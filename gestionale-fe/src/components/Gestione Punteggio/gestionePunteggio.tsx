@@ -280,6 +280,7 @@ export default function GestionePunteggio() {
     if (homeScore !== 0) { // Se il punteggio della casa non è 0
       console.log(`Punteggio finale casa: ${homeScore}`);
       const matchUpdate: MatchUpdate = {
+        MatchId: matchId,
         ScoreCasa: homeScore,
         ScoreOspite: awayScore,
         Set: selectedSet,
@@ -351,6 +352,7 @@ export default function GestionePunteggio() {
     if (awayScore !== 0) { // Se il punteggio degli ospiti non è 0
       console.log(`Punteggio finale ospite: ${awayScore}`);
       const matchUpdate: MatchUpdate = {
+        MatchId: matchId,
         ScoreCasa: homeScore,
         ScoreOspite: awayScore,
         Set: selectedSet,
@@ -425,6 +427,7 @@ export default function GestionePunteggio() {
     if (awayScore !== 0) { // Se il punteggio degli ospiti non è 0
       console.log(`Punteggio finale ospite: ${awayScore}`);
       const matchUpdate: MatchUpdate = {
+        MatchId: matchId,
         ScoreCasa: homeScore,
         ScoreOspite: awayScore,
         Set: selectedSet,
@@ -461,6 +464,7 @@ export default function GestionePunteggio() {
       }
 
       const matchUpdate: MatchUpdate = {
+        MatchId: matchId,
         ScoreCasa: homeScore,
         ScoreOspite: awayScore,
         Set: selectedSet,
@@ -493,6 +497,7 @@ export default function GestionePunteggio() {
       }
 
       const matchUpdate: MatchUpdate = {
+        MatchId: matchId,
         ScoreCasa: homeScore,
         ScoreOspite: awayScore,
         Set: selectedSet,
@@ -571,7 +576,7 @@ export default function GestionePunteggio() {
 
     const newPossession = possession === 'home' ? 'away' : 'home';
     setPossession(newPossession); // Cambia il possesso
-    if (matchId) {
+
       const matchUpdate: MatchUpdate = {
         MatchId: matchId,
         ScoreCasa: homeScore,
@@ -591,9 +596,7 @@ export default function GestionePunteggio() {
 
       // Invia l'aggiornamento al server
       UpdateScore(matchUpdate);
-    } else {
-      console.error("matchId non definito!");
-    }
+   
   };
 
 

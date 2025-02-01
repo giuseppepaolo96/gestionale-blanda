@@ -1,0 +1,44 @@
+[33ma6c364f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: reset: moving to a6c364f
+[33m82855cb[m HEAD@{1}: reset: moving to 82855cb
+[33mdb72c53[m HEAD@{2}: commit (cherry-pick): Ripush delle modifiche del commit 82855cb
+[33m68ed41a[m HEAD@{3}: checkout: moving from 82855cbb9199228230ecde068b9def9a7f6d7b5d to main
+[33m82855cb[m HEAD@{4}: checkout: moving from main to 82855cb
+[33m68ed41a[m HEAD@{5}: reset: moving to HEAD
+[33m68ed41a[m HEAD@{6}: commit: gestione video
+[33m046bfb2[m HEAD@{7}: commit: gestione video
+[33m82855cb[m HEAD@{8}: commit: modifca colum data
+[33me5e43b5[m HEAD@{9}: commit: modifiche varie
+[33mb5bc1fb[m HEAD@{10}: commit: update filter matchId
+[33m44579ea[m HEAD@{11}: commit: update filter matchId
+[33m44c924a[m HEAD@{12}: commit: build aggiornamento table
+[33m49e9b52[m HEAD@{13}: commit: build
+[33ma74ee0d[m HEAD@{14}: commit: nuova build
+[33ma8b2c71[m HEAD@{15}: commit: nuova build
+[33m6651272[m HEAD@{16}: commit: env
+[33maac0601[m HEAD@{17}: commit: add env
+[33m1e59c03[m HEAD@{18}: commit: gitignore
+[33m930042d[m HEAD@{19}: commit: file .env
+[33ma69e0c5[m HEAD@{20}: commit: Modifica gestione possesso
+[33md8ae4fe[m HEAD@{21}: commit: gestione possesso
+[33m737a95b[m HEAD@{22}: commit: add url
+[33m4c646f3[m HEAD@{23}: commit: add url
+[33m7f8e16c[m HEAD@{24}: commit: risoluzione problemi puntamenti e modifiche ledwall e diretta
+[33m341b0ba[m HEAD@{25}: commit: aggiornamento build con env
+[33m495f046[m HEAD@{26}: commit: aggiornamento file .env
+[33m618802b[m HEAD@{27}: commit: add build
+[33mf66e8f9[m HEAD@{28}: commit: build aggiornata con gestione timeout
+[33ma6c364f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{29}: pull --tags origin main: Fast-forward
+[33mc036a7a[m HEAD@{30}: commit: gestione timeout e modifiche varie
+[33md871f67[m HEAD@{31}: commit: build nuova
+[33m2ed412b[m HEAD@{32}: commit: build frontend
+[33m1d6381a[m HEAD@{33}: reset: moving to HEAD
+[33m1d6381a[m HEAD@{34}: reset: moving to HEAD
+[33m1d6381a[m HEAD@{35}: reset: moving to HEAD
+[33m1d6381a[m HEAD@{36}: pull --tags origin main: Fast-forward
+[33m26b845a[m HEAD@{37}: commit: modifiche ledwall,timeout
+[33mebc7761[m HEAD@{38}: pull --tags origin main: Fast-forward
+[33m662fc5e[m HEAD@{39}: commit (merge): Merge branch 'main' of https://github.com/giuseppepaolo96/gestionale-blanda
+[33mb15d0aa[m HEAD@{40}: commit: restore fe
+[33maedfbf9[m HEAD@{41}: commit: modifiche frontend varie
+[33ma09ebed[m HEAD@{42}: commit: varie modifiche
+[33mdf7c2f4[m HEAD@{43}: clone: from https://github.com/giuseppepaolo96/gestionale-blanda.git

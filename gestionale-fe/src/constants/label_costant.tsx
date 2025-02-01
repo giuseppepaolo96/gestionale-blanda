@@ -96,6 +96,6 @@ export const LABEL_CONSTANT = {
     dialog_conferma_gestione:"Sei sicuro di voler gestire il punteggio per la seguente gara: ",
     tra:"tra",
     e:"e",
-    winner:"Vince la partita la squadra:"
+    winner:"Vince la squadra:"
   }
   

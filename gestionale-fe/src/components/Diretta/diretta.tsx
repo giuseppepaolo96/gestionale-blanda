@@ -134,10 +134,16 @@ export default function Diretta() {
                     console.log("Dati ricevuti:", matchUpdate);
 
                     // Blocco qualsiasi aggiornamento se i matchId non corrispondono
-                    if (!matchId || !matchUpdate.matchId || parseInt(matchId, 10) !== Number(matchUpdate.matchId)) {
+                     if (!matchId || !matchUpdate.matchId || parseInt(matchId, 10) !== Number(matchUpdate.matchId)) {
                         console.log(`Aggiornamento ignorato: ricevuto ${matchUpdate.matchId}, atteso ${matchId}.`);
                         return;
-                    }
+                    } 
+
+                        if (!matchId || !matchUpdate.matchId || Number(matchId) !== Number(matchUpdate.matchId)) {
+                            console.log(`Aggiornamento ignorato: ricevuto ${matchUpdate.matchId} (tipo: ${typeof matchUpdate.matchId}), atteso ${matchId} (tipo: ${typeof matchId}).`);
+                            return;
+                        }
+                        
 
                     console.log(`matchId ricevuto: ${matchUpdate.matchId}, matchId attuale: ${matchId}`);
 
@@ -164,14 +170,16 @@ export default function Diretta() {
                     }
 
                     // Imposta il possesso corrente
-                    if (matchUpdate.possessoCasa) {
+                    if (matchUpdate.possessoCasa === true && matchUpdate.possessoOspite === false) {
                         setPossession('home');
-                    } else if (matchUpdate.possessoOspite) {
+                        console.log("✔️ Possesso aggiornato: home");
+                    } else if (matchUpdate.possessoCasa === false && matchUpdate.possessoOspite === true) {
                         setPossession('away');
+                        console.log("✔️ Possesso aggiornato: away");
                     } else {
-                        setPossession(null);
+                        console.warn("⚠️ Stato del possesso non chiaro, nessun aggiornamento.");
                     }
-
+                    
                     // Se è stato ricevuto un comando di reset, resettare il match
                     if (matchUpdate.ResetMatch) {
                         console.log("Ricevuto comando di reset del match");
@@ -187,6 +195,8 @@ export default function Diretta() {
             connection.stop();
         };
     }, [matchId]);
+
+
 
     useEffect(() => {
         const interval = setInterval(() => {

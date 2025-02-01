@@ -26,11 +26,7 @@ export default function GestioneGenerale() {
         file: File;
     }
 
-    const connection = new signalR.HubConnectionBuilder()
-        /* .withUrl("http://51.20.66.229:8080/scoreHub") */
-        .withUrl("http://localhost:8080/scoreHub")
-        .withAutomaticReconnect()
-        .build();
+   
 
 
     const navigate = useNavigate();
