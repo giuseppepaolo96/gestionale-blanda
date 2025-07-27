@@ -10,8 +10,8 @@ import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { HubConnectionBuilder } from "@microsoft/signalr";
 import { Panel } from "primereact/panel";
-import { classNames } from "primereact/utils";
-import { Calendar } from "primereact/calendar";
+/* import { classNames } from "primereact/utils";
+ */import { Calendar } from "primereact/calendar";
 
 export type MatchUpdate = {
   MatchId?: string | number;
@@ -243,7 +243,7 @@ export default function Dashboard() {
                 )}
               />
               <Column field="dayOfWeek" header="Giorno settimana" className="column" />
-              <Column field="time" header="Time" className="column" />
+              <Column field="time" header="Orario" className="column" />
               <Column field="location" header="Luogo" className="column" />
               <Column field="homeTeamName" header="Squadra casa" className="column" />
               <Column field="awayTeamName" header="Squadra ospite" className="column" />
@@ -352,51 +352,6 @@ export default function Dashboard() {
           </Panel>
 
         )}
-        <div className="row-container">
-          <Panel header="Gestisci il punteggio" style={{ marginBottom: '20px' }}>
-            <div className="box-dash-punteggio">
-              <div className="title-dashboard">{LABEL_CONSTANT.title_punteggio}</div>
-              <div className="subtitle-dashboard">{LABEL_CONSTANT.subtitle_punteggio}</div>
-              <button
-                type="button"
-                onClick={() => navigate('/gestione')}
-                className="button-panel"
-              >
-                {LABEL_CONSTANT.accedi}
-              </button>
-            </div>
-          </Panel>
-
-          {/* Visualizza Ledwall */}
-          <Panel header="Visualizza Ledwall" style={{ marginBottom: '20px' }}>
-            <div className="box-dash-ledwall">
-              <div className="title-dashboard">{LABEL_CONSTANT.visualizza_ledwall}</div>
-              <div className="subtitle-dashboard">{LABEL_CONSTANT.subtitle_ledwall}</div>
-              <button
-                type="button"
-                onClick={() => navigate('/ledwall')}
-                className="button-panel"
-              >
-                {LABEL_CONSTANT.accedi}
-              </button>
-            </div>
-          </Panel>
-
-          {/* Visualizza Diretta */}
-          <Panel header="Visualizza Diretta" style={{ marginBottom: '20px' }}>
-            <div className="box-dash-diretta">
-              <div className="title-dashboard">{LABEL_CONSTANT.visualizza_diretta}</div>
-              <div className="subtitle-dashboard">{LABEL_CONSTANT.subtitle_diretta}</div>
-              <button
-                type="button"
-                onClick={() => navigate('/diretta')}
-                className="button-panel"
-              >
-                {LABEL_CONSTANT.accedi}
-              </button>
-            </div>
-          </Panel>
-        </div>
         <div className="row-container">
           {/* Gestione Sponsor */}
           <Panel header="Gestione Sponsor" style={{ marginBottom: '20px' }}>

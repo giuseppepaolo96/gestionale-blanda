@@ -1,10 +1,34 @@
 
 import axios, { AxiosError } from 'axios';
 
+
 export const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080', // Default alla porta 8080
 });
 
+export interface Squadra {
+  Id: string;
+  tipologia: string;
+}
+
+export interface Categoria {
+  Id: string;
+  nome: string;
+}
+
+export interface Role {
+  Id: string;
+  ruolo: string;
+}
+
+export interface RegistrazioneForm {
+  FirstName: string;
+  LastName: string;
+  Email: string;
+  Squadre: Squadra[]; // Deve essere un array di Squadra
+  Categorie: Categoria[]; // Deve essere un array di Categoria
+  Roles: Role[]; // Deve essere un array di Role
+}
 export enum FileTypeEnum {
   PDF = 'PDF',
   JPEG = 'JPEG',
@@ -51,6 +75,7 @@ export interface MatchDataResponse {
   female?: boolean; // Possibilità di valore null
   male?: boolean; // Possibilità di valore null
 }
+
 
 
 export const uploadFile = async (
@@ -200,5 +225,113 @@ export const addColor = async (colorHex: string) => {
   } catch (error) {
     console.error('Errore durante l\'aggiunta del colore:', error);
     throw error;
+  }
+};
+
+
+// Funzione per il login
+export const login = async (username: string, password: string, RememberMe: boolean) => {
+  try {
+    const response = await axiosInstance.post('/api/login', { username, password, RememberMe });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      console.error('Errore durante il login:', axiosError.response ? axiosError.response.data : axiosError.message);
+    } else {
+      console.error('Errore durante il login:', error);
+    }
+    throw new Error('Errore durante il login');
+  }
+};
+
+// Funzione per verificare se l'username è disponibile
+export const checkUsername = async (username: string) => {
+  try {
+    const response = await axiosInstance.get(`/auth/authentication/check-username?username=${username}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error('Errore durante il controllo dell\'username:', error.response ? error.response.data : error.message); // Debug migliorato
+    } else {
+      console.error('Errore durante il controllo dell\'username:', error); // Gestione errori generici
+    }
+    throw new Error('Errore durante il controllo dell\'username');
+  }
+};
+
+// Funzione per la registrazione
+export const registrazione = async (payload: RegistrazioneForm) => {
+  try {
+    console.log('Payload della registrazione:', payload); // Aggiungi questo per il debug
+    const response = await axiosInstance.post('/api/register', payload);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error('Errore durante la registrazione:', error.response ? error.response.data : error.message); // Debug migliorato
+    } else {
+      console.error('Errore durante la registrazione:', error); // Gestione errori generici
+    }
+    throw new Error('Errore durante la registrazione');
+  }
+};
+
+
+// Funzione per recuperare le squadre
+export const squadra = async () => {
+  try {
+    const response = await axiosInstance.get('/api/squadra');
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error('Errore durante il recupero delle squadre:', error.response ? error.response.data : error.message); // Debug migliorato
+    } else {
+      console.error('Errore durante il recupero delle squadre:', error); // Gestione errori generici
+    }
+    throw new Error('Errore durante il recupero delle squadre');
+  }
+};
+
+// Funzione per recuperare le categorie
+export const categoria = async () => {
+  try {
+    const response = await axiosInstance.get('/api/categoria');
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error('Errore durante il recupero delle categorie:', error.response ? error.response.data : error.message); // Debug migliorato
+    } else {
+      console.error('Errore durante il recupero delle categorie:', error); // Gestione errori generici
+    }
+    throw new Error('Errore durante il recupero delle categorie');
+  }
+};
+
+// Funzione per recuperare i ruoli
+export const roles = async () => {
+  try {
+    const response = await axiosInstance.get('/api/role');
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error('Errore durante il recupero dei ruoli:', error.response ? error.response.data : error.message); // Debug migliorato
+    } else {
+      console.error('Errore durante il recupero dei ruoli:', error); // Gestione errori generici
+    }
+    throw new Error('Errore durante il recupero dei ruoli');
+  }
+};
+
+export const inviaEmail = async (Email: string) =>{
+  try{
+    const response = await axiosInstance.get('/user/verification/{tokenId}');
+    return response.data;
+  }catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error('Errore durante l invio dell email:', error.response ? error.response.data : error.message); // Debug migliorato
+    } else {
+      console.error('Errore durante l invio dell email:', error); // Gestione errori generici
+    }
+    throw new Error('Errore durante l invio dell email');
   }
 };

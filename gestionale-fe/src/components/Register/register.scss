@@ -1,0 +1,281 @@
+/* Card */
+.card {
+    width: 90%;
+    max-width: 900px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    height: 90%;
+    max-height: 450px;
+   
+}
+
+/* Header della card */
+.card-header {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    /* border-bottom: 1px solid #eee; */
+    
+}
+
+/* Logo */
+.logo-container {
+    display: flex;
+    align-items: center;
+    
+}
+
+.logo-image-col {
+    margin-right: 0.5rem;
+    width: 300px;
+    height: 300px;
+    margin-top: -22%;
+    margin-left: 1rem;
+    
+}
+
+/* Titoli */
+.titleClass {
+    font-family: 'Poppins', sans-serif;
+    font-size: 26px;
+    font-weight: bold;
+    color: #000000;
+    margin-left: 25rem;
+    display: flex;
+    align-items: center;
+    margin-top: 2%;
+
+}
+
+.subTitleClass {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #667682;
+    margin-left: 25rem;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    background-image: linear-gradient(to bottom right, #008000, #ffd700);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-left: 0.5rem;
+}
+
+/* Contenuti dei passi */
+.step-content-res,
+.step-content-riep {
+    width: 55%;
+    padding: 2rem;
+    background-color: white;
+    margin-left: 43.9%;
+    margin-top: -17%;
+}
+
+/* Input */
+.input-group {
+    position: relative;
+    /* Mantieni il positioning relativo per l'icona */
+    margin-bottom: 1rem;
+
+}
+
+.input-field-res,
+.input-pass-reg {
+    width: 100%;
+    /* Mantiene la larghezza del form invariata */
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #333;
+    /* Colore del testo predefinito */
+    transition: border-color 0.3s ease;
+}
+
+.input-pass-reg {
+    padding-right: 2.5rem;
+    /* Spazio per l'icona */
+}
+
+/* Posizionamento dell'icona */
+.p-button-text-reg {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    font-size: 1.2rem;
+    color: #888;
+    cursor: pointer;
+}
+
+/* Bottoni */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    /* border-top: 1px solid #eee; */
+    gap: 1rem;
+}
+
+.p-stepper .p-stepper-panels {
+    background: #ffffff;
+    /* padding: 1rem; */
+    color: #495057;
+}
+
+.next-button,
+.prev-button {
+    width: 120px;
+    padding: 10px;
+    background-color: transparent;
+    color: hwb(0 0% 100%);
+    border: 2px solid #000000;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    text-align: center;
+    margin-top: 0%;
+}
+
+.prev-button {
+    order: 1;
+    margin-left: 0%;
+}
+
+.next-button {
+    order: 3;
+    margin-right: 0%;
+    margin-left: 0%;
+}
+
+.prev-button:hover {
+    background-color: #6c757d;
+}
+
+.prev-button[severity='secondary'] {
+    background-color: #6c757d;
+}
+
+.next-button:hover {
+    background-color: #6c757d;
+}
+
+.next-button[severity='secondary'] {
+    background-color: #5a6268;
+}
+
+/* Nascondere lo stepper */
+.p-stepper-title,
+.p-step,
+.p-stepper-number,
+.p-stepper-header,
+.p-stepper-action {
+    display: none !important;
+    
+}
+
+
+/* Custom Dropdown Styling */
+.custom-dropdown .p-dropdown-item {
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+    color: #000000;
+}
+
+.custom-dropdown .p-dropdown-item:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+
+/* Ensure dropdown and selected item match the overall theme */
+.p-dropdown {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+    color: #000000;
+}
+
+.p-dropdown .p-dropdown-label {
+    padding: 0.75rem;
+    border-radius: 4px;
+    background-color: white;
+    color: #000000;
+}
+
+.p-dropdown .p-dropdown-trigger {
+    border-radius: 4px;
+}
+
+/* Adjust dropdown panel styling */
+.custom-dropdown .p-dropdown-panel {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Stile per i paragrafi che contengono i dati */
+.data-field {
+    font-family: '', sans-serif;
+    /* Imposta il font */
+    margin: 10px 0;
+    /* Spaziatura verticale tra i paragrafi */
+    line-height: 1.5;
+    /* Altezza della linea per una migliore leggibilità */
+}
+
+/* Stile per i tag strong all'interno dei paragrafi */
+.data-field strong {
+    color: #333;
+    /* Colore del testo del label */
+    font-weight: bold;
+    /* Grassetto per i label */
+}
+
+/* Stile per il testo dei dati */
+.data-field span {
+    color: #555;
+    /* Colore del testo dei dati */
+    font-weight: normal;
+    /* Peso del font normale per i dati */
+}
+
+.p-dropdown .p-dropdown-trigger::after {
+    content: '▼';
+    /* Usa il carattere Unicode per l'icona del dropdown */
+    font-size: 10px;
+    color: #000;
+    /* Colore dell'icona */
+    margin-left: 0.5rem;
+    /* Spaziatura tra il testo e l'icona */
+}
+
+.pi-arrow-left:before {
+    display: none;
+}
+
+
+
+input[type="password"]::-ms-reveal {
+    display: none;
+}
+
+.input-field-res.error,
+.input-pass-reg.error {
+    border: 1px solid red;
+    /* Bordo rosso per gli input con errori */
+    color: #333;
+    /* Colore del testo predefinito */
+}

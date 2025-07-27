@@ -1,0 +1,13 @@
+.background-container {
+   /*  display: flex;  */
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    background-image: linear-gradient(to bottom right, #008000 28%, #ffd700 54%);
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box; /* Aggiunto per evitare problemi di overflow */
+}
+
