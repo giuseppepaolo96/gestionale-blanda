@@ -8,7 +8,7 @@
     overflow: hidden;
     height: 90%;
     max-height: 450px;
-   
+
 }
 
 /* Header della card */
@@ -17,14 +17,14 @@
     align-items: center;
     padding: 1rem;
     /* border-bottom: 1px solid #eee; */
-    
+
 }
 
 /* Logo */
 .logo-container {
     display: flex;
     align-items: center;
-    
+
 }
 
 .logo-image-col {
@@ -33,7 +33,7 @@
     height: 300px;
     margin-top: -22%;
     margin-left: 1rem;
-    
+
 }
 
 /* Titoli */
@@ -74,7 +74,7 @@
     padding: 2rem;
     background-color: white;
     margin-left: 43.9%;
-    margin-top: -17%;
+    margin-top: -21%;
 }
 
 /* Input */
@@ -122,7 +122,29 @@
     padding: 1rem;
     /* border-top: 1px solid #eee; */
     gap: 1rem;
+
+    &.step-0 {
+        margin-bottom: -4%;
+    }
+
+    &.step-1 {
+
+        margin-top: 6%;
+        margin-bottom: -5%;
+    }
+
+    &.step-2 {
+        margin-top: -5%;
+        margin-bottom: -5%;
+    }
+
+    &.step-3 {
+        margin-top: -7%;
+        margin-bottom: -5%;
+    }
 }
+
+
 
 .p-stepper .p-stepper-panels {
     background: #ffffff;
@@ -178,7 +200,7 @@
 .p-stepper-header,
 .p-stepper-action {
     display: none !important;
-    
+
 }
 
 
@@ -278,4 +300,25 @@ input[type="password"]::-ms-reveal {
     /* Bordo rosso per gli input con errori */
     color: #333;
     /* Colore del testo predefinito */
+}
+
+
+.input-field-dropdown {
+    width: 100%;
+    /* Mantiene la larghezza del form invariata */
+    padding: -0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #333;
+    /* Colore del testo predefinito */
+    transition: border-color 0.3s ease;
+}
+
+
+.step-content-dropdwon {
+    width: 55%;
+    padding: 2rem;
+    background-color: white;
+    margin-left: 43.9%;
+    margin-top: -20%;
 }

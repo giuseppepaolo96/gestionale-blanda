@@ -151,7 +151,7 @@ export default function ResetPassword() {
       {currentStep !== 1 && (
         <div className="button-group">
           <Button label="Indietro" onClick={handlePrev} severity="secondary" icon="pi pi-arrow-left" className="prev-button" />
-          <Button label={currentStep === 3 ? "Conferma" : "Avanti"} onClick={handleNext} className="next-button" /* disabled={!isFormValid()} */ />
+          <Button label={currentStep === 3 ? "Conferma" : "Avanti"} onClick={handleNext} className="next-button" disabled={!isFormValid()}  />
         </div>
       )}
       {currentStep == 1 && (

@@ -356,9 +356,10 @@ export default function Register() {
 
   const footer = (
     <>
-      <div className="button-group">
+    
+      <div className={`button-group ${currentStep === 0 ? 'step-0' : ''} ${currentStep === 1 ? 'step-1' : ''} ${currentStep === 2 ? 'step-2' : ''} ${currentStep === 3 ? 'step-3' : ''} `}>
         <Button label="Indietro" onClick={handlePrev} severity="secondary" icon="pi pi-arrow-left" className="prev-button" />
-        <Button label={currentStep === 3 ? "Conferma" : "Avanti"} onClick={handleNext} className="next-button" /* disabled={!isFormValid()} */ />
+        <Button label={currentStep === 3 ? "Conferma" : "Avanti"} onClick={handleNext} className="next-button" disabled={!isFormValid()}  />
       </div>
     </>
   );
@@ -435,7 +436,7 @@ export default function Register() {
                 </StepperPanel>
                 <StepperPanel header="Squadra e categoria">
                   <div className="flex flex-column h-12rem">
-                    <div className="step-content-res">
+                    <div className="step-content-dropdwon">
                       <div className="input-group">
                         <Dropdown
                           value={selectedSquadra}
@@ -444,7 +445,7 @@ export default function Register() {
                           optionLabel="tipologia"
                           placeholder="Seleziona la squadra*"
                           panelClassName="custom-dropdown"
-                          className="input-field-res"
+                          className="input-field-dropdown"
                         />
                         {errors.squadra && <div className="error">{errors.squadra}</div>}
                       </div>
@@ -456,7 +457,7 @@ export default function Register() {
                           optionLabel="nome"
                           placeholder="Seleziona la categoria*"
                           panelClassName="custom-dropdown"
-                          className="input-field-res"
+                          className="input-field-dropdown"
                         />
                         {errors.categoria && <div className="error">{errors.categoria}</div>}
                       </div>
@@ -468,7 +469,7 @@ export default function Register() {
                           optionLabel="ruolo"
                           placeholder="Seleziona il ruolo*"
                           panelClassName="custom-dropdown"
-                          className="input-field-res"
+                          className="input-field-dropdown"
                         />
                         {errors.role && <div className="error">{errors.role}</div>}
                       </div>
