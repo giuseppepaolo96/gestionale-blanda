@@ -52,6 +52,38 @@
         }
       }
     },
+    "/teams/{teamId}/logo": {
+      "delete": {
+        "tags": [
+          "Teams"
+        ],
+        "operationId": "ApiFeaturesLogoEndpointDeleteLogoEndpoint",
+        "parameters": [
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {}
+              },
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/logo": {
       "get": {
         "tags": [
@@ -190,6 +222,10 @@
             "type": "string"
           }
         }
+      },
+      "ApiFeaturesLogoCommandDeleteLogoCommand": {
+        "type": "object",
+        "additionalProperties": false
       },
       "ApiEntitiesMatchData": {
         "type": "object",

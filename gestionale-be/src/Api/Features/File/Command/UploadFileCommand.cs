@@ -429,12 +429,10 @@ namespace Api.Features.UploadFile.Command
                 @"(\d+)\s+([A/R])\s+(\d+)\s+(\d{2}/\d{2}/\d{4})\s+([a-zA-ZàèéìòùÀÈÉÌÒÙ\s]+)\s+(\d+)\s+(\d{4})\s+([A-Za-zàèéìòùÀÈÉÌÒÙ'0-9\s]+?)\s{2,}([A-Za-zàèéìòùÀÈÉÌÒÙ'0-9\s]+?)\s{2,}([A-Za-zàèéìòùÀÈÉÌÒÙ'0-9\s]+)$",
                 RegexOptions.IgnorePatternWhitespace | RegexOptions.Multiline
             );
-
             var regexMaschile = new Regex(
-     @"(?m)^\s*(\d+)\s+([A/R])\s+(\d+)\s+(\d{2}/\d{2}/\d{4})\s+([a-zA-ZàèéìòùÀÈÉÌÒÙ\s]+?)\s+(\d{4})\s+(\d{4})\s+([A-Za-zàèéìòùÀÈÉÌÒÙ'0-9\s]+(?:[A-Za-zàèéìòùÀÈÉÌÒÙ'0-9\s]+)?(?:\s[A-Za-zàèéìòùÀÈÉÌÒÙ'0-9]+)+)\s+([A-Za-zàèéìòùÀÈÉÌÒÙ'0-9\s]+?)\s+([A-Za-zàèéìòùÀÈÉÌÒÙ'0-9\s]+?)$",
-     RegexOptions.IgnorePatternWhitespace | RegexOptions.Multiline
- );
-
+                @"(?m)^\s*(\d+)\s+([A/R])\s+(\d+)\s+(\d{2}/\d{2}/\d{4})\s+([a-zA-ZàèéìòùÀÈÉÌÒÙ\s]+?)\s+(\d{4})\s+(\d{4})\s+([A-Za-zàèéìòùÀÈÉÌÒÙ'0-9\s]+?)\s+([A-Za-zàèéìòùÀÈÉÌÒÙ'0-9\s]+?)\s+([A-Za-zàèéìòùÀÈÉÌÒÙ'0-9\s]+?)$",
+                RegexOptions.IgnorePatternWhitespace | RegexOptions.Multiline
+            );
 
 
             // Parsing dei match femminili

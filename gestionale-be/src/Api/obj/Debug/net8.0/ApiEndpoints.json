@@ -122,5 +122,31 @@
       }
     ],
     "EndpointName": "ApiFeaturesFileEndpointUploadFileEndpointpublic"
+  },
+  {
+    "ContainingType": "FastEndpoints.MainExtensions\u002B\u003C\u003Ec",
+    "Method": "\u003CMapFastEndpoints\u003Eb__2_1",
+    "RelativePath": "teams/{TeamId}/logo",
+    "HttpMethod": "DELETE",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "DeleteLogoCommand",
+        "Type": "Api.Features.Logo.Command.DeleteLogoCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Object",
+        "MediaTypes": [
+          "text/plain",
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "EndpointName": "ApiFeaturesLogoEndpointDeleteLogoEndpoint"
   }
 ]
