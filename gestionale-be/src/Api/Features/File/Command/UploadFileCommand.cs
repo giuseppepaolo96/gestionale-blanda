@@ -1,16 +1,17 @@
 ﻿using Api.Entities;
-using System.Globalization;
 using Api.Infrastructure.Data;
 using CsvHelper;
 using CsvHelper.Configuration;
-using Microsoft.EntityFrameworkCore;
+using CsvHelper.Configuration.Attributes;
+using FastEndpoints;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
-using System.Text.RegularExpressions;
-using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
+using System.Globalization;
+using System.Security.Cryptography;
 using System.Text;
-using FastEndpoints;
+using System.Text.RegularExpressions;
 
 namespace Api.Features.UploadFile.Command
 {
@@ -186,7 +187,7 @@ namespace Api.Features.UploadFile.Command
                     {
                         _logger.LogWarning("Tipo di file {FileName} non supportato.", file.FileName);
                     }
-
+                     
                     successfullyUploadedFiles.Add(file.FileName);
                     _logger.LogInformation("File {FileName} caricato con successo.", fileName);
                 }
@@ -230,40 +231,159 @@ namespace Api.Features.UploadFile.Command
             return Convert.ToBase64String(hash);
         }
 
+        public class MatchCsv
+        {
+            public string Giornata { get; set; }
+            public string A_R { get; set; }
+            public int Nr_Gara { get; set; }
+            public string Data_Gara { get; set; }
+            public string Giorno_della_settimana { get; set; }
+            public string Orario { get; set; }
+            public string Localita { get; set; }
+            public string Nome_Squadra_Casa { get; set; }
+            public string Nome_Squadra_Fuori { get; set; }
+        }
+
+        public class MatchCsvMap : ClassMap<MatchCsv>
+        {
+            public MatchCsvMap()
+            {
+                Map(m => m.Giornata).Name("Giornata");
+                Map(m => m.A_R).Name("A/R");
+                Map(m => m.Nr_Gara).Name("Nr.Gara");
+                Map(m => m.Data_Gara).Name("Data Gara");
+                Map(m => m.Orario).Name("Orario");
+                Map(m => m.Giorno_della_settimana).Name("Giorno della settimana");
+                Map(m => m.Localita).Name("Località");
+                Map(m => m.Nome_Squadra_Casa).Name("Nome Squadra Casa");
+                Map(m => m.Nome_Squadra_Fuori).Name("Nome Squadra Fuori");
+            }
+        }
+
+
+        //private async Task ProcessCalendarCsv(MemoryStream memoryStream, int fileRecordId, CancellationToken ct, string fileName)
+        //{
+        //    using var reader = new StreamReader(memoryStream);
+        //    using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture));
+
+        //    var records = csv.GetRecords<dynamic>();
+
+        //    foreach (var record in records)
+        //    {
+        //        try
+        //        {
+        //            var matchDate = DateTime.ParseExact(record.Data_Gara.ToString(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
+        //            var matchData = new MatchData
+        //            {
+        //                Day = record.Giornata, // Colonna "Giornata"
+        //                OutwardReturn = record.A_R,  // Colonna "A/R"
+        //                MatchNumber = int.Parse(record.Nr_Gara.ToString()),  // Colonna "Nr.Gara"
+        //                MatchDate = matchDate,  // Colonna "Data Gara"
+        //                DayOfWeek = matchDate.ToString("dddd", new CultureInfo("it-IT")), // Giorno della settimana
+        //                Time = record.Orario.ToString(),  // Colonna "Orario"
+        //                Location = record.Localita,  // Colonna "Località"
+        //                HomeTeam = new Api.Entities.Team { Name = record.Nome_Squadra_Casa },  // Colonna "Nome Squadra Casa"
+        //                AwayTeam = new Api.Entities.Team { Name = record.Nome_Squadra_Fuori },  // Colonna "Nome Squadra Fuori"
+        //                FileRecordId = fileRecordId                        
+        //            };
+
+        //            // Imposta il flag del sesso in base al nome del file
+        //            SetGenderFlags(fileName, matchData);
+
+        //            // Aggiungere o aggiornare i team
+        //            var homeTeam = await _context.Teams
+        //                .FirstOrDefaultAsync(t => t.Name == matchData.HomeTeam.Name, ct)
+        //                ?? _context.ChangeTracker.Entries<Api.Entities.Team>()
+        //                .FirstOrDefault(e => e.Entity.Name == matchData.HomeTeam.Name)?.Entity;
+
+        //            if (homeTeam == null)
+        //            {
+        //                homeTeam = new Api.Entities.Team { Name = matchData.HomeTeam.Name };
+        //                _context.Teams.Add(homeTeam);
+        //            }
+
+        //            var awayTeam = await _context.Teams
+        //                .FirstOrDefaultAsync(t => t.Name == matchData.AwayTeam.Name, ct)
+        //                ?? _context.ChangeTracker.Entries<Api.Entities.Team>()
+        //                     .FirstOrDefault(e => e.Entity.Name == matchData.AwayTeam.Name)?.Entity;
+
+        //            if (awayTeam == null)
+        //            {
+        //                awayTeam = new Api.Entities.Team { Name = matchData.AwayTeam.Name };
+        //                _context.Teams.Add(awayTeam);
+        //            }
+
+        //            // Associare i team ai match
+        //            matchData.HomeTeam = homeTeam;
+        //            matchData.AwayTeam = awayTeam;
+
+        //            // Aggiungi il matchData al contesto
+        //            _context.MatchData.Add(matchData);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            _logger.LogError($"Errore nel parsing del record CSV: {ex.Message}");
+        //        }
+        //    }
+
+        //    await _context.SaveChangesAsync(ct);
+        //}
+
         private async Task ProcessCalendarCsv(MemoryStream memoryStream, int fileRecordId, CancellationToken ct, string fileName)
         {
             using var reader = new StreamReader(memoryStream);
-            using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture));
+            using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                Delimiter = ";",             // Usa punto e virgola come separatore
+                HeaderValidated = null,      // Ignora header non corrispondenti
+                MissingFieldFound = null,    // Ignora campi mancanti
+                TrimOptions = TrimOptions.Trim // Rimuove spazi prima/dopo i valori
+            });
 
-            var records = csv.GetRecords<dynamic>();
+            csv.Context.RegisterClassMap<MatchCsvMap>();
+            var records = csv.GetRecords<MatchCsv>();
 
             foreach (var record in records)
             {
                 try
                 {
-                    var matchDate = DateTime.ParseExact(record.Data_Gara.ToString(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    // Validazione minima
+                    if (string.IsNullOrWhiteSpace(record.Nome_Squadra_Casa) ||
+                        string.IsNullOrWhiteSpace(record.Nome_Squadra_Fuori))
+                    {
+                        _logger.LogWarning($"Riga saltata per nome squadra mancante (Giornata: {record.Giornata})");
+                        continue;
+                    }
+
+                    // Parsing data
+                    if (!DateTime.TryParseExact(record.Data_Gara, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var matchDate))
+                    {
+                        _logger.LogWarning($"Formato data non valido per Giornata {record.Giornata}: '{record.Data_Gara}'");
+                        continue;
+                    }
+
                     var matchData = new MatchData
                     {
-                        Day = record.Giornata, // Colonna "Giornata"
-                        OutwardReturn = record.A_R,  // Colonna "A/R"
-                        MatchNumber = int.Parse(record.Nr_Gara.ToString()),  // Colonna "Nr.Gara"
-                        MatchDate = matchDate,  // Colonna "Data Gara"
-                        Time = record.Orario.ToString(),  // Colonna "Orario"
-                        Location = record.Localita,  // Colonna "Località"
-                        HomeTeam = new Api.Entities.Team { Name = record.Nome_Squadra_Casa },  // Colonna "Nome Squadra Casa"
-                        AwayTeam = new Api.Entities.Team { Name = record.Nome_Squadra_Fuori },  // Colonna "Nome Squadra Fuori"
-                        FileRecordId = fileRecordId,
-                        DayOfWeek = matchDate.ToString("dddd", new CultureInfo("it-IT")) // Giorno della settimana
+                        Day = record.Giornata?.Trim(),
+                        OutwardReturn = record.A_R?.Trim(),
+                        MatchNumber = record.Nr_Gara,
+                        MatchDate = matchDate,
+                        DayOfWeek = matchDate.ToString("dddd", new CultureInfo("it-IT")),
+                        Time = record.Orario?.Trim(),
+                        Location = record.Localita?.Trim(),
+                        HomeTeam = new Api.Entities.Team { Name = record.Nome_Squadra_Casa.Trim() },
+                        AwayTeam = new Api.Entities.Team { Name = record.Nome_Squadra_Fuori.Trim() },
+                        FileRecordId = fileRecordId
                     };
 
                     // Imposta il flag del sesso in base al nome del file
                     SetGenderFlags(fileName, matchData);
 
-                    // Aggiungere o aggiornare i team
+                    // Cerca o aggiungi i team
                     var homeTeam = await _context.Teams
                         .FirstOrDefaultAsync(t => t.Name == matchData.HomeTeam.Name, ct)
                         ?? _context.ChangeTracker.Entries<Api.Entities.Team>()
-                        .FirstOrDefault(e => e.Entity.Name == matchData.HomeTeam.Name)?.Entity;
+                            .FirstOrDefault(e => e.Entity.Name == matchData.HomeTeam.Name)?.Entity;
 
                     if (homeTeam == null)
                     {
@@ -274,7 +394,7 @@ namespace Api.Features.UploadFile.Command
                     var awayTeam = await _context.Teams
                         .FirstOrDefaultAsync(t => t.Name == matchData.AwayTeam.Name, ct)
                         ?? _context.ChangeTracker.Entries<Api.Entities.Team>()
-                             .FirstOrDefault(e => e.Entity.Name == matchData.AwayTeam.Name)?.Entity;
+                            .FirstOrDefault(e => e.Entity.Name == matchData.AwayTeam.Name)?.Entity;
 
                     if (awayTeam == null)
                     {
@@ -282,21 +402,22 @@ namespace Api.Features.UploadFile.Command
                         _context.Teams.Add(awayTeam);
                     }
 
-                    // Associare i team ai match
+                    // Associa i team al match
                     matchData.HomeTeam = homeTeam;
                     matchData.AwayTeam = awayTeam;
 
-                    // Aggiungi il matchData al contesto
+                    // Aggiungi il match
                     _context.MatchData.Add(matchData);
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Errore nel parsing del record CSV: {ex.Message}");
+                    _logger.LogError($"Errore nel parsing del record CSV (Giornata {record.Giornata}): {ex.Message}");
                 }
             }
 
             await _context.SaveChangesAsync(ct);
         }
+
 
 
 

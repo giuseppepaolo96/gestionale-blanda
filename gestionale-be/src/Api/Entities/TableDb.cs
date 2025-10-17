@@ -1,4 +1,7 @@
-﻿namespace Api.Entities
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+
+namespace Api.Entities
 {
     public class Team
     {
@@ -52,5 +55,43 @@
         public byte[] SponsorLogo { get; set; } // Logo dello sponsor in formato base64 o URL
 
      }
+
+    public class Role
+    {
+        public Guid Id { get; set; }
+        public string Ruolo { get; set; }
+    }
+
+    public class Categoria
+    {
+        public Guid Id { get; set; }
+        public string Nome { get; set; }
+    }
+
+    public class User : IdentityUser
+    {
+        public Profile Profile { get; set; } = null!;
+        public DateTime EmailTokenIssue { get; set; }
+        public Guid EmailToken { get; set; }
+        public bool IsEmailConfirmed { get; set; }
+        public bool IsActivated { get; set; }
+        public Guid RoleId { get; set; }
+    }
+
+    public class Profile
+    {
+        public Guid Id { get; private set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public User User { get; set; } = null!;
+        public string UserId { get; set; }
+        public Guid RoleId { get; set; }
+
+        public List<Team> Teams { get; set; } = new List<Team>();
+        public List<Role> Roles { get; set; } = new List<Role>();
+
+        public List<Categoria> Categorias { get; set; } = new List<Categoria> ();
+    }
+
 
 }
