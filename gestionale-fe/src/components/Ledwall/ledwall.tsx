@@ -58,9 +58,12 @@ export default function Ledwall() {
 
     const connection = new signalR.HubConnectionBuilder()
              .withUrl(`${process.env.REACT_APP_API_BASE_URL}/scoreHub`)
-        .withAutomaticReconnect()
+        .withAutomaticReconnect([0, 2000, 5000, 10000]) // tentativi dopo 0s, 2s, 5s, 10s
+        
         .build();
-
+connection.onreconnecting(() => console.warn('Tentativo di riconnessione...'));
+connection.onreconnected(() => console.log('Riconnesso a SignalR'));
+connection.onclose(() => console.error('Connessione chiusa, tentativo di riavvio...'));
     
     const fetchSponsors = async () => {
         try {
@@ -149,7 +152,9 @@ export default function Ledwall() {
         connection.start()
             .then(() => {
                 console.log("Connessione SignalR stabilita");
-
+connection.onreconnecting(() => console.warn('Tentativo di riconnessione...'));
+connection.onreconnected(() => console.log('Riconnesso a SignalR'));
+connection.onclose(() => console.error('Connessione chiusa, tentativo di riavvio...'));
                 connection.on("ReceiveScoreUpdate", async (matchUpdate) => {
                     console.log("Dati ricevuti:", matchUpdate);
 

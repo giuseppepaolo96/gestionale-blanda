@@ -8,6 +8,7 @@ import { getMatchData, MatchDataResponse, Team } from 'services/UserService';
 
 const connection = new HubConnectionBuilder()
   .withUrl(`${process.env.REACT_APP_API_BASE_URL}/scoreHub`)
+  .withAutomaticReconnect([0, 2000, 5000, 10000]) // tentativi dopo 0s, 2s, 5s, 10s
   .build();
 
 export type MatchUpdate = {
@@ -133,13 +134,13 @@ export default function GestionePunteggio() {
     fetchMatchData();
 
     // Connessione SignalR
-    connection.start()
+    /* connection.start()
       .then(() => console.log('Connesso a SignalR!'))
       .catch((err) => console.error('Errore di connessione a SignalR:', err));
 
     return () => {
       connection.stop();
-    };
+    }; */
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
