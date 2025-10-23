@@ -1,1 +1,15 @@
 gestionale-fe/.env
+# Build directories
+bin/
+obj/
+gestionale-be/publish/
+
+# Visual Studio / Rider / JetBrains
+.vs/
+.idea/
+*.user
+*.suo
+
+# Log files
+*.log
+
