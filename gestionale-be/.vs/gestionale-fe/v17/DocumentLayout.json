@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\features\\team\\endpoint\\deleteteamendpoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\features\\team\\endpoint\\deleteteamendpoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\features\\file\\command\\uploadfilecommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\features\\file\\command\\uploadfilecommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\features\\sponsor\\endpoint\\deletesponsorendpoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\features\\sponsor\\endpoint\\deletesponsorendpoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,8 +18,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 85,
-          "SelectedChildIndex": 14,
+          "SelectedChildIndex": 15,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
@@ -78,28 +82,34 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\appsettings.json",
-              "RelativeDocumentMoniker": "src\\Api\\appsettings.json",
-              "ToolTip": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\appsettings.json",
-              "RelativeToolTip": "src\\Api\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAACdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-03-01T11:35:47.34Z",
+              "DocumentIndex": 1,
+              "Title": "DeleteSponsorEndpoint.cs",
+              "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\Sponsor\\Endpoint\\DeleteSponsorEndpoint.cs",
+              "RelativeDocumentMoniker": "src\\Api\\Features\\Sponsor\\Endpoint\\DeleteSponsorEndpoint.cs",
+              "ToolTip": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\Sponsor\\Endpoint\\DeleteSponsorEndpoint.cs",
+              "RelativeToolTip": "src\\Api\\Features\\Sponsor\\Endpoint\\DeleteSponsorEndpoint.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-24T09:45:49.264Z",
               "EditorCaption": ""
-            },
+            }
+          ]
+        },
+        {
+          "DockedWidth": 85,
+          "SelectedChildIndex": 0,
+          "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "UploadFileCommand.cs",
-              "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\File\\Command\\UploadFileCommand.cs",
-              "RelativeDocumentMoniker": "src\\Api\\Features\\File\\Command\\UploadFileCommand.cs",
-              "ToolTip": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\File\\Command\\UploadFileCommand.cs",
-              "RelativeToolTip": "src\\Api\\Features\\File\\Command\\UploadFileCommand.cs",
-              "ViewState": "AgIAAJ8BAAAAAAAAAAAUwLABAADcAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "DeleteTeamEndpoint.cs",
+              "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\Team\\Endpoint\\DeleteTeamEndpoint.cs",
+              "RelativeDocumentMoniker": "src\\Api\\Features\\Team\\Endpoint\\DeleteTeamEndpoint.cs",
+              "ToolTip": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\Team\\Endpoint\\DeleteTeamEndpoint.cs",
+              "RelativeToolTip": "src\\Api\\Features\\Team\\Endpoint\\DeleteTeamEndpoint.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-14T17:22:41.322Z",
+              "WhenOpened": "2025-10-24T09:36:04.247Z",
               "EditorCaption": ""
             }
           ]

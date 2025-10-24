@@ -173,7 +173,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
-
+builder.Services.AddScoped<DeleteService>();
 builder.Services.AddDbContext<AppDbContext>((sp, options) =>
 {
     var connectionString = builder.Configuration.GetConnectionString("MariaDbConnection")
