@@ -31,6 +31,7 @@ public class GetSponsorCommandHandler : ICommandHandler<GetSponsorCommand, List<
         // Mappa ogni sponsor a un DTO, convertendo il logo in Base64
         var sponsorDtos = sponsors.Select(s => new SponsorResponse
         {
+            Id = s.Id,
             Name = s.Name,
             LogoBase64 = s.SponsorLogo != null
                         ? $"data:image/png;base64,{Convert.ToBase64String(s.SponsorLogo)}"

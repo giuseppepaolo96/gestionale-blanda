@@ -1,11 +1,15 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "views/Navbar/navbar";
 import './sponsor.scss';
 import SponsorCarousel from "components/Carousel/carousel";
 import { LABEL_CONSTANT } from "constants/label_costant";
-import { uploadFile } from "services/UserService"; // Cambia il nome del servizio per caricare più file
+import { deleteSponsor, getSponsors, SponsorResponse, uploadFile } from "services/UserService"; // Cambia il nome del servizio per caricare più file
 import { FileTypeEnum } from "services/UserService";
+import { Panel } from "primereact/panel";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { Button } from "primereact/button";
 
 // Aggiungere un tipo per il toast
 interface Toast {
@@ -20,7 +24,7 @@ interface CarouselSettings {
     singleImageMode: boolean;
     displayPosition: 'top' | 'bottom' | 'center';
     displayMode: 'diretta' | 'ledwall' | 'entrambi';
-} 
+}
 
 interface ImageType {
     id: number;
@@ -40,6 +44,7 @@ export default function Sponsor() {
     const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
     const [selectAll, setSelectAll] = useState(false);
     const [toast, setToast] = useState<Toast | null>(null);  // Stato per il toast
+    const [sponsor, setSponsor] = useState<SponsorResponse[]>([]);
 
     const [carouselSettings, setCarouselSettings] = useState<CarouselSettings>({
         displayDuration: 3000,
@@ -206,6 +211,19 @@ export default function Sponsor() {
         navigate('/ledwall', { state: { images } });
     };
 
+    const fetchSponsors = async () => {
+        try {
+            const data = await getSponsors();
+            setSponsor(data);
+        } catch (error) {
+            console.error("Errore durante il caricamento degli sponsor:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchSponsors();
+    }, []);
+
     return (
         <div className="dashboard">
             <Navbar />
@@ -288,7 +306,49 @@ export default function Sponsor() {
                     <button onClick={handleNavigateToLedwall}>Accedi al Ledwall</button>
                     <button onClick={handleSubmit}>Carica tutti i file</button>
                 </div>
+                <Panel header="Elenco sponsor" className="panel-header">
+                    <div className="title">{LABEL_CONSTANT.lista_sponsor}</div>
+                    <div className="subtitle-dashboard">{LABEL_CONSTANT.lista_sponsor_sub}</div>
+                    <DataTable
+                        value={sponsor}
+                        scrollable
+                        scrollHeight="400px"
+                        tableStyle={{ minWidth: '50rem' }}
+                        emptyMessage="Nessun sponsor disponibile"
+                    >
+                        <Column
+                            field="name"
+                            header="Nome sponsor"
+                            className="column"
+                        />
 
+                        <Column
+                            header="Azione"
+                            className="column"
+                            body={(rowData: SponsorResponse) => (
+                                <Button
+                                    icon="pi pi-trash"
+                                    label="Elimina"
+                                    onClick={async () => {
+                                        try {
+                                            if (!rowData.name) {
+                                                console.error("ID sponsor non trovato:", rowData);
+                                                return;
+                                            }
+                                            await deleteSponsor(rowData.id); // ora rowData.id è definito
+
+                                            // Rimuovi dallo stato senza rifare la fetch completa
+                                            setSponsor(prev => prev.filter(s => s.id !== rowData.id));
+                                        } catch (error) {
+                                            console.error("Errore durante l'eliminazione dello sponsor:", error);
+                                        }
+                                    }}
+                                    className="p-button-secondary"
+                                />
+                            )}
+                        />
+                    </DataTable>
+                </Panel>
                 <div className="carousel-preview">
                     <h3>Anteprima Carosello</h3>
                     {images.length > 0 ? (

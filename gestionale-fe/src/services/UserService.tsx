@@ -1,5 +1,6 @@
 
 import axios, { AxiosError } from 'axios';
+import exp from 'constants';
 
 
 export const axiosInstance = axios.create({
@@ -52,11 +53,13 @@ export interface Team {
 }
 
 export interface SponsorResponse {
+  id: number;
   name: string; // Nome dello sponsor
   logoBase64: string | null; // Logo in formato Base64 (o null se non disponibile)
 }
 
 export interface FileResponse {
+  id: number; 
   fileName: string;
   uploadDate: Date; 
   }
@@ -334,4 +337,91 @@ export const inviaEmail = async (Email: string) =>{
     }
     throw new Error('Errore durante l invio dell email');
   }
+};
+
+export const deleteFile = async (fileRecordsId: number) => {
+  try {
+    const response = await axiosInstance.delete(`/file/${fileRecordsId}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error(
+        'Errore durante l\'eliminazione del file',
+        error.response ? error.response.data : error.message
+      );
+    } else {
+      console.error('Errore durante l\'eliminazione del file', error);
+    }
+    throw new Error('Errore durante l\'eliminazione');
+  }
+};
+
+export const deleteLogo = async (TeamId: number) => {
+  try{
+    const response = await axiosInstance.delete(`/team/${TeamId}/logo`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)){
+      console.error(
+        'Errore durante l\'eliminazione del logo',
+        error.response ? error.response.data : error.message        
+      );
+    }else {
+            console.error('Errore durante l\'eliminazione del file',error);
+    }
+    throw new Error('Errore durante l\'eliminazione del logo');
+    }
+  };
+
+  export const deleteTeam = async (TeamId: number) => {
+    try{
+      const response = await axiosInstance.delete(`/team/${TeamId}`);
+      return response.data;
+    } catch (error){
+      if(axios.isAxiosError(error)){
+        console.error(
+          'Errore durante l\'eliminazione del team',
+          error.response ? error.response.data : error.message
+        );
+      } else {
+        console.error('l\'eliminazione del team ',error);
+      }
+      throw new Error('Errore durante l\'eliminazione del team');
+    }
+    };
+  
+ 
+export const deleteMatchData = async () =>{
+  try{
+    const response = await axiosInstance.delete(`/matchdata`);
+    return response.data;
+  } catch (error){
+    if(axios.isAxiosError(error)){
+      console.error(
+        'Errore nell\' eliminazione dei match',
+        error.response ? error.response.data : error.message
+      );
+    } else {
+      console.error('Errore nell\' eliminazione dei match',error);
+    }
+    throw new Error('Errore nell\' eliminazione dei match');
+  }
+};
+
+
+export const deleteSponsor = async (SponsorId: number) =>{
+try{
+  const response = await axiosInstance.delete(`/sponsor/${SponsorId}`);
+  return response.data;
+} catch (error){
+  if(axios.isAxiosError(error)){
+    console.error(
+      'Errore nell\' eliminazione dello sponsor',
+      error.response ? error.response.data : error.message
+    );
+  } else {
+    console.error('Errore nell\' eliminazione dello sponsor',error);
+  }
+  throw new Error('Errore nell\' eliminazione dello sponsor');
+}
 };

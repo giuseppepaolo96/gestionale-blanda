@@ -1,7 +1,7 @@
 import { LABEL_CONSTANT } from "constants/label_costant";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FileResponse, FileTypeEnum, getFiles, getTeams, Team, uploadFile } from "services/UserService";
+import { deleteFile, deleteLogo, deleteMatchData, deleteTeam, FileResponse, FileTypeEnum, getFiles, getTeamLogos, getTeams, Team, uploadFile } from "services/UserService";
 import Navbar from "views/Navbar/navbar";
 import './gestioneGenerale.scss';
 import * as signalR from "@microsoft/signalr";
@@ -26,7 +26,7 @@ export default function GestioneGenerale() {
         file: File;
     }
 
-   
+
 
 
     const navigate = useNavigate();
@@ -51,21 +51,41 @@ export default function GestioneGenerale() {
     const [tempFilterValue, setTempFilterValue] = useState<Date | null>(null);
     const [fileData, setFileData] = useState<FileResponse[]>([]);
     const [filteredData, setFilteredData] = useState<FileResponse[]>([]);
+    const [filteredTeams, setFilteredTeams] = useState<Team[]>([]);
+    const [allFiles, setAllFiles] = useState<FileResponse[]>([]);
+    const [isCalendarDialogVisible, setCalendarDialogVisible] = useState(false);
+    const [isLogoDialogVisible, setLogoDialogVisible] = useState(false);
+
+    const fetchFile = async () => {
+        try {
+            const data = await getFiles();
+            setAllFiles(data);
+            const calendarData = data.filter(item => item.fileName.toLowerCase().includes("calendario")); // Adatta la stringa di ricerca se necessario
+            setFileData(data);
+            setFilteredData(calendarData);
+        } catch (error) {
+            console.error('Errore durante il recupero dei dati delle partite:', error);
+        }
+    };
+
 
     useEffect(() => {
-        const fetchFile = async () => {
-            try {
-                const data = await getFiles();
-                const calendarData = data.filter(item => item.fileName.toLowerCase().includes("calendario")); // Adatta la stringa di ricerca se necessario
-                setFileData(data);
-                setFilteredData(calendarData);
-            } catch (error) {
-                console.error('Errore durante il recupero dei dati delle partite:', error);
-            }
-        };
         fetchFile();
     }, []);
-    
+
+
+    const fetchTeamsWithLogo = async () => {
+        try {
+            const teamsData = await getTeams();
+            const teamsWithLogo = teamsData.filter(team => team.logo && team.logo !== "");
+            setFilteredTeams(teamsWithLogo);
+        } catch (error) {
+            console.error("Errore durante il recupero dei loghi delle squadre:", error);
+        }
+    };
+    useEffect(() => {
+        fetchTeamsWithLogo();
+    }, []);
 
     const [filters, setFilters] = useState<{
         UploadDate: { value: Date | null; dateFile: string };
@@ -125,7 +145,7 @@ export default function GestioneGenerale() {
             return isValidType && isValidExtension;
         } else if (fileType === "calendar") {
             // Formati validi per il calendario: CSV e PDF
-            const validExtensions = ['csv', 'pdf'];
+            const validExtensions = ['csv', 'pdf', 'xlsx'];
             const fileExtension = file.name.split('.').pop()?.toLowerCase();
             return validExtensions.includes(fileExtension || '');
         }
@@ -180,7 +200,7 @@ export default function GestioneGenerale() {
             for (const file of newFiles) {
                 if (!isValidFileFormat(file, "calendar")) {
                     setToast({
-                        message: `Il formato del file ${file.name} non è supportato. Formati validi: CSV, PDF.`,
+                        message: `Il formato del file ${file.name} non è supportato. Formati validi: CSV, PDF , XLSX.`,
                         type: 'error',
                     });
                     continue;
@@ -314,9 +334,29 @@ export default function GestioneGenerale() {
         setIsDialogVisible(false);
     };
 
-    const handleDeleteFile = (file: FileResponse) => {
-        setDeletedFile(file);
-    }
+    const normalizeName = (name: string) =>
+        name.toLowerCase()
+            .replace(/^logo[_\s-]?/, '')   // rimuove prefisso "logo"
+            .replace(/\.[a-z]+$/, '')      // rimuove estensione
+            .replace(/[_\s-]+/g, '');      // rimuove spazi, underscore o trattino
+
+    const findFileForTeam = (files: FileResponse[], teamName: string) => {
+        const normalizedTeam = normalizeName(teamName);
+        return files.find(file => normalizeName(file.fileName).includes(normalizedTeam));
+    };
+
+useEffect(() => {
+    const fetchTeams = async () => {
+        try {
+            const teamData: Team[] = await getTeams();
+            setTeams(teamData); // Usa direttamente i dati dal backend
+        } catch (error) {
+            console.error("Errore durante il caricamento delle squadre:", error);
+        }
+    };
+    fetchTeams();
+}, []);
+
 
     return (
         <div className="dashboard">
@@ -325,7 +365,7 @@ export default function GestioneGenerale() {
                 <Panel header="Elenco calendari" className="panel-header">
                     <div className="title">{LABEL_CONSTANT.lista_calendario}</div>
                     <div className="subtitle-dashboard">{LABEL_CONSTANT.lista_calendari}</div>
-                    <button className="aggiungi" onClick={() => setIsDialogVisible(true)} >
+                    <button className="aggiungi" onClick={() => setCalendarDialogVisible(true)} >
                         {LABEL_CONSTANT.carica_calendario}
                     </button>
                     <DataTable
@@ -370,7 +410,11 @@ export default function GestioneGenerale() {
                                 <Button
                                     icon="pi pi-trash"
                                     label="Elimina"
-                                    onClick={() => handleDeleteFile(file)}
+                                    onClick={async () => {
+                                        await deleteFile(file.id);
+                                        setFilteredData(prev => prev.filter(f => f.fileName !== file.fileName));
+                                        await getFiles(); //  aggiorna la tabella
+                                    }}
                                     className="p-button-secondary"
                                 />
                             )}
@@ -379,10 +423,10 @@ export default function GestioneGenerale() {
                 </Panel>
                 <Dialog
                     header="Carica il calendario"
-                    visible={isDialogVisible}
+                    visible={isCalendarDialogVisible}
                     style={{ width: '50vw' }}
                     modal
-                    onHide={handleDialogClose}
+                    onHide={() => setCalendarDialogVisible(false)}
                 >
                     <div className="title">{LABEL_CONSTANT.carica_calendario}</div>
                     <div className="subtitle-dashboard">{LABEL_CONSTANT.subtitle_calendario}</div>
@@ -416,7 +460,7 @@ export default function GestioneGenerale() {
                     <input
                         className="upload"
                         type="file"
-                        accept=".csv, .pdf"
+                        accept=".csv, .pdf , .xlsx"
                         multiple
                         onChange={handleCalendarUpload}
                     />
@@ -457,16 +501,64 @@ export default function GestioneGenerale() {
                         {LABEL_CONSTANT.carica_calendario}
                     </button>
                 </Dialog>
+                <Panel header="Elenco loghi" className="panel-header">
+                    <div className="title">{LABEL_CONSTANT.lista_loghi}</div>
+                    <div className="subtitle-dashboard">{LABEL_CONSTANT.lista_loghi_sub}</div>
+                    <button className="aggiungi" onClick={() => setLogoDialogVisible(true)} >
+                        {LABEL_CONSTANT.carica_logo}
+                    </button>
+                    <DataTable
+                        value={filteredTeams} // solo squadre con logo
+                        scrollable
+                        scrollHeight="400px"
+                        tableStyle={{ minWidth: '50rem' }}
+                        emptyMessage="Nessuna squadra con logo disponibile"
+                    >
+                        <Column
+                            field="name"
+                            header="Nome squadra"
+                            className="column"
+                        />
 
-                <Panel header="Carica i loghi" style={{ marginBottom: '20px' }}>
+                        <Column
+                            header="Azione"
+                            className="column"
+                            body={(team) => (
+                                <Button
+                                    icon="pi pi-trash"
+                                    label="Elimina"
+                                    onClick={async () => {
+                                        try {
+                                            // Trova il file corretto in allFiles
+                                            const fileToDelete = findFileForTeam(allFiles, team.name);
+
+                                            if (fileToDelete) {
+                                                await deleteFile(fileToDelete.id); // elimina il file reale
+                                                setAllFiles(prev => prev.filter(f => f.id !== fileToDelete.id));
+                                            }
+
+                                            await deleteLogo(team.id); // elimina il logo dal team
+                                            await fetchTeamsWithLogo(); // ricarica la tabella dei loghi
+                                        } catch (error) {
+                                            console.error("Errore durante l'eliminazione:", error);
+                                        }
+                                    }}
+                                    className="p-button-secondary"
+                                />
+                            )}
+                        ></Column>
+                    </DataTable>
+                </Panel>
+                <Dialog
+                    header="Carica i loghi"
+                    visible={isLogoDialogVisible}
+                    style={{ width: '50vw' }}
+                    modal
+                    onHide={() => setLogoDialogVisible(false)}
+                >
                     <div className="title">{LABEL_CONSTANT.carica_logo}</div>
                     <div className="subtitle-dashboard">{LABEL_CONSTANT.subtitle_loghi}</div>
-                    <input className="upload"
-                        type="file"
-                        accept="image/png, image/jpeg, image/svg+xml"
-                        multiple
-                        onChange={handleLogoUpload}
-                    />
+
                     <div className="select-all-container">
                         <select
                             value={selectedTeam ?? ""}
@@ -493,6 +585,12 @@ export default function GestioneGenerale() {
                             </>
                         )}
                     </div>
+                    <input className="upload"
+                        type="file"
+                        accept="image/png, image/jpeg, image/svg+xml"
+                        multiple
+                        onChange={handleLogoUpload}
+                    />
 
                     <div className="file-names-list">
                         {logoFileNames.slice(0, 4).map((file, index) => (
@@ -512,8 +610,49 @@ export default function GestioneGenerale() {
                     <button onClick={handleLogoSubmit} disabled={logoImages.length === 0}>
                         {LABEL_CONSTANT.carica_logo}
                     </button>
+                </Dialog>
 
+                <Panel header="Elenco squadre" className="panel-header">
+                    <div className="title">{LABEL_CONSTANT.lista_squadre}</div>
+                    <div className="subtitle-dashboard">{LABEL_CONSTANT.list_squadre_sub}</div>
+                    <DataTable
+                        value={teams}
+                        scrollable
+                        scrollHeight="400px"
+                        tableStyle={{ minWidth: '50rem' }}
+                        emptyMessage="Nessuna squadra disponibile"
+                    >
+                        <Column
+                            field="name"
+                            header="Nome squadra"
+                            className="column"
+                        />
+
+                        <Column
+                            header="Azione"
+                            className="column"
+                            body={(rowTeam: Team) => (
+                                <Button
+                                    icon="pi pi-trash"
+                                    label="Elimina"
+                                    onClick={async () => {
+                                        try {
+                                            await deleteMatchData();
+                                            await deleteTeam(rowTeam.id); 
+                                            const updatedTeams = await getTeams();
+                                            setTeams(updatedTeams);
+                                        } catch (error) {
+                                            console.error("Errore durante l'eliminazione:", error);
+                                            setToast({ message: "Team non presente o errore eliminazione", type: "error" });
+                                        }
+                                    }}
+                                    className="p-button-secondary"
+                                />
+                            )}
+                        />
+                    </DataTable>
                 </Panel>
+
                 {toast && (
                     <div className={`toast ${toast.type}`}>
                         {toast.message}
