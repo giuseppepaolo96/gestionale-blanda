@@ -10,6 +10,7 @@ import { Panel } from "primereact/panel";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
+import { Dialog } from "primereact/dialog";
 
 // Aggiungere un tipo per il toast
 interface Toast {
@@ -45,7 +46,7 @@ export default function Sponsor() {
     const [selectAll, setSelectAll] = useState(false);
     const [toast, setToast] = useState<Toast | null>(null);  // Stato per il toast
     const [sponsor, setSponsor] = useState<SponsorResponse[]>([]);
-
+    const [isLogoDialogVisible, setSponsorDialogVisible] = useState(false);
     const [carouselSettings, setCarouselSettings] = useState<CarouselSettings>({
         displayDuration: 3000,
         sequentialMode: true,
@@ -224,11 +225,141 @@ export default function Sponsor() {
         fetchSponsors();
     }, []);
 
+    const normalizeName = (name: string) =>
+        name.toLowerCase()
+            .replace(/^sponsor[_\s-]?/, '')   // rimuove prefisso "logo"
+            .replace(/\.[a-z]+$/, '')      // rimuove estensione
+            .replace(/[_-]+/g, ' ')      // rimuove spazi, underscore o trattino
+            .toUpperCase();
+    
     return (
         <div className="dashboard">
             <Navbar />
             <div className="login-container">
-                <div className="sponsor-management-container">
+                <Panel header="Elenco sponsor" className="panel-header">
+                    <div className="title">{LABEL_CONSTANT.lista_sponsor}</div>
+                    <div className="subtitle-dashboard">{LABEL_CONSTANT.lista_sponsor_sub}</div>
+                    <button className="aggiungi" onClick={() => setSponsorDialogVisible(true)} >
+                        {LABEL_CONSTANT.carica_sponsor}
+                    </button>
+                    <DataTable
+                        value={sponsor}
+                        scrollable
+                        scrollHeight="400px"
+                        tableStyle={{ minWidth: '50rem' }}
+                        emptyMessage="Nessun sponsor disponibile"
+                        
+                    >
+                        <Column
+                            field="name"
+                            header="Nome sponsor"
+                            className="column"
+                            body={(rowData: SponsorResponse) => normalizeName(rowData.name)}
+                        />
+
+                        <Column
+                            header="Azione"
+                            className="column"
+                            body={(rowData: SponsorResponse) => (
+                                <Button
+                                    icon="pi pi-trash"
+                                    label="Elimina"
+                                    onClick={async () => {
+                                        try {
+                                            if (!rowData.name) {
+                                                console.error("ID sponsor non trovato:", rowData);
+                                                return;
+                                            }
+                                            await deleteSponsor(rowData.id); // ora rowData.id è definito
+
+                                            // Rimuovi dallo stato senza rifare la fetch completa
+                                            setSponsor(prev => prev.filter(s => s.id !== rowData.id));
+                                        } catch (error) {
+                                            console.error("Errore durante l'eliminazione dello sponsor:", error);
+                                        }
+                                    }}
+                                    className="p-button-secondary"
+                                />
+                            )}
+                        />
+                    </DataTable>
+                </Panel>
+                 <Dialog header="Carica gli sponsor"
+                    visible={isLogoDialogVisible}
+                    style={{ width: '50vw' }}
+                    modal
+                    onHide={() => setSponsorDialogVisible(false)}
+                >
+                    <div className="title">{LABEL_CONSTANT.upload_sponsor}</div>
+                    <div className="subtitle-dashboard">{LABEL_CONSTANT.subtitle_sponsor_sub}</div>
+                    <input
+                        className="upload"
+                        type="file"
+                        accept="image/png, image/jpeg, image/svg+xml"
+                        multiple
+                        onChange={handleImageUpload}
+                    />
+                     <div className="select-all-container">
+                        {fileNames.length > 0 && (
+                            <>
+                                <input
+                                    className="upload"
+                                    type="checkbox"
+                                    checked={selectAll}
+                                    onChange={handleSelectAllChange}
+                                />
+                                {LABEL_CONSTANT.selezione_multipla}
+                            </>
+                        )}
+                    </div>
+                    <div className="file-names-list">
+                        {fileNames.slice(0, 4).map((name, index) => (
+                            <div key={index} className="file-name-container">
+                                <input
+                                    className="upload"
+                                    type="checkbox"
+                                    id={`calendar-checkbox-${name}`}
+                                    checked={selectedFiles.includes(name)}
+                                    onChange={() => handleCheckboxChange(name)}
+                                />
+                                <label htmlFor={`calendar-checkbox-${name}`} className="file-name">
+                                    {name}
+                                </label>
+                            </div>
+                        ))}
+                        {fileNames.length > 4 && (
+                                <div className="file-name more-files" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+                                    {LABEL_CONSTANT.sponsor_all}
+                                    {isDropdownOpen && (
+                                        <div className="dropdown-menu">
+                                            {fileNames.slice(4).map((name, index) => (
+                                                <div key={index} className="file-name-container">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedFiles.includes(name)}
+                                                        onChange={() => handleCheckboxChange(name)}
+                                                    />
+                                                    <div className="dropdown-item" onClick={() => handleFileClick(name)}>
+                                                        {name}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                            
+                    </div>
+                    
+                    <button
+                        onClick={handleSubmit}
+                        disabled={fileNames.length === 0}
+                    >
+                        {LABEL_CONSTANT.carica_sponsor}
+                    </button>
+                    
+                 </Dialog>
+                {/* <div className="sponsor-management-container">
                     {LABEL_CONSTANT.title_sezione_sponsor}
                     <div className="upload-section">
                         <h3>Carica Sponsor</h3>
@@ -305,50 +436,8 @@ export default function Sponsor() {
                     </div>
                     <button onClick={handleNavigateToLedwall}>Accedi al Ledwall</button>
                     <button onClick={handleSubmit}>Carica tutti i file</button>
-                </div>
-                <Panel header="Elenco sponsor" className="panel-header">
-                    <div className="title">{LABEL_CONSTANT.lista_sponsor}</div>
-                    <div className="subtitle-dashboard">{LABEL_CONSTANT.lista_sponsor_sub}</div>
-                    <DataTable
-                        value={sponsor}
-                        scrollable
-                        scrollHeight="400px"
-                        tableStyle={{ minWidth: '50rem' }}
-                        emptyMessage="Nessun sponsor disponibile"
-                    >
-                        <Column
-                            field="name"
-                            header="Nome sponsor"
-                            className="column"
-                        />
-
-                        <Column
-                            header="Azione"
-                            className="column"
-                            body={(rowData: SponsorResponse) => (
-                                <Button
-                                    icon="pi pi-trash"
-                                    label="Elimina"
-                                    onClick={async () => {
-                                        try {
-                                            if (!rowData.name) {
-                                                console.error("ID sponsor non trovato:", rowData);
-                                                return;
-                                            }
-                                            await deleteSponsor(rowData.id); // ora rowData.id è definito
-
-                                            // Rimuovi dallo stato senza rifare la fetch completa
-                                            setSponsor(prev => prev.filter(s => s.id !== rowData.id));
-                                        } catch (error) {
-                                            console.error("Errore durante l'eliminazione dello sponsor:", error);
-                                        }
-                                    }}
-                                    className="p-button-secondary"
-                                />
-                            )}
-                        />
-                    </DataTable>
-                </Panel>
+                </div> */}
+                
                 <div className="carousel-preview">
                     <h3>Anteprima Carosello</h3>
                     {images.length > 0 ? (
