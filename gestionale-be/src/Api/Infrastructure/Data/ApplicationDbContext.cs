@@ -12,6 +12,11 @@ public class AppDbContext : DbContext
 
     public DbSet<MatchData> MatchData { get; set; }
 
+    public DbSet<Categoria> Categorie => Set<Categoria>();
+
+    public DbSet<Role> Roles => Set<Role>();
+
+    public DbSet<Profile> Profiles => Set<Profile>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { 
 
@@ -33,6 +38,15 @@ public class AppDbContext : DbContext
             .WithMany()
             .HasForeignKey(m => m.AwayTeamId)
             .OnDelete(DeleteBehavior.Restrict); // Configura la delete, se necessario
+
+        modelBuilder.Entity<User>()
+            .HasOne(u => u.Profile)
+            .WithOne(p => p.User)
+            .HasForeignKey<Profile>(p => p.UserId);
+
+        modelBuilder.Entity<User>()
+            .Property(u => u.Email)
+            .IsRequired();
     }
 
 

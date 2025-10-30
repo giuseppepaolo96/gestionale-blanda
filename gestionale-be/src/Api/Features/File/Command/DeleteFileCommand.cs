@@ -6,6 +6,7 @@ namespace Api.Features.File.Command
 {
     public class DeleteFileCommand : ICommand
     {
+        // Recupero dell'id necessario per eliminare il fileRecords
         public int FileRecordsId { get; set; }
     }
 

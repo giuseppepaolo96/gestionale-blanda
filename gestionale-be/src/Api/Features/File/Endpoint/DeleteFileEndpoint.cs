@@ -7,6 +7,8 @@ namespace Api.Features.File.Endpoint
 {
     public class DeleteFileEndpoint : Endpoint<DeleteFileCommand>
     {
+
+        //Connessione al db
         private readonly AppDbContext _dbContext;
 
         public DeleteFileEndpoint(AppDbContext dbContext)

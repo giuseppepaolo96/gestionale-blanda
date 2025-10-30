@@ -30,7 +30,7 @@ namespace Api.Features.Logo.Command
         // Gestisce il comando, rimuovendo il logo dal team
         public async Task ExecuteAsync(DeleteLogoCommand command, CancellationToken ct)
         {
-            // Recupera la squadra dal database
+            // Recupera la squadra dal database 
             await _deletionService.DeleteLogoAsync(command.TeamId, ct);
         }
     }

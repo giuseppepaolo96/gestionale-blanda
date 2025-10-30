@@ -20,7 +20,8 @@ namespace Api.Features.GetMatchData.Command
         }
 
         public async Task ExecuteAsync(DeleteMatchDataCommand command,CancellationToken ct)
-        {
+        { 
+            // Invio chiamata al servizio della delete
             await _deleteService.DeleteAllEntitiesAsync <MatchData> (ct);
         }
     }

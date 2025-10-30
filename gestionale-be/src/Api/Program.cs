@@ -204,6 +204,15 @@ builder.Services.AddTransient<GetSponsorCommandHandler>();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    //dbContext.Database.Migrate();
+
+    var seeder = new SeedDb(dbContext);
+    await seeder.SeedDataAsync();
+}
+
 app.UseDeveloperExceptionPage();
 
 

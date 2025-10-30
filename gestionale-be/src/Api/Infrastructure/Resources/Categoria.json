@@ -1,0 +1,50 @@
+[
+  {
+    "Id": "2414eb73-7f5c-4b80-bbc4-e81a5a8b48cc",
+    "Nome": "SUPERLEGA"
+  },
+  {
+    "Id": "72e20e77-7778-4494-b0cb-291a36df5f1a",
+    "Nome": "SERIE A1"
+  },
+  {
+    "Id": "896a3e96-c3a7-4fed-9ce1-5fd683f79e39",
+    "Nome": "SERIE A2"
+  },
+  {
+    "Id": "72e20e77-c3a7-4cc4-b0cb-291a36df5f1a",
+    "Nome": "SERIE A3"
+  },
+  {
+    "Id": "896a3e96-7778-4cc4-b0cb-291a36df5f1a",
+    "Nome": "SERIE B1"
+  },
+  {
+    "Id": "11c4bc46-7778-4cc4-b0cb-291a36df5f1a",
+    "Nome": "SERIE B2"
+  },
+  {
+    "Id": "72e20e77-7648-4cc4-b0cb-291a36df5f1a",
+    "Nome": "SERIE C"
+  },
+  {
+    "Id": "76f9290e-0cd3-4de8-802a-df7a266f8806",
+    "Nome": "SERIE D"
+  },
+  {
+    "Id": "5389c4bf-a5a2-4087-8ad8-9079affc1a37",
+    "Nome": "PRIMA DIVISIONE"
+  },
+  {
+    "Id": "b5ea8153-0a55-49ea-b8ba-58ccb411aacc",
+    "Nome": "SECONDA DIVISIONE"
+  },
+  {
+    "Id": "4aee8563-6df0-4e6f-8374-8d9ad8f3a3ca",
+    "Nome": "TERZA DIVISIONE"
+  },
+  {
+    "Id": "acd1bee6-d535-4ca1-98eb-b73ee1c2cd78",
+    "Nome": "TERZA DIVISIONE"
+  }
+]

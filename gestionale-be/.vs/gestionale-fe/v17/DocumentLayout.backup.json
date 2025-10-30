@@ -3,20 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\features\\sponsor\\command\\getsponsorcommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\features\\sponsor\\command\\getsponsorcommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Migrations\\20251029191001_AddTableUser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Api\\Migrations\\20251029191001_AddTableUser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\features\\sponsor\\endpoint\\sponsorresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\features\\sponsor\\endpoint\\sponsorresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\infrastructure\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\infrastructure\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\features\\logo\\endpoint\\deletelogoendpoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\features\\logo\\endpoint\\deletelogoendpoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\entities\\tabledb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\entities\\tabledb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\features\\logo\\endpoint\\getteamlogoendpoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\features\\logo\\endpoint\\getteamlogoendpoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\features\\user\\register\\endpoint\\registerendpoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\features\\user\\register\\endpoint\\registerendpoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\features\\user\\register\\command\\registercommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\features\\user\\register\\command\\registercommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 85,
-          "SelectedChildIndex": 16,
+          "SelectedChildIndex": 15,
           "Children": [
             {
               "$type": "Bookmark",
@@ -90,52 +94,68 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "SponsorResponse.cs",
-              "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\Sponsor\\Endpoint\\SponsorResponse.cs",
-              "RelativeDocumentMoniker": "src\\Api\\Features\\Sponsor\\Endpoint\\SponsorResponse.cs",
-              "ToolTip": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\Sponsor\\Endpoint\\SponsorResponse.cs",
-              "RelativeToolTip": "src\\Api\\Features\\Sponsor\\Endpoint\\SponsorResponse.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAjAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "20251029191001_AddTableUser.cs",
+              "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Migrations\\20251029191001_AddTableUser.cs",
+              "RelativeDocumentMoniker": "src\\Api\\Migrations\\20251029191001_AddTableUser.cs",
+              "ToolTip": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Migrations\\20251029191001_AddTableUser.cs",
+              "RelativeToolTip": "src\\Api\\Migrations\\20251029191001_AddTableUser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-26T11:27:10.394Z"
+              "WhenOpened": "2025-10-29T19:10:01.441Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "GetSponsorCommand.cs",
-              "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\Sponsor\\Command\\GetSponsorCommand.cs",
-              "RelativeDocumentMoniker": "src\\Api\\Features\\Sponsor\\Command\\GetSponsorCommand.cs",
-              "ToolTip": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\Sponsor\\Command\\GetSponsorCommand.cs",
-              "RelativeToolTip": "src\\Api\\Features\\Sponsor\\Command\\GetSponsorCommand.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAYwCsAAAABAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Infrastructure\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "src\\Api\\Infrastructure\\Data\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Infrastructure\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "src\\Api\\Infrastructure\\Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAQwDAAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-26T11:25:54.159Z",
+              "WhenOpened": "2025-10-29T19:07:35.222Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "DeleteLogoEndpoint.cs",
-              "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\Logo\\Endpoint\\DeleteLogoEndpoint.cs",
-              "RelativeDocumentMoniker": "src\\Api\\Features\\Logo\\Endpoint\\DeleteLogoEndpoint.cs",
-              "ToolTip": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\Logo\\Endpoint\\DeleteLogoEndpoint.cs",
-              "RelativeToolTip": "src\\Api\\Features\\Logo\\Endpoint\\DeleteLogoEndpoint.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAqAAAAAAAAAA==",
+              "Title": "TableDb.cs",
+              "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Entities\\TableDb.cs",
+              "RelativeDocumentMoniker": "src\\Api\\Entities\\TableDb.cs",
+              "ToolTip": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Entities\\TableDb.cs",
+              "RelativeToolTip": "src\\Api\\Entities\\TableDb.cs",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAwwFoAAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-25T15:05:17.091Z"
+              "WhenOpened": "2025-10-29T18:13:17.833Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "GetTeamLogoEndpoint.cs",
-              "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\Logo\\Endpoint\\GetTeamLogoEndpoint.cs",
-              "RelativeDocumentMoniker": "src\\Api\\Features\\Logo\\Endpoint\\GetTeamLogoEndpoint.cs",
-              "ToolTip": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\Logo\\Endpoint\\GetTeamLogoEndpoint.cs",
-              "RelativeToolTip": "src\\Api\\Features\\Logo\\Endpoint\\GetTeamLogoEndpoint.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "RegisterEndpoint.cs",
+              "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\User\\Register\\Endpoint\\RegisterEndpoint.cs",
+              "RelativeDocumentMoniker": "src\\Api\\Features\\User\\Register\\Endpoint\\RegisterEndpoint.cs",
+              "ToolTip": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\User\\Register\\Endpoint\\RegisterEndpoint.cs",
+              "RelativeToolTip": "src\\Api\\Features\\User\\Register\\Endpoint\\RegisterEndpoint.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-25T14:31:40.854Z"
+              "WhenOpened": "2025-10-29T18:01:16.086Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "RegisterCommand.cs",
+              "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\User\\Register\\Command\\RegisterCommand.cs",
+              "RelativeDocumentMoniker": "src\\Api\\Features\\User\\Register\\Command\\RegisterCommand.cs",
+              "ToolTip": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\User\\Register\\Command\\RegisterCommand.cs",
+              "RelativeToolTip": "src\\Api\\Features\\User\\Register\\Command\\RegisterCommand.cs",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAYwFsAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T18:00:57.201Z",
+              "EditorCaption": ""
             }
           ]
         }

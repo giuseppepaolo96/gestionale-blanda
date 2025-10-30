@@ -20,7 +20,7 @@ namespace Api.Features.Team.Endpoint
             Delete("/team/{TeamId}");
             AllowAnonymous();
         }
-
+         
         public override async Task HandleAsync(DeleteTeamCommand command, CancellationToken ct)
         {
             Console.WriteLine($"Received TeamId:{command.TeamId}");

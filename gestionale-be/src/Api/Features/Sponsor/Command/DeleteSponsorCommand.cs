@@ -19,7 +19,7 @@ namespace Api.Features.Sponsor.Command
         {
             _deleteService = deleteService;
         }
-
+         
         public async Task ExecuteAsync(DeleteSponsorCommand command,CancellationToken ct)
         {
             await _deleteService.DeleteSponsorAsync(command.SponsorId, ct);

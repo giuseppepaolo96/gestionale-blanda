@@ -8,6 +8,7 @@ namespace Api.Features.GetMatchData.Endpoint
 {
     public class DeleteMatchDataEndpoint : EndpointWithoutRequest
     {
+        // Richiamo al servizio di delete
         private readonly DeleteService _deleteService;
 
         public DeleteMatchDataEndpoint(DeleteService deleteService)

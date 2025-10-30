@@ -1,0 +1,22 @@
+[
+  {
+    "Id": "e81190e1-721e-4639-86f2-eec0a81a8032",
+    "Ruolo": "ADMIN"
+  },
+  {
+    "Id": "43468cc3-b2c2-4feb-a162-14e79fc75ee8",
+    "Ruolo": "ALLENATORE"
+  },
+  {
+    "Id": "7b1aa1b0-146e-4981-bc7e-8136740b0663",
+    "Ruolo": "SCOUT"
+  },
+  {
+    "Id": "4a4d209b-d537-4fcf-8d86-686bc415632c",
+    "Ruolo": "COLLABORATORE"
+  },
+  {
+    "Id": "3cb963fb-7b8c-4408-8645-1b911251852c",
+    "Ruolo": "GUEST"
+  }
+]

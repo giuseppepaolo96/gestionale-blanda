@@ -19,7 +19,7 @@ namespace Api.Features.Sponsor.Endpoint
             Delete("/sponsor/{SponsorId}");
                 AllowAnonymous();
         }
-
+         
         public override async Task HandleAsync(DeleteSponsorCommand command, CancellationToken ct)
         {
             Console.WriteLine($"Received SponsorId:{command.SponsorId}");

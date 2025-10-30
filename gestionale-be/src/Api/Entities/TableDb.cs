@@ -87,7 +87,7 @@ namespace Api.Entities
         public string UserId { get; set; }
         public Guid RoleId { get; set; }
 
-        public List<Team> Teams { get; set; } = new List<Team>();
+        //public List<Team> Teams { get; set; } = new List<Team>();
         public List<Role> Roles { get; set; } = new List<Role>();
 
         public List<Categoria> Categorias { get; set; } = new List<Categoria> ();

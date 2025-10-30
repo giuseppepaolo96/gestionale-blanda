@@ -19,7 +19,7 @@ namespace Api.Features.Team.Command
         public DeleteTeamCommandHandler (DeleteService deleteService)
         {
             _deleteService = deleteService;
-        }
+        } 
 
         public async Task ExecuteAsync(DeleteTeamCommand command,CancellationToken ct)
         {

@@ -42,7 +42,7 @@ namespace Api.Features.Logo.Endpoint
                 throw new Exception("Logo non presente");
             }
 
-            // Rimuovi il logo
+            // Rimuovi il logo 
             team.Logo = null;
             await _dbContext.SaveChangesAsync(ct);
 
