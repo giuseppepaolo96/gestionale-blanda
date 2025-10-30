@@ -485,7 +485,7 @@ export default function Sponsor() {
                             )}
                         </>
                     ) : (
-                        <p>Nessuno sponsor caricato. Carica un'immagine per visualizzare l'anteprima.</p>
+                        <p>Nessuno sponsor caricato. Carica un'immagine per visualizzare l'anteprima.</p> 
                     )}
                 </div>
             </div>

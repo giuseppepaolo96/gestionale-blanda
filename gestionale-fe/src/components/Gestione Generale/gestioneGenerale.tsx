@@ -415,7 +415,7 @@ useEffect(() => {
                                         setFilteredData(prev => prev.filter(f => f.fileName !== file.fileName));
                                         await getFiles(); //  aggiorna la tabella
                                     }}
-                                    className="p-button-secondary"
+                                    className="p-button-secondary" 
                                 />
                             )}
                         ></Column>
@@ -541,7 +541,7 @@ useEffect(() => {
                                             await fetchTeamsWithLogo(); // ricarica la tabella dei loghi
                                         } catch (error) {
                                             console.error("Errore durante l'eliminazione:", error);
-                                        }
+                                        } 
                                     }}
                                     className="p-button-secondary"
                                 />
