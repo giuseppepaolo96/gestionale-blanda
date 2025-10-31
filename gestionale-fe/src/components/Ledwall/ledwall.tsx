@@ -337,7 +337,7 @@ export default function Ledwall() {
         <div className="scoreboard-ledwall">
             <div className="match-info">
                 <h1>
-                    {LABEL_CONSTANT.campionato} {LABEL_CONSTANT.categoria_partita} {LABEL_CONSTANT.girone} {isFemale ? LABEL_CONSTANT.femminile : isMale ? LABEL_CONSTANT.maschile : ""}
+                    {LABEL_CONSTANT.campionato} {LABEL_CONSTANT.categoria_partita} {isFemale ? LABEL_CONSTANT.femminile : isMale ? LABEL_CONSTANT.maschile : ""} {LABEL_CONSTANT.girone} 
                 </h1>
                 <h1>
                     {day}{LABEL_CONSTANT.giornata} - {dayOfWeek} {matchDate} - {LABEL_CONSTANT.numero} {matchNumber}

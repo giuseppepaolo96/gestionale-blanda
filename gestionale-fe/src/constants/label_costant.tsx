@@ -118,7 +118,7 @@ export const LABEL_CONSTANT = {
   vinci: "Ha vinto",
   cartellino_rosso_casa: "Aggiungi cartellino rosso casa",
   cartellino_rosso_ospite: "Aggiungi cartellino rosso ospite",
-  categoria_partita: "Serie B2",
+  categoria_partita: "Serie B2", 
   girone:"Girone I",
   vs: "VS",
   title_generale: "Gestisci calendario e loghi",
