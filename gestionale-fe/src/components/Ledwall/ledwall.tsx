@@ -57,42 +57,42 @@ export default function Ledwall() {
     const [winner, setMatchWinner] = useState<Team | null>(null);
 
     const connection = new signalR.HubConnectionBuilder()
-             .withUrl(`${process.env.REACT_APP_API_BASE_URL}/scoreHub`)
+        .withUrl(`${process.env.REACT_APP_API_BASE_URL}/scoreHub`)
         .withAutomaticReconnect([0, 2000, 5000, 10000]) // tentativi dopo 0s, 2s, 5s, 10s
-        
+
         .build();
-connection.onreconnecting(() => console.warn('Tentativo di riconnessione...'));
-connection.onreconnected(() => console.log('Riconnesso a SignalR'));
-connection.onclose(() => console.error('Connessione chiusa, tentativo di riavvio...'));
-    
+    connection.onreconnecting(() => console.warn('Tentativo di riconnessione...'));
+    connection.onreconnected(() => console.log('Riconnesso a SignalR'));
+    connection.onclose(() => console.error('Connessione chiusa, tentativo di riavvio...'));
+
     const fetchSponsors = async () => {
         try {
             // Recupera l'URL di base dalla variabile di ambiente
             const apiUrl = process.env.REACT_APP_API_BASE_URL;
-    
+
             // Controlla che apiUrl sia definito
             if (!apiUrl) {
                 console.error('API base URL is not defined!');
                 return;
             }
-    
+
             // Effettua la richiesta GET
             const response = await axios.get<SponsorResponse[]>(`${apiUrl}/api/sponsor`);
             console.log('Sponsors fetched:', response.data);
-    
+
             // Filtra i risultati escludendo quelli che contengono 'CARBAT' nel nome (case-insensitive)
-            const filteredSponsors = response.data.filter(sponsor => 
+            const filteredSponsors = response.data.filter(sponsor =>
                 !sponsor.name.toLowerCase().includes('carbat')
             );
             console.log('Filtered sponsors:', filteredSponsors);
-    
+
             // Imposta lo stato con i risultati filtrati
             setSponsors(filteredSponsors);
         } catch (error) {
             console.error('Error fetching sponsors:', error);
         }
     };
-    
+
     useEffect(() => {
         if (matchId) {
             const parsedMatchId = parseInt(matchId, 10);  // Parsiamo il matchId in numero
@@ -152,82 +152,82 @@ connection.onclose(() => console.error('Connessione chiusa, tentativo di riavvio
         connection.start()
             .then(() => {
                 console.log("Connessione SignalR stabilita");
-connection.onreconnecting(() => console.warn('Tentativo di riconnessione...'));
-connection.onreconnected(() => console.log('Riconnesso a SignalR'));
-connection.onclose(() => console.error('Connessione chiusa, tentativo di riavvio...'));
+                connection.onreconnecting(() => console.warn('Tentativo di riconnessione...'));
+                connection.onreconnected(() => console.log('Riconnesso a SignalR'));
+                connection.onclose(() => console.error('Connessione chiusa, tentativo di riavvio...'));
                 connection.on("ReceiveScoreUpdate", async (matchUpdate) => {
                     console.log("Dati ricevuti:", matchUpdate);
 
                     if (matchId && matchUpdate.matchId && parseInt(matchId, 10) === Number(matchUpdate.matchId)) {
                         console.log("Aggiornamento ricevuto per il matchId corretto:", matchUpdate);
-                    const { matchId, scoreCasa, scoreOspite, set: currentSet, possessoCasa, possessoOspite, timeoutHome, timeoutAway, matchWinner } = matchUpdate;
-
- 
-                    await fetchMatchData(matchId);
-
-                    if (scoreCasa !== undefined && scoreOspite !== undefined) {
-                        setHomeScore(scoreCasa);
-                        setAwayScore(scoreOspite);
-                    }
-
-                    if (currentSet !== undefined) {
-                        setSetsCount(currentSet);
-                        setCompleteSet(currentSet);
-
-                        setSetScores((prevSetScores) => {
-                            const newSetScores = [...prevSetScores];
-                            if (!newSetScores[currentSet - 1]) {
-                                newSetScores[currentSet - 1] = [0, 0];
-                            }
-                            newSetScores[currentSet - 1] = [scoreCasa || 0, scoreOspite || 0];
-                            return newSetScores;
-                        });
+                        const { matchId, scoreCasa, scoreOspite, set: currentSet, possessoCasa, possessoOspite, timeoutHome, timeoutAway, matchWinner } = matchUpdate;
 
 
-                    }
+                        await fetchMatchData(matchId);
 
-                    if (matchWinner) {
-                        // Aggiungi il vincitore dell'ultimo set
-                        const winningTeam = matchWinner === "home" ? homeTeam : awayTeam;
-                        const lastSetIndex = setScores.length - 1;
+                        if (scoreCasa !== undefined && scoreOspite !== undefined) {
+                            setHomeScore(scoreCasa);
+                            setAwayScore(scoreOspite);
+                        }
 
-                        if (setScores[lastSetIndex].length === 2) {
-                            // Se l'ultimo set è completato, visualizza il vincitore
-                            if (matchWinner === "home") {
-                                SetWinHome((prev) => (parseInt(prev) + 1).toString());
-                            } else {
-                                SetWinAway((prev) => (parseInt(prev) + 1).toString());
+                        if (currentSet !== undefined) {
+                            setSetsCount(currentSet);
+                            setCompleteSet(currentSet);
+
+                            setSetScores((prevSetScores) => {
+                                const newSetScores = [...prevSetScores];
+                                if (!newSetScores[currentSet - 1]) {
+                                    newSetScores[currentSet - 1] = [0, 0];
+                                }
+                                newSetScores[currentSet - 1] = [scoreCasa || 0, scoreOspite || 0];
+                                return newSetScores;
+                            });
+
+
+                        }
+
+                        if (matchWinner) {
+                            // Aggiungi il vincitore dell'ultimo set
+                            const winningTeam = matchWinner === "home" ? homeTeam : awayTeam;
+                            const lastSetIndex = setScores.length - 1;
+
+                            if (setScores[lastSetIndex].length === 2) {
+                                // Se l'ultimo set è completato, visualizza il vincitore
+                                if (matchWinner === "home") {
+                                    SetWinHome((prev) => (parseInt(prev) + 1).toString());
+                                } else {
+                                    SetWinAway((prev) => (parseInt(prev) + 1).toString());
+                                }
                             }
                         }
-                    }
 
-                    if (matchWinner) {
-                        // Se matchWinner è il nome della squadra vincente, imposta direttamente il vincitore
-                        setMatchWinner(matchWinner);
-                    }
+                        if (matchWinner) {
+                            // Se matchWinner è il nome della squadra vincente, imposta direttamente il vincitore
+                            setMatchWinner(matchWinner);
+                        }
 
 
-                    if (timeoutHome && timeoutsHome < 2) {
-                        setTimeoutHomeFlags(prev => [...prev, true]);  // Aggiungi il flag a true
-                        setTimeoutsHome(prev => prev + 1);  // Incrementa il conteggio dei timeout
-                    }
+                        if (timeoutHome && timeoutsHome < 2) {
+                            setTimeoutHomeFlags(prev => [...prev, true]);  // Aggiungi il flag a true
+                            setTimeoutsHome(prev => prev + 1);  // Incrementa il conteggio dei timeout
+                        }
 
-                    // Gestisce il timeout per la squadra ospite
-                    if (timeoutAway && timeoutsAway < 2) {
-                        setTimeoutAwayFlags(prev => [...prev, true]);  // Aggiungi il flag a true
-                        setTimeoutsAway(prev => prev + 1);  // Incrementa il conteggio dei timeout
-                    }
-                    // Imposta il possesso corrente
-                    if (possessoCasa) {
-                        setPossession('home'); // La squadra di casa ha il possesso
-                    } else if (possessoOspite) {
-                        setPossession('away'); // La squadra ospite ha il possesso
+                        // Gestisce il timeout per la squadra ospite
+                        if (timeoutAway && timeoutsAway < 2) {
+                            setTimeoutAwayFlags(prev => [...prev, true]);  // Aggiungi il flag a true
+                            setTimeoutsAway(prev => prev + 1);  // Incrementa il conteggio dei timeout
+                        }
+                        // Imposta il possesso corrente
+                        if (possessoCasa) {
+                            setPossession('home'); // La squadra di casa ha il possesso
+                        } else if (possessoOspite) {
+                            setPossession('away'); // La squadra ospite ha il possesso
+                        } else {
+                            setPossession(null); // Nessuna squadra ha il possesso
+                        }
                     } else {
-                        setPossession(null); // Nessuna squadra ha il possesso
+                        console.log("matchId non corrisponde, ignorando aggiornamento...");
                     }
-                } else {
-                    console.log("matchId non corrisponde, ignorando aggiornamento...");
-                }
                 });
             })
             .catch(err => {
@@ -337,7 +337,7 @@ connection.onclose(() => console.error('Connessione chiusa, tentativo di riavvio
         <div className="scoreboard-ledwall">
             <div className="match-info">
                 <h1>
-                    {LABEL_CONSTANT.categoria} {isFemale ? LABEL_CONSTANT.femminile : isMale ? LABEL_CONSTANT.maschile : ""}
+                    {LABEL_CONSTANT.campionato} {LABEL_CONSTANT.categoria_partita} {LABEL_CONSTANT.girone} {isFemale ? LABEL_CONSTANT.femminile : isMale ? LABEL_CONSTANT.maschile : ""}
                 </h1>
                 <h1>
                     {day}{LABEL_CONSTANT.giornata} - {dayOfWeek} {matchDate} - {LABEL_CONSTANT.numero} {matchNumber}
