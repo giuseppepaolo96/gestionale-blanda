@@ -28,7 +28,7 @@ services:
     container_name: mariadb-Match
     environment:
       MYSQL_ROOT_PASSWORD: gestionale-password
-      MYSQL_DATABASE: Gestionale-Match
+      MYSQL_DATABASE: Gestionale_Match
     ports:
       - "3306:3306"
     volumes:
@@ -65,7 +65,7 @@ services:
     networks:
       - integrationai_network
     environment:
-      - ConnectionStrings__MariaDbConnection=Server=mariadb;Port=3306;Database=Gestionale-Match;Uid=root;Pwd=gestionale-password;
+      - ConnectionStrings__MariaDbConnection=Server=mariadb;Port=3306;Database=Gestionale_Match;Uid=root;Pwd=gestionale-password;
       # - JwtBearerOptions__Authority=http://keycloak:8080/realms/gestionale-pallavolo
       # - JwtBearerOptions__MetadataAddress=http://keycloak:8080/realms/gestionale-pallavolo/.well-known/openid-configuration
       # - JwtBearerOptions__RequireHttpsMetadata=false

@@ -47,6 +47,8 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<User>()
             .Property(u => u.Email)
             .IsRequired();
+
+        modelBuilder.Entity<Role>(entity => { entity.ToTable("Roles"); entity.HasKey(r => r.Id); entity.Property(r => r.Ruolo).IsRequired(); });
     }
 
 

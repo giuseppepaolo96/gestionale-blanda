@@ -17,6 +17,8 @@
         public int? RedCardOspite { get; set; }
 
         public string? MatchWinner { get; set; }
+
+        public long Version { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
     }
 
 
