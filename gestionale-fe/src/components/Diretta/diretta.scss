@@ -93,64 +93,61 @@
   font-weight: bold;
   
 }
-
 .set-info {
- /*  display: flex;
-  flex-direction: row;
-  margin-left: 15px; /* Ridotto per adattare meglio 
-  font-weight: bold; */
   display: flex;
-  flex-direction: row; /* Allinea orizzontalmente gli elementi */
-  margin-left: 15px; /* Ridotto per adattare meglio */
+  flex-direction: row; /* set disposti orizzontalmente */
+  align-items: flex-start; /* allinea in alto */
   font-weight: bold;
-  
+  margin-left: 0; /* rimuove il margine sinistro */
+  position: relative; /* necessario per posizionare il label assoluto */
 }
 
 .set-container {
-  /* display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-left: 40px; */
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-left: 40px;
+  flex-direction: column; /* punteggio e icona in verticale */
+  align-items: center;    /* centra punteggio e icona */
+  margin-left: 40px;      /* spazio tra i set */
+  min-width: 35px;        /* larghezza uguale per tutti i set */
+  position: relative;     /* necessario per label e icona */
 }
 
-.set-label,
 .set-number {
-  /* font-size: 65%; /* Ridotto per coerenza 
+  font-size: 100%;
   color: #343a40;
-  margin: 0;
-  font-weight: bold !important;
-  margin-bottom: 3px; */
-  font-size: 65%; /* Ridotto per coerenza */
-  color: #343a40;
-  margin: 0;
   font-weight: bold !important;
   margin-bottom: 3px;
-}
-  .set-scores {
-    /*font-size: 85%;  Ridotto leggermente 
-    color: black;
-    min-width: 25px; /* Più piccolo 
-    text-align: center;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-  /*   justify-content: space-between; 
-  justify-content: flex-start;*/
-
-  font-size: 85%;
-  color: black;
-  min-width: 25px;
   text-align: center;
-  font-weight: bold;
+  width: 100%;
+  margin-top: -18px;
+}
+
+.set-label {
+  font-size: 100%;
+  color: #343a40;
+  font-weight: bold !important;
+  margin-bottom: 3px;
+  text-align: left;      /* allinea il testo a sinistra */
+  position: absolute;    /* posizionamento assoluto rispetto a .set-info */
+  left: 0;               /* allineato all’inizio della riga dei set */
+  top: -18px;            /* distanza sopra i punteggi */
+  width: 30px;           /* larghezza fissa del label, opzionale */
+}
+
+
+
+.set-scores {
+  font-size: 113%;
+  color: black;
   display: flex;
-  flex-direction: column; /* Posiziona il punteggio uno sotto l'altro */
-  align-items: center;
-  position: relative; /* Necessario per posizionare l'icona */
-  }
+  flex-direction: column; /* punteggio e icona in verticale */
+  align-items: center;    /* centra orizzontalmente */
+  position: relative;     /* necessario per icona */
+  min-width: 35px;        /* allinea casa e ospite */
+}
+
+
+
+
 
 .divider {
   width: 109%;

@@ -153,10 +153,6 @@ export default function Diretta() {
                         setCurrentVersion(matchUpdate.version);
                     }
 
-                    if (!matchId || !matchUpdate.matchId || Number(matchId) !== Number(matchUpdate.matchId)) {
-                        console.log(`Aggiornamento ignorato: ricevuto ${matchUpdate.matchId} (tipo: ${typeof matchUpdate.matchId}), atteso ${matchId} (tipo: ${typeof matchId}).`);
-                        return;
-                    }
 
 
                     console.log(`matchId ricevuto: ${matchUpdate.matchId}, matchId attuale: ${matchId}`);
@@ -240,11 +236,12 @@ export default function Diretta() {
                                 </div>
                                 <div className="set-info">
                                     <div className="set-info">
+                                        <div className="set-label">Set</div>
                                         {Array.from({ length: set }).map((_, i) => {
                                             const setNumber = i + 1;
                                             return (
                                                 <div key={setNumber} className="set-container">
-                                                    <div className="set-label">Set</div>
+                                                    
                                                     <div className="set-number">{setNumber}°</div>
                                                     <div className="set-scores">
                                                         {setScores[setNumber - 1]?.[0] || 0}

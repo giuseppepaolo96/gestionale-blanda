@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|c:\\users\\giuse\\onedrive\\desktop\\versione blanda gestionale pallavolo\\frontend\\gestionale-blanda\\gestionale-be\\src\\api\\features\\websocket\\scorehub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8EBB4A9E-C69F-49A4-9165-9E093569C2B4}|src\\Api\\Api.csproj|solutionrelative:src\\api\\features\\websocket\\scorehub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -99,19 +103,32 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\appsettings.json",
+              "RelativeDocumentMoniker": "src\\Api\\appsettings.json",
+              "ToolTip": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\appsettings.json",
+              "RelativeToolTip": "src\\Api\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-11-08T07:07:03.487Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "ScoreHub.cs",
               "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\WebSocket\\ScoreHub.cs",
               "RelativeDocumentMoniker": "src\\Api\\Features\\WebSocket\\ScoreHub.cs",
               "ToolTip": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\WebSocket\\ScoreHub.cs",
               "RelativeToolTip": "src\\Api\\Features\\WebSocket\\ScoreHub.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAIwBkAAAApAAAAAAAAAA==",
+              "ViewState": "AgIAABMAAAAAAAAAAAAYwBkAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-03T18:11:16.239Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "MatchUpdate.cs",
               "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\WebSocket\\MatchUpdate.cs",
               "RelativeDocumentMoniker": "src\\Api\\Features\\WebSocket\\MatchUpdate.cs",
@@ -124,7 +141,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Infrastructure\\Data\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "src\\Api\\Infrastructure\\Data\\ApplicationDbContext.cs",
@@ -136,7 +153,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "TableDb.cs",
               "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Entities\\TableDb.cs",
               "RelativeDocumentMoniker": "src\\Api\\Entities\\TableDb.cs",
@@ -148,7 +165,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "RegisterEndpoint.cs",
               "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\User\\Register\\Endpoint\\RegisterEndpoint.cs",
               "RelativeDocumentMoniker": "src\\Api\\Features\\User\\Register\\Endpoint\\RegisterEndpoint.cs",
@@ -160,7 +177,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "RegisterCommand.cs",
               "DocumentMoniker": "C:\\Users\\giuse\\OneDrive\\Desktop\\Versione blanda gestionale pallavolo\\Frontend\\gestionale-blanda\\gestionale-be\\src\\Api\\Features\\User\\Register\\Command\\RegisterCommand.cs",
               "RelativeDocumentMoniker": "src\\Api\\Features\\User\\Register\\Command\\RegisterCommand.cs",
