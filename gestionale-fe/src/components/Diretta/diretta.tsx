@@ -29,14 +29,15 @@ export default function Diretta() {
     const [possession, setPossession] = useState<'home' | 'away' | null>(null); // Stato per il possesso
     const [currentIndex, setCurrentIndex] = useState(0);
     const [reset, resetMatch] = useState(false);
+    const [currentVersion, setCurrentVersion] = useState<number>(0);
 
     const connection = new signalR.HubConnectionBuilder()
         .withUrl(`${process.env.REACT_APP_API_BASE_URL}/scoreHub`)
         .withAutomaticReconnect([0, 2000, 5000, 10000]) // tentativi dopo 0s, 2s, 5s, 10s
         .build();
-        connection.onreconnecting(() => console.warn('Tentativo di riconnessione...'));
-connection.onreconnected(() => console.log('Riconnesso a SignalR'));
-connection.onclose(() => console.error('Connessione chiusa, tentativo di riavvio...'));
+    connection.onreconnecting(() => console.warn('Tentativo di riconnessione...'));
+    connection.onreconnected(() => console.log('Riconnesso a SignalR'));
+    connection.onclose(() => console.error('Connessione chiusa, tentativo di riavvio...'));
 
     const fetchSponsors = async () => {
         try {
@@ -137,16 +138,26 @@ connection.onclose(() => console.error('Connessione chiusa, tentativo di riavvio
                     console.log("Dati ricevuti:", matchUpdate);
 
                     // Blocco qualsiasi aggiornamento se i matchId non corrispondono
-                     if (!matchId || !matchUpdate.matchId || parseInt(matchId, 10) !== Number(matchUpdate.matchId)) {
+                    if (!matchId || !matchUpdate.matchId || parseInt(matchId, 10) !== Number(matchUpdate.matchId)) {
                         console.log(`Aggiornamento ignorato: ricevuto ${matchUpdate.matchId}, atteso ${matchId}.`);
                         return;
-                    } 
+                    }
 
-                        if (!matchId || !matchUpdate.matchId || Number(matchId) !== Number(matchUpdate.matchId)) {
-                            console.log(`Aggiornamento ignorato: ricevuto ${matchUpdate.matchId} (tipo: ${typeof matchUpdate.matchId}), atteso ${matchId} (tipo: ${typeof matchId}).`);
-                            return;
-                        }
-                        
+                    if (matchUpdate.version !== undefined && matchUpdate.version <= currentVersion) {
+                        console.warn(`Aggiornamento ignorato: versione ${matchUpdate.version} <= ${currentVersion}`);
+                        return;
+                    }
+
+                    // Aggiorna la versione corrente
+                    if (matchUpdate.version !== undefined) {
+                        setCurrentVersion(matchUpdate.version);
+                    }
+
+                    if (!matchId || !matchUpdate.matchId || Number(matchId) !== Number(matchUpdate.matchId)) {
+                        console.log(`Aggiornamento ignorato: ricevuto ${matchUpdate.matchId} (tipo: ${typeof matchUpdate.matchId}), atteso ${matchId} (tipo: ${typeof matchId}).`);
+                        return;
+                    }
+
 
                     console.log(`matchId ricevuto: ${matchUpdate.matchId}, matchId attuale: ${matchId}`);
 
@@ -182,7 +193,7 @@ connection.onclose(() => console.error('Connessione chiusa, tentativo di riavvio
                     } else {
                         console.warn("⚠️ Stato del possesso non chiaro, nessun aggiornamento.");
                     }
-                    
+
                     // Se è stato ricevuto un comando di reset, resettare il match
                     if (matchUpdate.ResetMatch) {
                         console.log("Ricevuto comando di reset del match");

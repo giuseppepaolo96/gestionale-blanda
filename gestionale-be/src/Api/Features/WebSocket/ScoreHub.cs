@@ -8,11 +8,22 @@ public class ScoreHub : Hub
     // Metodo per inviare un aggiornamento completo del punteggio e delle informazioni del match
 
     private static readonly ConcurrentDictionary<string, MatchUpdate> _latestUpdates = new();
+
+    // Dizionario per mantenere una versione incrementale per ogni MatchId
+    private static readonly ConcurrentDictionary<string, long> _versionCounters = new();
+
     public async Task UpdateScore(MatchUpdate matchUpdate) 
     {
         if (string.IsNullOrEmpty(matchUpdate.MatchId))
             return;
 
+        var newVersion = _versionCounters.AddOrUpdate(
+           matchUpdate.MatchId,
+           DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(), // inizializza se è la prima volta
+           (key, oldValue) => Math.Max(oldValue + 1, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds())
+       );
+
+        matchUpdate.Version = newVersion;
         // Recupera l'ultima versione inviata
         if (_latestUpdates.TryGetValue(matchUpdate.MatchId, out var lastUpdate))
         {

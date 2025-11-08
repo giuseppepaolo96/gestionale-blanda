@@ -55,6 +55,7 @@ export default function Ledwall() {
     const [isMale, setIsMale] = useState<boolean>(false);
     const [isFemale, setIsFemale] = useState<boolean>(false);
     const [winner, setMatchWinner] = useState<Team | null>(null);
+    const [currentVersion, setCurrentVersion] = useState<number>(0);
 
     const connection = new signalR.HubConnectionBuilder()
         .withUrl(`${process.env.REACT_APP_API_BASE_URL}/scoreHub`)
@@ -159,11 +160,20 @@ export default function Ledwall() {
                     console.log("Dati ricevuti:", matchUpdate);
 
                     if (matchId && matchUpdate.matchId && parseInt(matchId, 10) === Number(matchUpdate.matchId)) {
+                        if (matchUpdate.version && matchUpdate.version <= currentVersion) {
+                            console.warn("Aggiornamento ignorato: versione obsoleta", matchUpdate.version);
+                            return;
+                        }
+
+                        // Aggiorno la versione
+                        setCurrentVersion(matchUpdate.version);
+
+                        console.log("Aggiornamento accettato:", matchUpdate);
                         console.log("Aggiornamento ricevuto per il matchId corretto:", matchUpdate);
                         const { matchId, scoreCasa, scoreOspite, set: currentSet, possessoCasa, possessoOspite, timeoutHome, timeoutAway, matchWinner } = matchUpdate;
 
-
-                        await fetchMatchData(matchId);
+                        /* 
+                                                await fetchMatchData(matchId); */
 
                         if (scoreCasa !== undefined && scoreOspite !== undefined) {
                             setHomeScore(scoreCasa);
@@ -337,7 +347,7 @@ export default function Ledwall() {
         <div className="scoreboard-ledwall">
             <div className="match-info">
                 <h1>
-                    {LABEL_CONSTANT.campionato} {LABEL_CONSTANT.categoria_partita} {isFemale ? LABEL_CONSTANT.femminile : isMale ? LABEL_CONSTANT.maschile : ""} {LABEL_CONSTANT.girone} 
+                    {LABEL_CONSTANT.campionato} {LABEL_CONSTANT.categoria_partita} {isFemale ? LABEL_CONSTANT.femminile : isMale ? LABEL_CONSTANT.maschile : ""} {LABEL_CONSTANT.girone}
                 </h1>
                 <h1>
                     {day}{LABEL_CONSTANT.giornata} - {dayOfWeek} {matchDate} - {LABEL_CONSTANT.numero} {matchNumber}
