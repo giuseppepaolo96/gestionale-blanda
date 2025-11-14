@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as signalR from "@microsoft/signalr";
 import defaultLogo from '../../assets/images/default_white.png';
 import logoSponsor1 from '../../assets/images/faam_spa_senza-sfondo.png';
@@ -55,7 +55,8 @@ export default function Ledwall() {
     const [isMale, setIsMale] = useState<boolean>(false);
     const [isFemale, setIsFemale] = useState<boolean>(false);
     const [winner, setMatchWinner] = useState<Team | null>(null);
-    const [currentVersion, setCurrentVersion] = useState<number>(0);
+    const currentVersionRef = useRef(0);
+
 
     const connection = new signalR.HubConnectionBuilder()
         .withUrl(`${process.env.REACT_APP_API_BASE_URL}/scoreHub`)
@@ -158,15 +159,17 @@ export default function Ledwall() {
                 connection.onclose(() => console.error('Connessione chiusa, tentativo di riavvio...'));
                 connection.on("ReceiveScoreUpdate", async (matchUpdate) => {
                     console.log("Dati ricevuti:", matchUpdate);
+                    const lastVersion = currentVersionRef.current;
 
                     if (matchId && matchUpdate.matchId && parseInt(matchId, 10) === Number(matchUpdate.matchId)) {
-                        if (matchUpdate.version && matchUpdate.version <= currentVersion) {
-                            console.warn("Aggiornamento ignorato: versione obsoleta", matchUpdate.version);
+                        if (matchUpdate.version && matchUpdate.version <= lastVersion) {
+                            console.warn("Aggiornamento ignorato (vecchio):", matchUpdate.version);
                             return;
                         }
 
                         // Aggiorno la versione
-                        setCurrentVersion(matchUpdate.version);
+                        currentVersionRef.current = matchUpdate.version;
+                        
 
                         console.log("Aggiornamento accettato:", matchUpdate);
                         console.log("Aggiornamento ricevuto per il matchId corretto:", matchUpdate);
