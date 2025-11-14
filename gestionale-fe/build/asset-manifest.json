@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.190ca828.css",
-    "main.js": "/static/js/main.9fc392e7.js",
+    "main.css": "/static/css/main.34208ec6.css",
+    "main.js": "/static/js/main.0f554f50.js",
     "static/js/453.f3bd854d.chunk.js": "/static/js/453.f3bd854d.chunk.js",
     "static/media/Logo_scritta.svg": "/static/media/Logo_scritta.e6ae75f603055a8af79a1f10a34d3da4.svg",
     "static/media/primeicons.svg": "/static/media/primeicons.6ed59f962963a4a73af2.svg",
@@ -13,12 +13,12 @@
     "static/media/primeicons.woff2": "/static/media/primeicons.024b32cc7bf399b1a847.woff2",
     "static/media/SPONSOR_CARBAT-removebg-preview.png": "/static/media/SPONSOR_CARBAT-removebg-preview.dc7caee5f403ad8c6cd3.png",
     "index.html": "/index.html",
-    "main.190ca828.css.map": "/static/css/main.190ca828.css.map",
-    "main.9fc392e7.js.map": "/static/js/main.9fc392e7.js.map",
+    "main.34208ec6.css.map": "/static/css/main.34208ec6.css.map",
+    "main.0f554f50.js.map": "/static/js/main.0f554f50.js.map",
     "453.f3bd854d.chunk.js.map": "/static/js/453.f3bd854d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.190ca828.css",
-    "static/js/main.9fc392e7.js"
+    "static/css/main.34208ec6.css",
+    "static/js/main.0f554f50.js"
   ]
 }
