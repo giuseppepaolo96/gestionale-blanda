@@ -389,15 +389,15 @@ export default function Ledwall() {
 
                 <div className="team">
                     <div className="logo-score">
-                        
-                        <img src={awayTeamLogo || defaultLogo} alt="Logo Squadra Ospite" className="team-logo" />
-                        <span className="team-score">{winSetAway}</span>
-                    </div>
-                    {[...Array(timeoutsAway)].map((_, index) => (
+                                            {[...Array(timeoutsAway)].map((_, index) => (
                             <div key={index} className="timeout-icon-away">
                                 <i className="pi pi-stopwatch"></i>
                             </div>
                         ))}
+                        <img src={awayTeamLogo || defaultLogo} alt="Logo Squadra Ospite" className="team-logo" />
+                        <span className="team-score">{winSetAway}</span>
+                    </div>
+
                     <div className="team-name-seconda">{awayTeam ? awayTeam.name : ""}</div >
                 </div>
             </div>
