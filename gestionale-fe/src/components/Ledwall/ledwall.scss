@@ -45,16 +45,30 @@
 
 
             .logo-score {
+                /* display: flex;
+                align-items: center; */
+                /* justify-content: flex-start; */
+                // Allineamento a sinistra (di default) ma possiamo cambiarlo se serve
+                /* justify-content: center;
+                gap: 10px; */
+                /* Distanza tra gli elementi (logo, score, icon) */
                 display: flex;
                 align-items: center;
-                justify-content: flex-start; // Allineamento a sinistra (di default) ma possiamo cambiarlo se serve
-                gap: 10px;
-                /* Distanza tra gli elementi (logo, score, icon) */
+                justify-content: space-between;
+                /* separa blocchi */
+                width: 500px;
+                /* larghezza fissa complessiva */
+                min-width: 500px;
+                margin: 0 auto;
+                /* centra il tutto */
             }
 
             .team-logo {
                 width: 300px !important;
                 height: 300px !important;
+                flex-shrink: 0;
+                display: flex;
+                align-items: center;
             }
 
             .team-score {
@@ -64,6 +78,7 @@
                 -webkit-text-stroke: 3px #FFED00;
                 /* Bordo giallo del testo */
                 text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+                flex-shrink: 0;
             }
 
             .team-name {
@@ -80,28 +95,32 @@
             }
 
             .team-name-prima {
-                margin-left: 12%;
+                margin-left: 37%;
                 font-size: 1.5rem;
                 font-weight: bold;
                 color: #abbcff;
                 margin-top: 10px;
                 text-align: center;
-                word-wrap: break-word;
                 white-space: normal;
-                overflow-wrap: break-word;
+                /* overflow-wrap: break-word;
+                word-wrap: break-word; */
                 max-width: 250px;
+                overflow-wrap: normal;
+                word-break: normal;
+                margin-right: 4.5%;
+
             }
 
             .team-name-seconda {
-                margin-right: 13%;
+                margin-right: 33%;
                 font-size: 1.5rem;
                 font-weight: bold;
                 color: #abbcff;
                 margin-top: 10px;
                 text-align: center;
-                word-wrap: break-word;
                 white-space: normal;
-                overflow-wrap: break-word;
+               /*  overflow-wrap: break-word;
+                word-wrap: break-word; */
                 max-width: 250px;
             }
 
@@ -282,8 +301,11 @@
 
 /* Icona timeout posizionata correttamente */
 .timeout-icon-home {
-    margin-left: 10px;
-    /* Distanza tra l'icona e il punteggio */
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100px;
+    /* larghezza fissa */
 }
 
 .pi-stopwatch:before {
@@ -293,16 +315,21 @@
 
 /* Posiziona l'icona timeout-away a destra del punteggio e logo */
 .timeout-icon-away {
-    margin-left: 10px;
+    /*  margin-left: 10px; */
     /* Mantieni un po' di spazio tra l'icona e il logo */
     order: 1;
     /* Posiziona l'icona a destra se necessario */
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100px;
+    /* larghezza fissa */
 }
 
 .stripe-value-separator {
     font-size: 94px;
 }
 
-.winner{
+.winner {
     font-size: 70px;
 }
