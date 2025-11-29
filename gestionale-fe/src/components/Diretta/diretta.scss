@@ -82,9 +82,13 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  min-width: 180px; /* Riduzione minima della larghezza */
+  min-width: 180px;  /* Riduzione minima della larghezza */
   margin-left: 0;
+  width: 270px;
+  max-width: 260px;
 }
+
+
 
 .team-name {
   font-size: 98%;
@@ -93,6 +97,15 @@
   font-weight: bold;
   
 }
+/* .set-info {
+  display: flex;
+  flex-direction: row; /* set disposti orizzontalmente 
+  align-items: flex-start; /* allinea in alto
+  font-weight: bold;
+  margin-left: 0; /* rimuove il margine sinistro 
+  position: relative; /* necessario per posizionare il label assoluto 
+} */
+
 .set-info {
   display: flex;
   flex-direction: row; /* set disposti orizzontalmente */
@@ -100,17 +113,28 @@
   font-weight: bold;
   margin-left: 0; /* rimuove il margine sinistro */
   position: relative; /* necessario per posizionare il label assoluto */
+  gap: 8px; /* 🔥 distanza tra i set, puoi modificare da 0px a 12px */
 }
 
 .set-container {
   display: flex;
   flex-direction: column; /* punteggio e icona in verticale */
   align-items: center;    /* centra punteggio e icona */
-  margin-left: 40px;      /* spazio tra i set */
+  margin-left: 10px;         /* 🔥 spazio gestito da gap su .set-info */
   min-width: 35px;        /* larghezza uguale per tutti i set */
   position: relative;     /* necessario per label e icona */
 }
 
+
+/* .set-container {
+  display: flex;
+  flex-direction: column; /* punteggio e icona in verticale 
+  align-items: center;    /* centra punteggio e icona 
+  margin-left: 40px;      /* spazio tra i set 
+  min-width: 35px;        /* larghezza uguale per tutti i set 
+  position: relative;     /* necessario per label e icona 
+}
+ */
 .set-number {
   font-size: 100%;
   color: #343a40;
@@ -128,7 +152,7 @@
   margin-bottom: 3px;
   text-align: left;      /* allinea il testo a sinistra */
   position: absolute;    /* posizionamento assoluto rispetto a .set-info */
-  left: 0;               /* allineato all’inizio della riga dei set */
+  left: -19px;              /* allineato all’inizio della riga dei set */
   top: -18px;            /* distanza sopra i punteggi */
   width: 30px;           /* larghezza fissa del label, opzionale */
 }
